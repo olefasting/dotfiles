@@ -13,10 +13,11 @@ alias ll="ls -la --color=always"
 
 # zsh
 zmodload zsh/mapfile
+
+[ -e "$(which kubectl)" ] && kubectl completion zsh > "${fpath[1]}/_kubectl"
+
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
-
-[ -n "$(which kubectl)" ] && kubectl completion zsh > "${fpath[1]}/_kubectl"
 
 # asdf
 asdf_dir="$HOME/.asdf"
