@@ -9,16 +9,6 @@ function genrandom() {
         unset key_len
 }
 
-alias ll="ls -la --color=always"
-
-# zsh
-zmodload zsh/mapfile
-
-[ -e "$(which kubectl)" ] && kubectl completion zsh > "${fpath[1]}/_kubectl"
-
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
-
 # asdf
 asdf_dir="$HOME/.asdf"
 if [ -e "$asdf_dir" ] && [ -f "$asdf_dir/asdf.sh" ]; then
@@ -28,6 +18,16 @@ if [ -e "$asdf_dir" ] && [ -f "$asdf_dir/asdf.sh" ]; then
         autoload -Uz compinit && compinit
 fi
 unset asdf_dir
+
+# zsh
+zmodload zsh/mapfile
+
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
+
+[ -e "$(which kubectl)" ] && kubectl completion zsh > "${fpath[1]}/_kubectl"
+
+alias ll="ls -la --color=always"
 
 # starship
 eval "$(starship init zsh)"
