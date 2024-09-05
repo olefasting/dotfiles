@@ -16,6 +16,8 @@ zmodload zsh/mapfile
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
 
+[ -n "$(which kubectl)" ] && kubectl completion zsh > "${fpath[1]}/_kubectl"
+
 # asdf
 asdf_dir="$HOME/.asdf"
 if [ -e "$asdf_dir" ] && [ -f "$asdf_dir/asdf.sh" ]; then
