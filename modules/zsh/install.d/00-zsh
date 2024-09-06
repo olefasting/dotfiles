@@ -1,0 +1,28 @@
+export ZDOTDIR="${ZDOTDIR:-$HOME}"
+
+[ -e "$XDG_CONFIG_HOME" ] || mkdir -p "$XDG_CONFIG_HOME"
+[ -e "$ZDOTDIR" ] || mkdir -p "$ZDOTDIR"
+
+[[ -e "$ZDOTDIR/.zprofile" ]] && mv "$ZDOTDIR/.zprofile" "$ZDOTDIR/.zprofile.bak"
+[[ -e "$PWD/modules/zsh/zprofile" ]] && [[ -f "$PWD/modules/zsh/zprofile" ]] && cat "$PWD/modules/zsh/zprofile" > "$ZDOTDIR/.zprofile"
+for f in "$PWD"/modules/zsh/zprofile.d/[0-9][0-9]-*; do
+    cat "$f" >> "$ZDOTDIR/.zprofile"
+done
+
+[[ -e "$ZDOTDIR/.zshrc" ]] && mv "$ZDOTDIR/.zshrc" "$ZDOTDIR/.zshrc.bak"
+[[ -e "$PWD/modules/zsh/zshrc" ]] && [[ -f "$PWD/modules/zsh/zshrc" ]] && cat "$PWD/modules/zsh/zshenv" > "$ZDOTDIR/.zshrc"
+for f in "$PWD"/modules/zsh/zshrc.d/[0-9][0-9]-*; do
+    cat "$f" >> "$ZDOTDIR/.zshrc"
+done
+
+[[ -e "$ZDOTDIR/.zshenv" ]] && mv "$ZDOTDIR/.zshenv" "$ZDOTDIR/.zshenv.bak"
+[[ -e "$PWD/modules/zsh/zshenv" ]] && [[ -f "$PWD/modules/zsh/zshenv" ]] && cat "$PWD/modules/zsh/zshenv" > "$ZDOTDIR/.zshenv"
+for f in "$PWD"/modules/zsh/zshenv.d/[0-9][0-9]-*; do
+    cat "$f" >> "$ZDOTDIR/.zshenv"
+done
+
+if [[ "$ZDOTDIR" != "$HOME" ]]; then
+    [[ -L "$HOME/.zshenv" ]] && rm "$HOME/.zshenv"
+    [[ -e "$HOME/.zshenv" ]] && mv "$HOME/.zshenv" "$HOME/.zshenv.bak"
+    ln -s "$ZDOTDIR/.zshenv" "$HOME/.zshenv"
+fi

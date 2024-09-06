@@ -1,34 +1,38 @@
 #!/usr/bin/env bash
 
-set -e
+set -Eeuo pipefail
 
-export ZDOTDIR="${ZDOTDIR:-$HOME}"
+trap 'error_handler $LINENO $?' ERR
 
-[ -e "$XDG_CONFIG_HOME" ] || mkdir -p "$XDG_CONFIG_HOME"
-[ -e "$ZDOTDIR" ] || mkdir -p "$ZDOTDIR"
+function error_handler() {
+  error "ERROR: line $1: $2"
+}
 
-(( $VERBOSE )) && echo "environment setup and dotfiles install"
+function install_module() {
+    [[ -z "$1" ]] && echo "install_module requires a modpath as the first argument" >&2 && return 1
 
-(( $VERBOSE )) && echo " ENVIRONMENT_KIND = '$ENVIRONMENT_KIND'"
+    local modpath="$1"
 
-[ -e "$ZDOTDIR/.zprofile" ] && mv "$ZDOTDIR/.zprofile" "$ZDOTDIR/.zprofile.bak"
-[ -e "$ZDOTDIR/.zshrc" ] && mv "$ZDOTDIR/.zshrc" "$ZDOTDIR/.zshrc.bak"
-[ -e "$ZDOTDIR/.zshenv" ] && mv "$ZDOTDIR/.zshenv" "$ZDOTDIR/.zshenv.bak"
+    [[ ! -e "$modpath" ]] && echo "invalid module path '$modpath'" >&2 && return 1
+    if [[ -e "$modpath/module" ]] && [[ -f "$modpath/module" ]]; then
+        source "$modpath/module"
 
-cp "$PWD/zsh/.zprofile" "$ZDOTDIR/.zprofile"
-cp "$PWD/zsh/.zshrc" "$ZDOTDIR/.zshrc"
-cp "$PWD/zsh/.zshenv" "$ZDOTDIR/.zshenv"
+        [[ -z "$MODULE__name" ]] && echo "invalid module file '$modpath'" >&2 && return 1
+        echo " module '$MODULE__name' installing"
 
-if [ "$zdotdir" != "$HOME" ]; then
-    [ -L "$HOME/.zshenv" ] && rm "$HOME/.zshenv"
-    [ -e "$HOME/.zshenv" ] && mv "$HOME/.zshenv" "$HOME/.zshenv.bak"
-    ln -s "$ZDOTDIR/.zshenv" "$HOME/.zshenv"
-fi
+        [[ -e "$modpath/install" ]] && source "$modpath/install"
+        if [[ -e "$modpath/install.d" ]]; then
+            for filepath in "$modpath"/install.d/[0-9][0-9]-*; do
+                source "$filepath"
+            done
+        fi
+    fi
+}
 
-[ -e "$XDG_CONFIG_HOME/zellij" ] || mkdir -p "$XDG_CONFIG_HOME/zellij"
+echo "environment setup and dotfiles install"
 
-[ -e "$XDG_CONFIG_HOME/zellij/config.kdl" ] && mv "$XDG_CONFIG_HOME/zellij/config.kdl" "$XDG_CONFIG_HOME/zellij/config.kdl.bak"
+for modpath in "$PWD"/modules/*; do
+    install_module "$modpath"
+done
 
-cp "$PWD/zellij/config.kdl" "$XDG_CONFIG_HOME/zellij/config.kdl"
-
-(( $VERBOSE )) && echo "install finished"
+echo "install finished"
