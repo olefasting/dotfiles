@@ -8,17 +8,17 @@ function error_handler() {
   error "ERROR: line $1: $2"
 }
 
-function install_module() {
-    [[ -z "$1" ]] && echo "install_module requires a modpath as the first argument" >&2 && return 1
+echo "environment setup and dotfiles install"
 
-    local modpath="$1"
+for modpath in "$PWD"/modules/*; do
+    [[ -z "$modpath" ]] && echo "install_module requires a modpath as the first argument" >&2 && exit 1
 
-    [[ ! -e "$modpath" ]] && echo "invalid module path '$modpath'" >&2 && return 1
+    [[ ! -e "$modpath" ]] && echo "invalid module path '$modpath'" >&2 && exit 1
     if [[ -e "$modpath/module" ]] && [[ -f "$modpath/module" ]]; then
-        source "$PWD/modules/common/metadata-clear"
+        source "$PWD/common/metadata-clear"
         source "$modpath/module"
 
-        [[ -z "$MODULE__name" ]] && echo "invalid module file '$modpath'" >&2 && return 1
+        [[ -z "$MODULE__name" ]] && echo "invalid module file '$modpath'" >&2 && exit 1
         echo " module '$MODULE__name' installing"
 
         [[ -e "$modpath/install" ]] && source "$modpath/install"
@@ -28,12 +28,6 @@ function install_module() {
             done
         fi
     fi
-}
-
-echo "environment setup and dotfiles install"
-
-for modpath in "$PWD"/modules/*; do
-    install_module "$modpath"
 done
 
 echo "install finished"
