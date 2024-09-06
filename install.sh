@@ -2,15 +2,14 @@
 
 set -e
 
-export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export ZDOTDIR="${ZDOTDIR:-$HOME}"
 
 [ -e "$XDG_CONFIG_HOME" ] || mkdir -p "$XDG_CONFIG_HOME"
 [ -e "$ZDOTDIR" ] || mkdir -p "$ZDOTDIR"
 
-echo "installing dotfiles"
-echo " XDG_CONFIG_HOME  =  '$XDG_CONFIG_HOME'"
-echo " ZDOTENV          =  '$ZDOTDIR'"
+(( $VERBOSE )) && echo "environment setup and dotfiles install"
+
+(( $VERBOSE )) && echo " ENVIRONMENT_KIND = '$ENVIRONMENT_KIND'"
 
 [ -e "$ZDOTDIR/.zprofile" ] && mv "$ZDOTDIR/.zprofile" "$ZDOTDIR/.zprofile.bak"
 [ -e "$ZDOTDIR/.zshrc" ] && mv "$ZDOTDIR/.zshrc" "$ZDOTDIR/.zshrc.bak"
@@ -32,4 +31,4 @@ fi
 
 cp "$PWD/zellij/config.kdl" "$XDG_CONFIG_HOME/zellij/config.kdl"
 
-echo "install finished"
+(( $VERBOSE )) && echo "install finished"
