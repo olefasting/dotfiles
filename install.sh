@@ -15,6 +15,7 @@ function install_module() {
 
     [[ ! -e "$modpath" ]] && echo "invalid module path '$modpath'" >&2 && return 1
     if [[ -e "$modpath/module" ]] && [[ -f "$modpath/module" ]]; then
+        source "$PWD/modules/common/metadata-clear"
         source "$modpath/module"
 
         [[ -z "$MODULE__name" ]] && echo "invalid module file '$modpath'" >&2 && return 1
