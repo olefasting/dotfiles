@@ -37,12 +37,8 @@ zmodload zsh/mapfile
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
 
-[ -e "$(which kubectl)" ] && kubectl completion zsh > "${fpath[1]}/_kubectl"
 
 alias ll="ls -la --color=always"
-
-# starship
-eval "$(starship init zsh)"
 
 function genrandom() {
         local key_len="$1"
@@ -50,3 +46,7 @@ function genrandom() {
         echo $(export LC_CTYPE=C; cat /dev/urandom | tr -dc 'a-zA-Z0-9@#%\$\+\*\?\^\=\!\<\>\:\-' | fold -w "$key_len" | head -n 1)
         unset key_len
 }
+
+[ -e "$(which kubectl)" ] && kubectl completion zsh > "${fpath[1]}/_kubectl"
+
+eval "$(starship init zsh)"
