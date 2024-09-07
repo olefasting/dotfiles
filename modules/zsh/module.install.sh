@@ -1,5 +1,5 @@
 [ -e "$XDG_CONFIG_HOME" ] || mkdir -p "$XDG_CONFIG_HOME"
-ZDOTDIR="${ZDOTDIR:-${XDG_CONFIG_HOME/zsh:-$HOME}}"
+ZDOTDIR="${ZDOTDIR:-${XDG_CONFIG_HOME/zsh}}"
 [ -e "$ZDOTDIR" ] || mkdir -p "$ZDOTDIR"
 
 function generate_zfile() {
@@ -29,6 +29,6 @@ generate_zfile zshenv
 
 if [[ "$ZDOTDIR" != "$HOME" ]]; then
     [[ -L "$HOME/.zshenv" ]] && rm "$HOME/.zshenv"
-    [[ -e "$HOME/.zshenv" ]] && mv "$HOME/.zshenv" "$HOME/.zshenv.bak"
+    [[ -f "$HOME/.zshenv" ]] && mv "$HOME/.zshenv" "$HOME/.zshenv.bak"
     ln -s "$ZDOTDIR/.zshenv" "$HOME/.zshenv"
 fi
