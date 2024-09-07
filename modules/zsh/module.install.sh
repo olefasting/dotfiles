@@ -1,3 +1,4 @@
+XDG_CONFIG_HOME="$XDG_CONFIG_HOME:-$HOME/.config"
 [ -e "$XDG_CONFIG_HOME" ] || mkdir -p "$XDG_CONFIG_HOME"
 ZDOTDIR="${ZDOTDIR:-${XDG_CONFIG_HOME/zsh}}"
 [ -e "$ZDOTDIR" ] || mkdir -p "$ZDOTDIR"
@@ -5,7 +6,11 @@ ZDOTDIR="${ZDOTDIR:-${XDG_CONFIG_HOME/zsh}}"
 function generate_zfile() {
     local output_filename="$1"
     local output_filename_clean="$output_filename"
-    [[ "$output_filename" =~ ^\. ]] && output_filename_clean="${output_filename:1}"
+    if [[ "$output_filename" =~ ^\. ]]; then
+        output_filename_clean="${output_filename:1}"
+    else
+        output_filename=".$output_filename"
+    fi
     local output_filepath="$ZDOTDIR/$output_filename"
     local root_path="$PWD/$PROJECT__module_folder_name/zsh/$output_filename_clean"
     increase_indent

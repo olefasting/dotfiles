@@ -37,7 +37,6 @@ function indent_echo() {
 }
 
 echo "starting $PROJECT__name environment setup and dotfiles install"
-increase_indent
 
 for modpath in "$PWD/$PROJECT__module_folder_name"/*; do
     [[ ! -e "$modpath" ]] && echo "invalid module path '$modpath'" >&2 && exit 1
@@ -57,7 +56,7 @@ for modpath in "$PWD/$PROJECT__module_folder_name"/*; do
     fi
 done
 
-decrease_indent
+PROJECT__current_indent=0
 
 indent_echo "the $PROJECT__name install procedure finished successfully"
 
