@@ -24,7 +24,7 @@ function generate_zfile() {
 }
 
 generate_zfile zprofile
-generate_zfile .zshrc
+generate_zfile zshrc
 generate_zfile zshenv
 
 if [[ "$ZDOTDIR" != "$HOME" ]]; then
