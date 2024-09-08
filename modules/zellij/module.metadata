@@ -1,1 +1,3 @@
 MODULE__name="zellij"
+MODULE__targets=(workstation)
+MODULE__dependencies=(zellij)

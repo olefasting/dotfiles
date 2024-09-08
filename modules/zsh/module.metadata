@@ -1,1 +1,3 @@
 MODULE__name="zsh"
+MODULE__targets=(all)
+MODULE__dependencies=(zsh)

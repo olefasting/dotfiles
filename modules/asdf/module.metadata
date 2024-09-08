@@ -1,1 +1,3 @@
 MODULE__name="asdf"
+MODULE__targets=(workstation)
+MODULE__dependencies=(asdf)
