@@ -37,8 +37,4 @@ if [[ "$ZDOTDIR" != "$HOME" ]]; then
     [[ -L "$HOME/.zshenv" ]] && rm "$HOME/.zshenv"
     [[ -f "$HOME/.zshenv" ]] && mv "$HOME/.zshenv" "$HOME/.zshenv.bak"
     ln -s "$ZDOTDIR/.zshenv" "$HOME/.zshenv"
-
-    [[ -L "$HOME/.zprofile" ]] && rm "$HOME/.zprofile"
-    [[ -f "$HOME/.zprofile" ]] && mv "$HOME/.zprofile" "$HOME/.zprofile.bak"
-    ln -s "$ZDOTDIR/.zprofile" "$HOME/.zprofile"
 fi
