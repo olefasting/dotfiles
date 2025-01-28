@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 function backup_and_link() {
 	if [ -z "$1" ] || [ -z "$2" ]; then 
 		echo "ERROR: backup_and_link require two parameters"
