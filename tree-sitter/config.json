@@ -1,0 +1,54 @@
+{
+  "parser-directories": [
+    "/home/oasf/Repos",
+  ],
+  "theme": {
+    "function": 26,
+    "variable.parameter": {
+      "underline": true
+    },
+    "punctuation.bracket": 239,
+    "constant.builtin": {
+      "color": 94,
+      "bold": true
+    },
+    "comment": {
+      "color": 245,
+      "italic": true
+    },
+    "attribute": {
+      "color": 124,
+      "italic": true
+    },
+    "tag": 18,
+    "property": 124,
+    "type.builtin": {
+      "bold": true,
+      "color": 23
+    },
+    "type": 23,
+    "module": 136,
+    "constructor": 136,
+    "keyword": 56,
+    "embedded": null,
+    "constant": 94,
+    "operator": {
+      "bold": true,
+      "color": 239
+    },
+    "punctuation.delimiter": 239,
+    "string.special": 30,
+    "number": {
+      "bold": true,
+      "color": 94
+    },
+    "string": 28,
+    "function.builtin": {
+      "color": 26,
+      "bold": true
+    },
+    "variable.builtin": {
+      "bold": true
+    }
+  }
+}

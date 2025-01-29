@@ -66,10 +66,9 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   fonts.packages = with pkgs; [
-    nerdfonts
     powerline-fonts
     powerline-symbols
-  ];
+  ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -97,8 +96,10 @@
 
   hardware.logitech.wireless.enable = true;
 
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
+  
   security.rtkit.enable = true;
+  
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -116,39 +117,15 @@
     ];
   };
 
-  # Load nvidia driver for Xorg and Wayland
   services.xserver.videoDrivers = ["nvidia"];
 
   hardware.nvidia = {
     forceFullCompositionPipeline = false;
-
-    # Modesetting is required.
     modesetting.enable = true;
-
-    # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
-    # Enable this if you have graphical corruption issues or application crashes after waking
-    # up from sleep. This fixes it by saving the entire VRAM memory to /tmp/ instead 
-    # of just the bare essentials.
     powerManagement.enable = true;
-
-    # Fine-grained power management. Turns off GPU when not in use.
-    # Experimental and only works on modern Nvidia GPUs (Turing or newer).
     powerManagement.finegrained = false;
-
-    # Use the NVidia open source kernel module (not to be confused with the
-    # independent third-party "nouveau" open source driver).
-    # Support is limited to the Turing and later architectures. Full list of 
-    # supported GPUs is at: 
-    # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus 
-    # Only available from driver 515.43.04+
-    # Currently alpha-quality/buggy, so false is currently the recommended setting.
     open = true;
-
-    # Enable the Nvidia settings menu,
-    # accessible via `nvidia-settings`.
     nvidiaSettings = true;
-
-    # Optionally, you may need to select the appropriate driver version for your specific GPU.
     package = config.boot.kernelPackages.nvidiaPackages.beta;
   };
 
@@ -184,6 +161,8 @@
     loadModels = [
       "dolphin-mixtral"
       "llava-phi3"
+      "deepseek-r1:14b"
+      "deepseek-coder-v2"
     ];
   };
 
@@ -253,11 +232,11 @@
 
     krita gamemode gamescope mangohud bottles lutris heroic gogdl sqlite
 
-    valgrind neovim conda python312 python312Packages.pip gperftools godot_4 zig asdf
+    llvmPackages.libcxxClang valgrind neovim conda python312 python312Packages.pip gperftools godot_4 asdf-vm
 
-    lua51Packages.lua lua51Packages.luarocks-nix luajit luajitPackages.luarocks-nix
+    lua51Packages.lua lua51Packages.luarocks-nix luajit luajitPackages.luarocks-nix zig
 
-    tree-sitter fish-lsp lua-language-server zls vim-language-server nginx-language-server
+    tree-sitter fish-lsp lua-language-server zls vim-language-server nginx-language-server tree-sitter-grammars.tree-sitter-yaml
   ];
 
   environment.sessionVariables = {
@@ -289,12 +268,5 @@
     ];
   };
 
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.11"; # Did you read the comment?
-
+  system.stateVersion = "24.11";
 }
