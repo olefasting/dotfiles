@@ -25,8 +25,26 @@
       nixos-bgrt-plymouth
     ];
   };
+ 
+  boot.kernelParams = [
+    "splash"
+    "quiet"
+    "nvidia-drm.modeset=1"
+    "nvidia-drm.fbdev=1"
+  ];
 
-  boot.initrd.luks.devices."luks-d22887f8-10e8-428a-8815-6400ced92898".device = "/dev/disk/by-uuid/d22887f8-10e8-428a-8815-6400ced92898";
+  boot.initrd = {
+    kernelModules = [
+      "nvidia_modeset"
+      "nvidia_drm"
+      "nvidia_uvm"
+    ];
+    luks.devices = {
+      "luks-d22887f8-10e8-428a-8815-6400ced92898" = {
+        device = "/dev/disk/by-uuid/d22887f8-10e8-428a-8815-6400ced92898";
+      };
+    };
+  };
   
   networking = {
     hostName = "sortsol";
@@ -139,17 +157,6 @@
     powerOnBoot = true;
   };
 
-  boot.kernelParams = [
-    "nvidia-drm.modeset=1"
-    "nvidia-drm.fbdev=1"
-  ];
-
-  boot.initrd.kernelModules = [
-    "nvidia_modeset"
-    "nvidia_drm"
-    "nvidia_uvm"
-  ];
-
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
@@ -236,11 +243,11 @@
     vulkan-tools clinfo plasma-panel-colorizer qutebrowser resvg
     wayland-pipewire-idle-inhibit vulnix flatpak-builder xdg-dbus-proxy libportal-qt6 krunner-translator
 
-    kdePackages.plasma-firewall kdePackages.plasma-vault kdePackages.kdeconnect-kde kdePackages.sddm-kcm kdePackages.plymouth-kcm
-    kdePackages.plasma-disks kdePackages.partitionmanager kdePackages.kdesu kdePackages.kde-gtk-config appimage-run
-    kdePackages.kcachegrind kdePackages.kcalc kdePackages.kalarm kdePackages.isoimagewriter kdePackages.flatpak-kcm
-    kdePackages.filelight kdePackages.dolphin-plugins kdePackages.discover kdePackages.accounts-qt kdePackages.kpipewire
-    kdePackages.sonnet 
+    kdePackages.qtbase kdePackages.kconfig kdePackages.plasma-firewall kdePackages.plasma-vault kdePackages.kdeconnect-kde
+    kdePackages.sddm-kcm kdePackages.plymouth-kcm kdePackages.plasma-disks kdePackages.partitionmanager kdePackages.kdesu
+    kdePackages.kde-gtk-config appimage-run kdePackages.kcachegrind kdePackages.kcalc kdePackages.kalarm kdePackages.isoimagewriter
+    kdePackages.flatpak-kcm kdePackages.filelight kdePackages.dolphin-plugins kdePackages.discover kdePackages.accounts-qt
+    kdePackages.kpipewire kdePackages.sonnet 
 
     aspell aspellDicts.en aspellDicts.en-science aspellDicts.en-computers aspellDicts.nn aspellDicts.nb
 
@@ -248,7 +255,7 @@
 
     valgrind neovim conda python3Full gperftools godot_4 zig asdf lua luajit
 
-    fish-lsp lua-language-server zls vim-language-server nginx-language-server
+    tree-sitter fish-lsp lua-language-server zls vim-language-server nginx-language-server
   ];
 
   environment.sessionVariables = {
