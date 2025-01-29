@@ -253,7 +253,9 @@
 
     krita gamemode gamescope mangohud bottles lutris heroic gogdl sqlite
 
-    valgrind neovim conda python3Full gperftools godot_4 zig asdf lua luajit
+    valgrind neovim conda python312 python312Packages.pip gperftools godot_4 zig asdf
+
+    lua51Packages.lua lua51Packages.luarocks-nix luajit luajitPackages.luarocks-nix
 
     tree-sitter fish-lsp lua-language-server zls vim-language-server nginx-language-server
   ];

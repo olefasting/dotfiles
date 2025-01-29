@@ -22,5 +22,9 @@ end
 set -gx EDITOR nvim
 
 if status is-interactive
-    # Commands to run in interactive sessions can go here
+  alias --save l="ls -l"
+  alias --save ll="ls -lah"
+  alias --save ls="ls --color=tty"
+
+  alias --save nix-delete-generations="sudo nix-env -p /nix/var/nix/profiles/system --delete-generations"
 end
