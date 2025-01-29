@@ -236,7 +236,7 @@
 
     lua51Packages.lua lua51Packages.luarocks-nix luajit luajitPackages.luarocks-nix zig
 
-    tree-sitter fish-lsp lua-language-server zls vim-language-server nginx-language-server tree-sitter-grammars.tree-sitter-yaml
+    tree-sitter fish-lsp lua-language-server zls vim-language-server nginx-language-server tree-sitter-grammars.tree-sitter-yaml tailwindcss-language-server
   ];
 
   environment.sessionVariables = {

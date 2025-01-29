@@ -2,12 +2,13 @@
 
 set -e
 
-LOG_PFX_DEBUG="DEBUG: "
-LOG_PFX_TRACE="TRACE: "
-LOG_PFX_INFO="INFO: "
-LOG_PFX_WARNING="WARNING: "
-LOG_PFX_ERROR="ERROR: "
+LOG_PFX_DEBUG="[DBG]=(1)> "
+LOG_PFX_TRACE="[TRC]=(2)> "
+LOG_PFX_INFO="[INF]=(3)> "
+LOG_PFX_WARNING="[WRN]=(4)> "
+LOG_PFX_ERROR="[ERR]=(5)> "
 
+LOG_SEVERITY_NONE=0
 LOG_SEVERITY_DEBUG=1
 LOG_SEVERITY_TRACE=2
 LOG_SEVERITY_INFO=3
@@ -16,9 +17,22 @@ LOG_SEVERITY_ERROR=5
 
 LOG_SEVERITY_DEFAULT="$LOG_SEVERITY_INFO"
 
-LOG_ERROR_DEFAULT="an unspecified error occured"
+[ -z "$DEBUG" ] && DEBUG=0
+
+if [ "$DEBUG" == "1" ]; then
+  VERBOSITY="$LOG_SEVERITY_DEBUG"
+else
+  DEBUG=0
+fi
 
 [ -z "$VERBOSITY" ] && VERBOSITY="$LOG_SEVERITY_DEFAULT"
+[ "$DO_BACKUP" != "1" ] && DO_BACKUP=0
+
+if [ "$VERBOSITY" -lt 0 ]; then 
+  VERBOSITY="$LOG_SEVERITY_NONE"
+elif [ "$VERBOSITY" -gt "$LOG_SEVERITY_ERROR" ]; then
+  VERBOSITY="$LOG_SEVERITY_ERROR"
+fi
 
 function to_pfx() {
   local _severity="$1"
@@ -49,6 +63,34 @@ function to_pfx() {
   esac
   echo "$_pfx"
   return 0
+}
+
+function to_msg_type() {
+  local _severity="$1"
+  local _type=""
+  case "$_severity" in
+    $LOG_SEVERITY_NONE)
+      _type="none"
+      ;;
+    $LOG_SEVERITY_DEBUG)
+      _type="debug"
+      ;;
+    $LOG_SEVERITY_TRACE)
+      _type="trace"
+      ;;
+    $LOG_SEVERITY_INFO)
+      _type="info"
+      ;;
+    $LOG_SEVERITY_WARNING)
+      _type="warning"
+      ;;
+    *)
+      _type="error"
+      ;;
+  esac
+  echo "$_type"
+  unset _type
+  unset _severity
 }
 
 function fmtout() {
@@ -111,7 +153,7 @@ function create_symlink() {
 		errout "path '$_path1' does not exist"
 		return 1
 	fi
-	info "creating symlink from '$_path1' to '$_path2'..."
+	info "symlink '$_path1' -> '$_path2'"
   local _folder="$(dirname $_path2)"
   if [ ! -e "$_folder" ]; then
     if [ -f "$_folder" ]; then
@@ -151,11 +193,16 @@ function create_symlink() {
 
 [ -e "$XDG_CONFIG_HOME" ] && mkdir -p "$XDG_CONFIG_HOME"
 
-info "symlinking dotfiles to users home directory"
+info "installing to user ${USER}'s home directory ($HOME)"
 
-info "VERBOSITY = '$VERBOSITY'"
+if [ "$DEBUG" == "1" ]; then
+  info "DEBUG     = '1' (on)"
+else
+  info "DEBUG     = '$DEBUG' (off)"
+fi
 
-[ "$DO_BACKUP" != "1" ] && DO_BACKUP=0
+info "VERBOSITY = '$VERBOSITY' ($(to_msg_type $VERBOSITY))"
+
 if [ $DO_BACKUP == "1" ]; then
   info "DO_BACKUP = '1' (on)"
 else
@@ -169,4 +216,4 @@ create_symlink "$PWD/tmux/tmux.conf" "$HOME/.tmux.conf"
 create_symlink "$PWD/nvim" "$XDG_CONFIG_HOME/nvim"
 create_symlink "$PWD/tree-sitter/config.json" "$XDG_CONFIG_HOME/tree-sitter/config.json"
 
-info "symlinking complete!"
+info "installation completed successfully!"
