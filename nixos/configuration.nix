@@ -230,7 +230,7 @@
 
     aspell aspellDicts.en aspellDicts.en-science aspellDicts.en-computers aspellDicts.nn aspellDicts.nb
 
-    krita gamemode gamescope mangohud bottles lutris heroic gogdl sqlite
+    krita gamemode gamescope mangohud bottles lutris heroic gogdl sqlite tmuxifier
 
     llvmPackages.libcxxClang valgrind neovim conda python312 python312Packages.pip gperftools godot_4 asdf-vm
 
