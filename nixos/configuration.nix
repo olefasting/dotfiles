@@ -233,7 +233,9 @@
     kdePackages.kcachegrind kdePackages.kcalc kdePackages.kalarm kdePackages.isoimagewriter kdePackages.flatpak-kcm
     kdePackages.filelight kdePackages.dolphin-plugins kdePackages.discover kdePackages.accounts-qt kdePackages.kpipewire
 
-    valgrind neovim conda python3Full gperftools krita godot_4 zig
+    valgrind neovim conda python3Full gperftools krita
+
+    godot_4 zig asdf lua-language-server zlp 
  
     gamemode gamescope mangohud bottles lutris heroic gogdl 
   ];
