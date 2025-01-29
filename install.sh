@@ -20,16 +20,15 @@ function create_symlink() {
 	fi
 	echo "creating symlink from '$_path1' to '$_path2'..."
   if [ -e "$_path2" ]; then
-    if [ "$NO_BACKUPS" -eq 1 ] || [ -L "$_path2" ]; then
-      local _cmd="${_pfx}rm -rf $_path2"
-      $($_cmd)
-    else
+    if [ ! -L "$_path2" ] && [ "$DO_BACKUP" == "1" ]; then
       if [ -e "$_path2.old" ]; then
         local _cmd="${_pfx}rm -rf ${_path2}.old" 
         $($_cmd)
-      fi
-
+      fi 
       local _cmd="${_pfx}mv $_path2 ${_path2}.old"
+      $($_cmd)
+    else
+      local _cmd="${_pfx}rm -f $_path2"
       $($_cmd)
     fi
   fi
@@ -52,9 +51,16 @@ function create_symlink() {
 
 echo "symlinking dotfiles to users home directory"
 
-[ "$NO_BACKUPS" -eq 1 ] && echo "WARNING: backups are turned off (NO_BACKUP is 1)"
+[ "$DO_BACKUP" != "1" ] && DO_BACKUP=0
+if [ $DO_BACKUP == "1" ]; then
+  echo "backups are turned 'on' (DO_BACKUP is 1)"
+else
+  echo "backups are turned 'off' (DO_BACKUP is not 1)"
+fi
 
 create_symlink sudo "$PWD/nixos/configuration.nix" "/etc/nixos/configuration.nix"
+
+create_symlink "$PWD/fish" "$XDG_CONFIG_HOME/fish"
 create_symlink "$PWD/alacritty" "$XDG_CONFIG_HOME/alacritty"
 create_symlink "$PWD/tmux/tmux.conf" "$HOME/.tmux.conf"
 create_symlink "$PWD/nvim" "$XDG_CONFIG_HOME/nvim"

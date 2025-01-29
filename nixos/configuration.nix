@@ -221,23 +221,34 @@
     '';
   };
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  programs.fish = {
+    enable = true;
+    useBabelfish = true;
+  };
+
+  services.fwupd.enable = true;
+
   environment.systemPackages = with pkgs; [
-    htop wget vim git mpv libva libva-utils vdpauinfo libvdpau fastfetch pciutils nvidia-system-monitor-qt
-    vkmark polonium solaar logitech-udev-rules vulkan-tools clinfo plasma-panel-colorizer qutebrowser resvg
+    fwupd-efi htop wget vim git mpv libva libva-utils vdpauinfo libvdpau fastfetch pciutils nvidia-system-monitor-qt
+
+    vkmark polonium solaar logitech-udev-rules
+
+    vulkan-tools clinfo plasma-panel-colorizer qutebrowser resvg
     wayland-pipewire-idle-inhibit vulnix flatpak-builder xdg-dbus-proxy libportal-qt6 krunner-translator
 
     kdePackages.plasma-firewall kdePackages.plasma-vault kdePackages.kdeconnect-kde kdePackages.sddm-kcm kdePackages.plymouth-kcm
     kdePackages.plasma-disks kdePackages.partitionmanager kdePackages.kdesu kdePackages.kde-gtk-config appimage-run
     kdePackages.kcachegrind kdePackages.kcalc kdePackages.kalarm kdePackages.isoimagewriter kdePackages.flatpak-kcm
     kdePackages.filelight kdePackages.dolphin-plugins kdePackages.discover kdePackages.accounts-qt kdePackages.kpipewire
+    kdePackages.sonnet 
 
-    valgrind neovim conda python3Full gperftools krita
+    aspell aspellDicts.en aspellDicts.en-science aspellDicts.en-computers aspellDicts.nn aspellDicts.nb
 
-    godot_4 zig asdf lua-language-server zlp 
- 
-    gamemode gamescope mangohud bottles lutris heroic gogdl 
+    krita gamemode gamescope mangohud bottles lutris heroic gogdl sqlite
+
+    valgrind neovim conda python3Full gperftools godot_4 zig asdf lua luajit
+
+    fish-lsp lua-language-server zls vim-language-server nginx-language-server
   ];
 
   environment.sessionVariables = {
@@ -263,6 +274,7 @@
     isNormalUser = true;
     description = "Ole A. Sjo Fasting";
     extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
+    shell = pkgs.fish;
     packages = with pkgs; [
       alacritty zed-editor ktorrent 
     ];
