@@ -21,7 +21,9 @@ return {
         opts = {
           log_level = "TRACE"
         }
-      })
+      }) 
+		  vim.keymap.set("n", "<CS-a>", ":CodeCompanionActions<CR>", {})
+		  vim.keymap.set("n", "<CS-s>", ":CodeCompanionChat<CR>", {})
     end
   }
 }

@@ -233,7 +233,7 @@
   services.fwupd.enable = true;
 
   environment.systemPackages = with pkgs; [
-    zellij starship fzf fwupd-efi htop wget vim git mpv libva libva-utils vdpauinfo libvdpau fastfetch pciutils nvidia-system-monitor-qt
+    zellij starship fzf fwupd-efi htop wget vim git mpv libva libva-utils vdpauinfo libvdpau fastfetch pciutils nvidia-system-monitor-qt wl-clipboard-rs
 
     vkmark polonium solaar logitech-udev-rules dmidecode
 
