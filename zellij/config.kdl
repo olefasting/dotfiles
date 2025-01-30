@@ -381,12 +381,12 @@ copy_clipboard "primary"
 // The folder in which Zellij will look for layouts
 // (Requires restart)
 //
-layout_dir "~/.config/zellij/layouts"
+layout_dir "/home/oasf/.config/zellij/layouts/"
 
 // The folder in which Zellij will look for themes
 // (Requires restart)
 //
-theme_dir "~/.config/zellij/themes"
+theme_dir "/home/oasf/.config/zellij/themes/"
 
 // Enable or disable the rendering of styled and colored underlines (undercurl).
 // May need to be disabled for certain unsupported terminals
