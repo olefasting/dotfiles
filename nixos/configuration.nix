@@ -31,6 +31,7 @@
     "quiet"
     "nvidia-drm.modeset=1"
     "nvidia-drm.fbdev=1"
+    "pcie_port_pm=off"
   ];
 
   boot.initrd = {
@@ -59,10 +60,8 @@
     };
   };
 
-  # Set your time zone.
   time.timeZone = "Europe/Oslo";
 
-  # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
   fonts.packages = with pkgs; [
@@ -70,10 +69,8 @@
     powerline-symbols
   ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);
 
-  # Enable the X11 windowing system.
   services.xserver.enable = true;
 
-  # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm = {
     enable = true;
     theme = "breeze";
@@ -86,7 +83,6 @@
 
   services.desktopManager.plasma6.enable = true;
 
-  # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us,no";
     variant = "";
@@ -109,13 +105,14 @@
     wireplumber.enable = true;
   };
 
-  # Enable OpenGL
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
        nvidia-vaapi-driver
     ];
   };
+
+  programs.nix-required-mounts.presets.nvidia-gpu.enable = true;
 
   services.xserver.videoDrivers = ["nvidia"];
 
@@ -125,8 +122,13 @@
     powerManagement.enable = true;
     powerManagement.finegrained = false;
     open = true;
+    #prime = {
+    #  offload.enableOffloadCmd = true;
+    #  reverseSync.enable = true;
+    #};
     nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.beta;
+    nvidiaPersistenced = true;
+    package = config.boot.kernelPackages.nvidiaPackages.latest;
   };
 
   hardware.bluetooth = {
@@ -184,10 +186,8 @@
 
   programs.waybar.enable = false;
 
-  # Install firefox.
   programs.firefox.enable = true;
 
-  # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   xdg = {
@@ -209,12 +209,20 @@
     '';
   };
 
+  hardware.nvidia-container-toolkit.enable = true;
+
   programs.neovim = {
     enable = true;
     viAlias = true;
     vimAlias = true;
     defaultEditor = true;
     withNodeJs = true;
+  };
+
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
+    dockerSocket.enable = true;
   };
 
   programs.fish = {
@@ -227,7 +235,7 @@
   environment.systemPackages = with pkgs; [
     starship fzf fwupd-efi htop wget vim git mpv libva libva-utils vdpauinfo libvdpau fastfetch pciutils nvidia-system-monitor-qt
 
-    vkmark polonium solaar logitech-udev-rules
+    vkmark polonium solaar logitech-udev-rules dmidecode
 
     vulkan-tools clinfo plasma-panel-colorizer qutebrowser resvg
     wayland-pipewire-idle-inhibit vulnix flatpak-builder xdg-dbus-proxy libportal-qt6 krunner-translator
@@ -246,7 +254,9 @@
 
     lua51Packages.lua lua51Packages.luarocks-nix luajit luajitPackages.luarocks-nix zig nodePackages_latest.nodejs nodePackages_latest.yarn
 
-    tree-sitter fish-lsp lua-language-server zls vim-language-server nginx-language-server tree-sitter-grammars.tree-sitter-yaml tree-sitter-grammars.tree-sitter-zig tree-sitter-grammars.tree-sitter-vim tree-sitter-grammars.tree-sitter-rust tree-sitter-grammars.tree-sitter-typescript tree-sitter-grammars.tree-sitter-toml tree-sitter-grammars.tree-sitter-sql tree-sitter-grammars.tree-sitter-scss tree-sitter-grammars.tree-sitter-regex tree-sitter-grammars.tree-sitter-org-nvim tree-sitter-grammars.tree-sitter-nix tree-sitter-grammars.tree-sitter-make tree-sitter-grammars.tree-sitter-lua tree-sitter-grammars.tree-sitter-llvm tree-sitter-grammars.tree-sitter-kotlin tree-sitter-grammars.tree-sitter-json tailwindcss-language-server tree-sitter-grammars.tree-sitter-html tree-sitter-grammars.tree-sitter-latex tree-sitter-grammars.tree-sitter-markdown tree-sitter-grammars.tree-sitter-markdown-inline tree-sitter-grammars.tree-sitter-javascript tree-sitter-grammars.tree-sitter-json tree-sitter-grammars.tree-sitter-gomod tree-sitter-grammars.tree-sitter-godot-resource tree-sitter-grammars.tree-sitter-glsl tree-sitter-grammars.tree-sitter-go tree-sitter-grammars.tree-sitter-fish tree-sitter-grammars.tree-sitter-elixir tree-sitter-grammars.tree-sitter-dockerfile tree-sitter-grammars.tree-sitter-cuda tree-sitter-grammars.tree-sitter-css tree-sitter-grammars.tree-sitter-cpp tree-sitter-grammars.tree-sitter-comment tree-sitter-grammars.tree-sitter-cmake tree-sitter-grammars.tree-sitter-c tree-sitter-grammars.tree-sitter-bash 
+    julia distrobox podman-tui 
+
+    tree-sitter fish-lsp lua-language-server zls vim-language-server nginx-language-server tailwindcss-language-server kotlin-language-server bash-language-server cmake-language-server autotools-language-server arduino-language-server ansible-language-server
   ];
 
   environment.sessionVariables = {
@@ -271,7 +281,7 @@
   users.users.oasf = {
     isNormalUser = true;
     description = "Ole A. Sjo Fasting";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" "podman" ];
     shell = pkgs.fish;
     packages = with pkgs; [
       alacritty zed-editor ktorrent 

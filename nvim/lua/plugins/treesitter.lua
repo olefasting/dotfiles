@@ -5,7 +5,7 @@ return {
     config = function()
       local config = require("nvim-treesitter.configs")
       config.setup({
-        auto_install = false,
+        auto_install = true,
         ensure_installed = {
           "bash",
           "ruby",
@@ -30,7 +30,9 @@ return {
           "kotlin",
           "zig",
           "vim",
-          "nix"
+          "nix",
+          "julia",
+          "rust"
         },
         highlight = { enable = true },
         indent = { enable = false },

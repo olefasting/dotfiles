@@ -3,7 +3,7 @@
 set -e
 
 LOG_PFX_DEBUG="[DBG] "
-LOG_PFX_INFO="[INF] "
+LOG_PFX_INFO=""
 LOG_PFX_WARNING="[WRN] "
 LOG_PFX_ERROR="[ERR] "
 
@@ -139,7 +139,7 @@ function debug() {
 }
 
 function log() {
-  into "$@"
+  info "$@"
 }
 
 function create_symlink() {
@@ -208,7 +208,7 @@ fi
 
 info "VERBOSITY = '$VERBOSITY' ($(to_msg_type $VERBOSITY))"
 
-if [ "$DO_BACKUP" = "1" ]; then
+if [ "$BACKUP" = "1" ]; then
   info "BACKUP    = '1' (on)"
 else
   info "BACKUP    = '$BACKUP' (off)"
@@ -217,7 +217,7 @@ fi
 create_symlink sudo "$PWD/nixos/configuration.nix" "/etc/nixos/configuration.nix"
 create_symlink "$PWD/fish" "$XDG_CONFIG_HOME/fish"
 create_symlink "$PWD/alacritty" "$XDG_CONFIG_HOME/alacritty"
-create_symlink "$PWD/tmux/tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
+create_symlink "$PWD/tmux/tmux.conf" "$HOME/.tmux.conf"
 create_symlink "$PWD/nvim" "$XDG_CONFIG_HOME/nvim"
 create_symlink "$PWD/tree-sitter/config.json" "$XDG_CONFIG_HOME/tree-sitter/config.json"
 create_symlink "$PWD/starship/starship.toml" "$XDG_CONFIG_HOME/starship.toml"
