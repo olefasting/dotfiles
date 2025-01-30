@@ -233,7 +233,7 @@
   services.fwupd.enable = true;
 
   environment.systemPackages = with pkgs; [
-    starship fzf fwupd-efi htop wget vim git mpv libva libva-utils vdpauinfo libvdpau fastfetch pciutils nvidia-system-monitor-qt
+    zellij starship fzf fwupd-efi htop wget vim git mpv libva libva-utils vdpauinfo libvdpau fastfetch pciutils nvidia-system-monitor-qt
 
     vkmark polonium solaar logitech-udev-rules dmidecode
 
@@ -254,7 +254,7 @@
 
     lua51Packages.lua lua51Packages.luarocks-nix luajit luajitPackages.luarocks-nix zig nodePackages_latest.nodejs nodePackages_latest.yarn
 
-    julia distrobox podman-tui 
+    julia distrobox podman-tui devpod devpod-desktop 
 
     tree-sitter fish-lsp lua-language-server zls vim-language-server nginx-language-server tailwindcss-language-server kotlin-language-server bash-language-server cmake-language-server autotools-language-server arduino-language-server ansible-language-server
   ];
