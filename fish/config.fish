@@ -27,4 +27,6 @@ if status is-interactive
   alias --save ls="ls --color=tty"
 
   alias --save nix-delete-generations="sudo nix-env -p /nix/var/nix/profiles/system --delete-generations"
+
+  starship init fish | source
 end

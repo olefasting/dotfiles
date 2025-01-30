@@ -15,8 +15,11 @@ return {
           gitsigns = true,
           neotree = true,
           treesitter = true,
-        },
+          fzf = true,
+          dashboard = true,
+        }
       })
+
       vim.cmd.colorscheme("catppuccin-mocha")
     end
   }

@@ -215,5 +215,6 @@ create_symlink "$PWD/alacritty" "$XDG_CONFIG_HOME/alacritty"
 create_symlink "$PWD/tmux/tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
 create_symlink "$PWD/nvim" "$XDG_CONFIG_HOME/nvim"
 create_symlink "$PWD/tree-sitter/config.json" "$XDG_CONFIG_HOME/tree-sitter/config.json"
+create_symlink "$PWD/starship/starship.json" "$XDG_CONFIG_HOME/starship.json"
 
 info "installation completed successfully!"
