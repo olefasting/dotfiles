@@ -25,6 +25,9 @@ style = "Italic"
 family = "CaskaydiaCove Nerd Font"
 style = "Regular"
 
+[window]
+opacity = 0.9
+
 [general]
 import = [
   "~/.config/alacritty/catppuccin-mocha.toml"
