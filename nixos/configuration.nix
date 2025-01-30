@@ -214,6 +214,7 @@
     viAlias = true;
     vimAlias = true;
     defaultEditor = true;
+    withNodeJs = true;
   };
 
   programs.fish = {
@@ -243,7 +244,7 @@
 
     llvmPackages.libcxxClang valgrind conda python312 python312Packages.pip python312Packages.pylatexenc gperftools godot_4 asdf-vm
 
-    lua51Packages.lua lua51Packages.luarocks-nix luajit luajitPackages.luarocks-nix zig
+    lua51Packages.lua lua51Packages.luarocks-nix luajit luajitPackages.luarocks-nix zig nodePackages_latest.nodejs nodePackages_latest.yarn
 
     tree-sitter fish-lsp lua-language-server zls vim-language-server nginx-language-server tree-sitter-grammars.tree-sitter-yaml tree-sitter-grammars.tree-sitter-zig tree-sitter-grammars.tree-sitter-vim tree-sitter-grammars.tree-sitter-rust tree-sitter-grammars.tree-sitter-typescript tree-sitter-grammars.tree-sitter-toml tree-sitter-grammars.tree-sitter-sql tree-sitter-grammars.tree-sitter-scss tree-sitter-grammars.tree-sitter-regex tree-sitter-grammars.tree-sitter-org-nvim tree-sitter-grammars.tree-sitter-nix tree-sitter-grammars.tree-sitter-make tree-sitter-grammars.tree-sitter-lua tree-sitter-grammars.tree-sitter-llvm tree-sitter-grammars.tree-sitter-kotlin tree-sitter-grammars.tree-sitter-json tailwindcss-language-server tree-sitter-grammars.tree-sitter-html tree-sitter-grammars.tree-sitter-latex tree-sitter-grammars.tree-sitter-markdown tree-sitter-grammars.tree-sitter-markdown-inline tree-sitter-grammars.tree-sitter-javascript tree-sitter-grammars.tree-sitter-json tree-sitter-grammars.tree-sitter-gomod tree-sitter-grammars.tree-sitter-godot-resource tree-sitter-grammars.tree-sitter-glsl tree-sitter-grammars.tree-sitter-go tree-sitter-grammars.tree-sitter-fish tree-sitter-grammars.tree-sitter-elixir tree-sitter-grammars.tree-sitter-dockerfile tree-sitter-grammars.tree-sitter-cuda tree-sitter-grammars.tree-sitter-css tree-sitter-grammars.tree-sitter-cpp tree-sitter-grammars.tree-sitter-comment tree-sitter-grammars.tree-sitter-cmake tree-sitter-grammars.tree-sitter-c tree-sitter-grammars.tree-sitter-bash 
   ];
