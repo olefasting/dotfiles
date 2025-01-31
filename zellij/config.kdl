@@ -128,6 +128,29 @@ keybinds clear-defaults=true {
             SwitchToMode "locked"
         }
     }
+    tmux {
+        bind "[" { SwitchToMode "scroll"; }
+        bind "Ctrl b" { Write 2; SwitchToMode "locked"; }
+        bind "\"" { NewPane "down"; SwitchToMode "locked"; }
+        bind "%" { NewPane "right"; SwitchToMode "locked"; }
+        bind "z" { ToggleFocusFullscreen; SwitchToMode "locked"; }
+        bind "c" { NewTab; SwitchToMode "locked"; }
+        bind "," { SwitchToMode "renametab"; }
+        bind "p" { GoToPreviousTab; SwitchToMode "locked"; }
+        bind "n" { GoToNextTab; SwitchToMode "locked"; }
+        bind "Left" { MoveFocus "left"; SwitchToMode "locked"; }
+        bind "Right" { MoveFocus "right"; SwitchToMode "locked"; }
+        bind "Down" { MoveFocus "down"; SwitchToMode "locked"; }
+        bind "Up" { MoveFocus "up"; SwitchToMode "locked"; }
+        bind "h" { MoveFocus "left"; SwitchToMode "locked"; }
+        bind "l" { MoveFocus "right"; SwitchToMode "locked"; }
+        bind "j" { MoveFocus "down"; SwitchToMode "locked"; }
+        bind "k" { MoveFocus "up"; SwitchToMode "locked"; }
+        bind "o" { FocusNextPane; }
+        bind "d" { Detach; }
+        bind "Space" { NextSwapLayout; }
+        bind "x" { CloseFocus; SwitchToMode "locked"; }
+    }
     shared_among "normal" "locked" {
         bind "Alt left" { MoveFocusOrTab "left"; }
         bind "Alt down" { MoveFocus "down"; }
@@ -191,6 +214,9 @@ keybinds clear-defaults=true {
         bind "k" { ScrollUp; }
         bind "l" { PageScrollDown; }
         bind "u" { HalfPageScrollUp; }
+    }
+    shared_except "tmux" "locked" {
+        bind "Ctrl b" { SwitchToMode "Tmux"; }
     }
     entersearch {
         bind "Ctrl c" { SwitchToMode "scroll"; }

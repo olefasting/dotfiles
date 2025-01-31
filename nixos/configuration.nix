@@ -128,7 +128,7 @@
     #};
     nvidiaSettings = true;
     nvidiaPersistenced = true;
-    package = config.boot.kernelPackages.nvidiaPackages.latest;
+    package = config.boot.kernelPackages.nvidiaPackages.beta;
   };
 
   hardware.bluetooth = {
@@ -189,6 +189,8 @@
   programs.firefox.enable = true;
 
   nixpkgs.config.allowUnfree = true;
+
+  programs.ssh.startAgent = true;
 
   xdg = {
     portal = {
