@@ -22,11 +22,6 @@ end
 set -gx EDITOR nvim
 
 if status is-interactive
-  alias --save l="ls -l"
-  alias --save ll="ls -lah"
-  alias --save ls="ls --color=tty"
-
-  alias --save nix-delete-generations="sudo nix-env -p /nix/var/nix/profiles/system --delete-generations"
-
+  fish-ssh-agent
   starship init fish | source
 end

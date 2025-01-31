@@ -1,4 +1,7 @@
 keybinds clear-defaults=true {
+    shared {
+        // bind "Ctrl Shift c" { Copy; }
+    }
     locked {
         bind "Ctrl a" { SwitchToMode "normal"; }
     }

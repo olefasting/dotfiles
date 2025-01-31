@@ -246,7 +246,7 @@
     kdePackages.sddm-kcm kdePackages.plymouth-kcm kdePackages.plasma-disks kdePackages.partitionmanager kdePackages.kdesu
     kdePackages.kde-gtk-config appimage-run kdePackages.kcachegrind kdePackages.kcalc kdePackages.kalarm kdePackages.isoimagewriter
     kdePackages.flatpak-kcm kdePackages.filelight kdePackages.dolphin-plugins kdePackages.discover kdePackages.accounts-qt
-    kdePackages.kpipewire kdePackages.sonnet 
+    kdePackages.kpipewire kdePackages.sonnet kdePackages.spectacle 
 
     aspell aspellDicts.en aspellDicts.en-science aspellDicts.en-computers aspellDicts.nn aspellDicts.nb
 
