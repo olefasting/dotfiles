@@ -1,13 +1,13 @@
 return {
   {
-    '<leader>williamboman/mason.nvim',
+    'williamboman/mason.nvim',
     lazy = false,
     config = function()
       require('mason').setup()
     end,
   },
   {
-    '<leader>williamboman/mason-lspconfig.nvim',
+    'williamboman/mason-lspconfig.nvim',
     lazy = false,
     opts = {
       auto_install = true,
@@ -42,7 +42,7 @@ return {
         buf_set_keymap('n', '<leader>M', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
         buf_set_keymap('n', '<leader>I', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
         buf_set_keymap('n', '<leader>S', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-        buf_set_geymap('n', '<leader>R', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+        buf_set_keymap('n', '<leader>R', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
         buf_set_keymap('n', '<leader>F', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
         buf_set_keymap('n', '<leader>w', '<cmd>lua vim.lsp.buf.add_workleader_folder()<CR>', opts)
         buf_set_keymap('n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workleader_folder()<CR>', opts)
@@ -57,7 +57,7 @@ return {
 
       local servers = {
         {
-          'lua_ls',
+          name = "lua_ls",
           on_init = function(client)
             if client.workleader_folders then
               local path = client.workleader_folders[1].name
@@ -85,16 +85,15 @@ return {
             Lua = {}
           }
         },
-        { 'ruby_lsp' },
-        { 'tailwindcss' },
-        { 'pyright' },
-        { 'rust_analyzer' },
-        { 'tsserver' },
+        { name = "ruby_lsp" },
+        { name = "tailwindcss" },
+        { name = "pyright" },
+        { name = "rust_analyzer" },
+        { name = "ts_ls" },
       }
 
-      for _, v in ipairs(servers) do
-        local lsp = v[0]
-        lspconfig.[lsp].setup({
+      for _, lsp in pairs(servers) do
+        lspconfig[lsp.name].setup({
           capabilities = capabilities,
           on_init = lsp.on_init,
           on_attach = common_on_attach,
