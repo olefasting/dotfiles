@@ -22,6 +22,6 @@ end
 set -gx EDITOR nvim
 
 if status is-interactive
-  fish-ssh-agent
+  ssh_agent_start
   starship init fish | source
 end

@@ -34,7 +34,17 @@
     "pcie_port_pm=off"
   ];
 
-  boot.initrd = {
+boot.initrd = {
+    network = {
+      enable = true;
+      ssh = {
+        enable = true;
+        port = 2222;
+      };
+      openvpn = {
+        enable = true;
+      };
+    };
     kernelModules = [
       "nvidia_modeset"
       "nvidia_drm"
@@ -55,7 +65,14 @@
       extraCommands = '' 
         iptables -A INPUT -p tcp -s 10.0.0.12/24 --dport 1714:1764
         iptables -A INPUT -p udp -s 10.0.0.12/24 --dport 1714:1764
-        iptables -A INPUT -p tcp -s 10.0.0.12/24 --dport 9090
+        iptables -A INPUT -p tcp -s 10.0.0.12/24 --dport 2222:2222
+        iptables -A INPUT -p tcp -s 10.8.0.0/24 --dport 2222:2222
+        iptables -A INPUT -p tcp -s 10.0.0.12/24 --dport 9090:9090
+        iptables -A INPUT -p tcp -s 10.8.0.0/24 --dport 9090:9090
+        iptables -A INPUT -p tcp -s 10.0.0.12/24 --dport 80:80
+        iptables -A INPUT -p tcp -s 10.8.0.0/24 --dport 80:80
+        iptables -A INPUT -p tcp -s 10.0.0.12/24 --dport 443:443
+        iptables -A INPUT -p tcp -s 10.8.0.0/24 --dport 443:443
       '';
     };
   };
@@ -95,7 +112,7 @@
   services.pulseaudio.enable = false;
   
   security.rtkit.enable = true;
-  
+ 
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -173,13 +190,38 @@
     port = 3000;
   };
 
+  services.openssh = {
+    enable = true;
+    ports = [ 2222 ];
+    startWhenNeeded = true;
+    allowGroups = [ "remote" ];
+    settings = {
+      PermitRootLogin = "no";
+    };
+  };
+
+  services.openvpn = {
+    enable = false;
+    servers = { 
+      server = {
+        config = ''
+          # Simplest server configuration: https://community.openvpn.net/openvpn/wiki/StaticKeyMiniHowto
+          # server :
+          dev tun
+          ifconfig 10.8.0.1 10.8.0.2
+          secret /root/static.key
+        '';
+        up = "ip route add ...";
+        down = "ip route del ...";
+      };
+    };
+  };
+
   programs.tmux = {
     enable = true;
     terminal = "tmux-direct";
     clock24 = true;
     baseIndex = 1;
-    plugins = with pkgs.tmuxPlugins; [
-    ];
   };
 
   programs.starship.enable = true;
@@ -235,7 +277,7 @@
   services.fwupd.enable = true;
 
   environment.systemPackages = with pkgs; [
-    zellij starship fzf fwupd-efi htop wget vim git mpv libva libva-utils vdpauinfo libvdpau fastfetch pciutils nvidia-system-monitor-qt wl-clipboard-rs
+    helix broot zellij starship fzf procps fwupd-efi htop wget vim git mpv libva libva-utils vdpauinfo libvdpau fastfetch pciutils nvidia-system-monitor-qt wl-clipboard-rs
 
     vkmark polonium solaar logitech-udev-rules dmidecode
 
@@ -283,7 +325,7 @@
   users.users.oasf = {
     isNormalUser = true;
     description = "Ole A. Sjo Fasting";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" "podman" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" "podman" "remote" ];
     shell = pkgs.fish;
     packages = with pkgs; [
       alacritty zed-editor ktorrent 
