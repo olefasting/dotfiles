@@ -2,15 +2,9 @@
 
 set -e
 
-[ -z "$DOTFILES_DIR" ] && DOTFILES_DIR="$(readlink -f $0 | xargs -0 dirname)"
+cd "$(readlink -f $0 | xargs -0 dirname)"
 
-LIB_HOME_DIR="$DOTFILES_DIR/scripts"
-
-cd "$LIB_HOME_DIR"
-
-source "$LIB_HOME_DIR/lib.sh"
-
-cd "$DOTFILES_DIR"
+source "${PWD}/scripts/logging.sh"
 
 function create_symlink() {
   local _pfx=""
