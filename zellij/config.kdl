@@ -1,9 +1,22 @@
 keybinds clear-defaults=true {
     shared {
         bind "Ctrl Shift c" { Copy; }
+        bind "Alt Shift z" {
+            MessagePlugin "autolock" { payload "enable"; };
+        }
+    }
+    normal {
+        bind "Enter" {
+            WriteChars "\u{000D}"; // Passthrough
+            MessagePlugin "autolock" {};
+        }
     }
     locked {
         bind "Ctrl d" { SwitchToMode "normal"; }
+        bind "Alt z" {
+            MessagePlugin "autolock" { payload "disable"; };
+            SwitchToMode "Normal";
+        }
     }
     pane {
         bind "left" { MoveFocus "left"; }
@@ -140,6 +153,11 @@ keybinds clear-defaults=true {
         }
     }
     shared_among "normal" "locked" {
+        bind "Alt z" {
+            MessagePlugin "autolock" {payload "disable";};
+            SwitchToMode "Locked";
+        }
+
         bind "Alt left" { MoveFocusOrTab "left"; }
         bind "Alt down" { MoveFocus "down"; }
         bind "Alt up" { MoveFocus "up"; }
@@ -150,13 +168,17 @@ keybinds clear-defaults=true {
         bind "Alt [" { PreviousSwapLayout; }
         bind "Alt ]" { NextSwapLayout; }
         bind "Alt f" { ToggleFloatingPanes; }
-        bind "Alt h" { MoveFocusOrTab "left"; }
+        bind "Alt n" { NewPane; }
         bind "Alt i" { MoveTab "left"; }
+        bind "Alt o" { MoveTab "right"; }
+        bind "Alt h" { MoveFocusOrTab "left"; }
+        bind "Alt l" { MoveFocusOrTab "right"; }
         bind "Alt j" { MoveFocus "down"; }
         bind "Alt k" { MoveFocus "up"; }
-        bind "Alt l" { MoveFocusOrTab "right"; }
-        bind "Alt n" { NewPane; }
-        bind "Alt o" { MoveTab "right"; }
+        // bind "Ctrl h" { MoveFocusOrTab "left"; }
+        // bind "Ctrl l" { MoveFocusOrTab "right"; }
+        // bind "Ctrl j" { MoveFocus "down"; }
+        // bind "Ctrl k" { MoveFocus "up"; }
     }
     shared_except "locked" "renametab" "renamepane" {
         bind "Ctrl q" { Quit; }
@@ -236,16 +258,29 @@ plugins {
         welcome_screen true
     }
     filepicker location="zellij:strider" {
-        cwd "/home/oasf/Repos"
+        cwd "~/Repos"
     }
     configuration location="zellij:configuration"
     plugin-manager location="zellij:plugin-manager"
+    autolock location="file:~/.config/zellij/plugins/zellij-autolock.wasm" {
+        is_enabled false
+        triggers "nvim|vim|git|fzf|zoxide|atuin"
+        // Reaction to input occurs after this many seconds. (default=0.3)
+        // (An existing scheduled reaction prevents additional reactions.)
+        reaction_seconds "0.3"
+        print_to_log false
+    }
+    zjframes location="file:~/.config/zellij/plugins/zjframes.wasm" {
+        hide_frame_for_single_pane true
+        hide_frame_except_for_search true
+        hide_frame_except_for_scroll true
+        hide_frame_except_for_fullscreen true
+    }
 }
 
 // Plugins to load in the background when a new session starts
 load_plugins {
-  // "file:/path/to/my-plugin.wasm"
-  // "https://example.com/my-plugin.wasm"
+    autolock 
 }
 
 // Use a simplified UI without special fonts (arrow glyphs)
@@ -276,7 +311,7 @@ default_mode "locked"
 
 // The name of the default layout to load on startup
 // Default: "default"
-// default_layout "developer"
+default_layout "default"
 
 // The folder in which Zellij will look for layouts
 // (Requires restart)

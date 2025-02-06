@@ -8,62 +8,19 @@ layout {
             plugin location="zellij:status-bar"
         }
     }
-    pane_template name="tests_under_files" {
-        pane split_direction="horizontal" {
-            children
-            pane command="cargo" size="30%" {
-                args "test"
-            }
+    tab name="dashboard" {
+        pane name="htop" {
+            command "htop"
+            start_suspended true
         }
     }
-    tab_template name="strider_tab" {
-        pane size=1 borderless=true {
-            plugin location="zellij:tab-bar"
-        }
+    tab name="workspace" {
         pane split_direction="vertical" {
-            pane size="15%" {
-                // TODO: when we support sending CWD to plugins, this should start in ./zellij-server
-                plugin location="zellij:strider"
-            }
-            children
+            pane name="editor" edit="." focus=true
         }
-        pane size=2 borderless=true {
-            plugin location="zellij:status-bar"
+        pane size=16 split_direction="vertical" {
+            pane name="terminal 1"
+            pane name="terminal 2" size="25%"
         }
     }
-    tab name="dotfiles" {
-        pane split_direction="horizontal" {
-            pane size="75%" cwd="/home/oasf/Repos/olefasting/dotfiles" edit="./install.sh"
-            pane split_direction="vertical" {
-                pane size="70%" cwd="/home/oasf/Repos/olefasting/dotfiles"
-                pane size="30%"
-            }
-        }
-    }
-    tab name="regnum" {
-        pane split_direction="horizontal" {
-            pane size="75%" cwd="/home/oasf/Repos/kaliyuga/regnum" edit="./build.zig" focus=true
-            pane split_direction="vertical" {
-                pane size="70%"
-                pane cwd="/home/oasf/Repos/kaliyuga/regnum" command="zig" {
-                    args "build test"
-                    size "30%"
-                    start_suspended true
-                }
-            }
-        }
-    }
-    tab name="regnum" {
-        pane split_direction="horizontal" {
-            pane size="75%" cwd="/home/oasf/Repos/kaliyuga/regnum" edit="./build.zig" focus=true
-            pane split_direction="vertical" {
-                pane size="70%"
-                pane cwd="/home/oasf/Repos/kaliyuga/regnum" command="zig" {
-                    args "build test"
-                    size "30%"
-                    start_suspended true
-                }
-            }
-        }
-     }
-  }
+}
