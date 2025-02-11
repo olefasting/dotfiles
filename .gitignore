@@ -1,3 +1,7 @@
 *.log
 *.bak
 *.bak.*
+
+helix/runtime/
+helix/runtime/*
+helix/runtime/**/*

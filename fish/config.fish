@@ -31,12 +31,6 @@ alias update='sudo pacman -Syu'
 # Get fastest mirrors
 alias mirror="sudo cachyos-rate-mirrors"
 
-# Help people new to Arch
-alias apt='man pacman'
-alias apt-get='man pacman'
-alias please='sudo'
-alias tb='nc termbin.com 9999'
-
 # Cleanup orphaned packages
 alias cleanup='sudo pacman -Rns (pacman -Qtdq)'
 
@@ -45,6 +39,8 @@ alias jctl="journalctl -p 3 -xb"
 
 # Recent installed packages
 alias rip="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -200 | nl"
+
+alias hx='helix'
 
 if status is-interactive
     ssh_agent_start

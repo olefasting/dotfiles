@@ -1,58 +1,108 @@
 [[language]]
-name = "rust"
-language-servers = [ "rust-analyzer", "typos-lsp" ]
-formatter = { command = "rustfmt" }
+name = "toml"
+auto-format = true
+# https://github.com/bd82/toml-tools/tree/master/packages/prettier-plugin-toml
+formatter = { command = "prettier", args = ["--parser", "toml"] }
 
 [[language]]
-name = "zig"
-language-servers = [ "zlp", "typos-lsp" ]
+name = "kdl"
+auto-format = true
+language-servers = [ "kdl-lsp" ]
+formatter = { command = "prettier", args = ["--parser", "kdl"] }
 
 [[language]]
-name = "css"
-language-servers = [ "vscode-css-language-server", "typos-lsp" ]
-
-[[language]]
-name = "html"
-language-servers = [ "vscode-html-language-server", "typos-lsp" ]
+name = "c"
+formatter = { command = "clang-format", args = ["--assume-filename", "%file"] }
 
 [[language]]
 name = "json"
-language-servers = [ "vscode-json-language-server", "typos-lsp" ]
+formatter = { command = "prettier", args = ["--parser", "json"] }
+
+[[language]]
+name = "javascript"
+auto-format = true
+
+[[language]]
+name = "typescript"
+auto-format = true
+
+[[language]]
+name = "markdown"
+formatter = { command = "dprint", args = ["fmt", "--stdin", "md"]}
+
+[[language]]
+name = "rust"
+language-servers = ["rust-analyzer" ]
+formatter = { command = "rustfmt" }
+auto-format = true
+indent = { tab-width = 2, unit = "  " }
+
+[language-server.rust-analyzer]
+command = "rust-analyzer"
+
+[[language]]
+name = "go"
+#config = { formatting.gofumpt = true }
+language-servers = ["gopls", "golangci-lint"]
+
+[[language]]
+name = "yaml"
+indent = { tab-width = 2, unit = "  " }
+formatter = { command = "prettier", args = ["--parser", "yaml"] }
+
+[[language]]
+name = "d2"
+scope = ""
+file-types = ["d2"]
+comment-token = "#"
+roots = [""]
+indent = { tab-width = 2, unit = "  " }
+
+[[grammar]]
+name = "d2"
+source = { git = "https://git.pleshevski.ru/pleshevskiy/tree-sitter-d2", rev = "eb6910126fa392b60832d834fe6640635cd35ba8" }
+
+[[language]]
+name = "typst"
+auto-format = true
+formatter.command = "typstyle"
+
+[[language]]
+name = "go"
+language-servers = ["gopls", "golangci-lint"]
+
+[[language]]
+name = "zig"
+language-servers = [ "zlp" ]
 
 [[language]]
 name = "bash"
-language-servers = [ "bash-language-server", "typos-lsp" ]
+language-servers = [ "bash-language-server" ]
 formatter = { command = "shfmt" }
 
 [[language]]
 name = "cpp"
-language-servers = [ "clangd", "typos-lsp" ]
+language-servers = [ "clangd" ]
 
 [[language]]
 name = "fish"
-language-servers = [ "fish-lsp", "typos-lsp" ]
-
-[[language]]
-name = "typescript"
-language-servers = [ "typescript-language-server", "typos-lsp" ]
+language-servers = [ "fish-lsp" ]
 
 [[language]]
 name = "kotlin"
-language-servers = [ "kotlin-language-server", "typos-lsp" ]
+language-servers = [ "kotlin-language-server" ]
 
 [[language]]
 name = "odin"
-language-servers = [ "odinls", "typos-lsp" ]
+language-servers = [ "odinls" ]
 
 [[language]]
 name = "lua"
-language-servers = [ "lua-language-server", "typos-lsp" ]
+language-servers = [ "lua-language-server" ]
 
 [[language]]
 name = "dockerfile"
-language-servers = [ "dockerfile-language-server", "typos-lsp" ]
+language-servers = [ "dockerfile-language-server" ]
 
-[[language]]
-name = "go"
-language-servers = [ "gopls", "typos-lsp" ]
-formatter = { command = "gofmt" }
+[use-grammars]
+only = [ "rust", "toml", "bash", "zig", "kotlin", "odin", "fish", "markdown", "markdown-inline" ]

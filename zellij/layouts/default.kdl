@@ -10,7 +10,9 @@ layout {
     }
     pane_template name="toolbox_under" {
         pane split_direction="horizontal" {
-            children
+            pane size="75%" split_direction="vertical" {
+                children
+            }
             pane name="toolbox" split_direction="vertical" {
                 pane name="terminal"
                 pane stacked=true {
@@ -28,33 +30,32 @@ layout {
         pane size=1 borderless=true {
             plugin location="zellij:tab-bar"
         }
-        pane size="75%" split_direction="vertical" {
+        toolbox_under {
             children
-        }
-        pane name="toolbox" split_direction="vertical" {
-            pane name="terminal"
-            pane stacked=true {
-                pane command="zig" {
-                    args "build"
-                }
-                pane command="zig" {
-                    args "build test"
-                }
-            }
         }
         pane size=2 borderless=true {
             plugin location="zellij:status-bar"
         }
     }
     tab name="dashboard" {
-        pane name="htop" {
-            command "htop"
-            start_suspended true
+        pane split_direction="vertical" {
+            pane command="lazygit" {
+                start_suspended true
+                close_on_exit true
+            }
+            pane split_direction="horizontal" {
+                pane command="bpytop" {
+                    start_suspended true
+                    close_on_exit true
+                }
+                pane command="nvtop" {
+                    start_suspended true
+                    close_on_exit true
+                }
+            }
         }
     }
-    workspace_tab name="workspace 1" {
-        pane split_direction="vertical" {
-            pane edit="."
-        }
+    workspace_tab name="workspace" {
+        pane name="editor" edit=""
     }
 }
