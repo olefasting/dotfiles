@@ -1,0 +1,3 @@
+source /usr/share/cachyos-zsh-config/cachyos-config.zsh
+
+[ -e "${ZDOTDIR:-$HOME}/.p10k.zsh" ] && source "${ZDOTDIR:-$HOME}/.p10k.zsh"

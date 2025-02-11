@@ -1,3 +1,3 @@
-function l --wraps='ls -l' --description 'alias l=ls -l'
-  command ls -l $argv        
+function l. --description "alias l.=eza -a | grep -e '^\.'"
+    command eza -a | grep -e '^\.' $argv
 end

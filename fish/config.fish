@@ -1,46 +1,26 @@
-# Replace ls with eza
-alias ls='eza -al --color=always --group-directories-first --icons' # preferred listing
-alias la='eza -a --color=always --group-directories-first --icons' # all files and dirs
-alias ll='eza -l --color=always --group-directories-first --icons' # long format
-alias lt='eza -aT --color=always --group-directories-first --icons' # tree listing
-alias l.="eza -a | grep -e '^\.'" # show only dotfiles
+set -gx LANGUAGE en_US:en
+set -gx LANG en_US.UTF-8
+set -gx LC_LANGUAGE en_US.UTF-8
+set -gx LC_CTYPE en_US.UTF-8
+set -gx LC_NUMERIC en_US.UTF-8
+set -gx LC_COLLATE en_US.UTF-8
+set -gx LC_TIME nb_NO.UTF-8
+set -gx LC_MESSAGES en_US.UTF-8
+set -gx LC_MONETARY en_US.UTF-8
+set -gx LC_ADDRESS nb_NO.UTF-8
+set -gx LC_IDENTIFICATION nb_NO.UTF-8
+set -gx LC_MEASUREMENT nb_NO.UTF-8
+set -gx LC_PAPER nb_NO.UTF-8
+set -gx LC_TELEPHONE nb_NO.UTF-8
+set -gx LC_NAME nb_NO.UTF-8
+set -gx LC_ALL
 
-# Common use
-alias grubup="sudo grub-mkconfig -o /boot/grub/grub.cfg"
-alias fixpacman="sudo rm /var/lib/pacman/db.lck"
-alias tarnow='tar -acf '
-alias untar='tar -zxvf '
-alias wget='wget -c '
-alias psmem='ps auxf | sort -nr -k 4'
-alias psmem10='ps auxf | sort -nr -k 4 | head -10'
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias .....='cd ../../../..'
-alias ......='cd ../../../../..'
-alias dir='dir --color=auto'
-alias vdir='vdir --color=auto'
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
-alias hw='hwinfo --short' # Hardware Info
-alias big="expac -H M '%m\t%n' | sort -h | nl" # Sort installed packages according to size in MB
-alias gitpkg='pacman -Q | grep -i "\-git" | wc -l' # List amount of -git packages
-alias update='sudo pacman -Syu'
+if test -z "$XDG_CONFIG_HOME"
+    set -gx XDG_CONFIG_HOME "$HOME/.config"
+end
 
-# Get fastest mirrors
-alias mirror="sudo cachyos-rate-mirrors"
-
-# Cleanup orphaned packages
-alias cleanup='sudo pacman -Rns (pacman -Qtdq)'
-
-# Get the error messages from journalctl
-alias jctl="journalctl -p 3 -xb"
-
-# Recent installed packages
-alias rip="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -200 | nl"
-
-alias hx='helix'
+set -gx EDITOR helix
+set -gx VISUAL_EDITOR zeditor
 
 if status is-interactive
     ssh_agent_start

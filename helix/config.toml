@@ -103,10 +103,13 @@ C-right = "jump_view_right"
 q = ":bc"
 Q = ":bc!"
 
+[keys.normal.space.space]
+#f = "file_browser"
+
 # Remove vscode "training wheels"
 # Comment this to enable arrow navigation in insert mode
 [keys.insert]
-j = { j = "normal_mode" }
+# j = { j = "normal_mode" }
 # up = "no_op"
 # down = "no_op"
 # left = "no_op"

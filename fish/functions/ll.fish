@@ -1,3 +1,3 @@
-function ll --wraps='ls -lah' --description 'alias ll=ls -lah'
-  command ls -lah $argv
+function ll --wraps='eza -l' --description 'alias ll=eza -l'
+    command eza -l --color=always --group-directories-first --icons $argv
 end

@@ -56,6 +56,6 @@ layout {
         }
     }
     workspace_tab name="workspace" {
-        pane name="editor" edit=""
+        pane name="editor" edit="./README.md"
     }
 }

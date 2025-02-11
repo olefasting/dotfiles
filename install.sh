@@ -32,21 +32,19 @@ function create_symlink() {
     local _cmd="${_pfx}mkdir -p $_folder"
     eval "$_cmd"
   fi
-  if [ -e "$_path2" ]; then
-    if [ ! -L "$_path2" ] && [ "$BACKUP" == "1" ]; then
-      if [ -e "$_path2.old" ]; then
-        local _cmd="${_pfx}rm -rf ${_path2}.old" 
-        eval "$_cmd"
-      fi
-      local _cmd="${_pfx}mv $_path2 ${_path2}.old"
-      eval "$_cmd"
-    elif [ -d "$_path2" ]; then
-      local _cmd="${_pfx}rm -rf $_path2"
-      eval "$_cmd" 
-    else
-      local _cmd="${_pfx}rm -f $_path2"
+  if [ ! -L "$_path2" ] && [ "$BACKUP" == "1" ]; then
+    if [ -e "$_path2.old" ]; then
+      local _cmd="${_pfx}rm -rf ${_path2}.old" 
       eval "$_cmd"
     fi
+    local _cmd="${_pfx}mv $_path2 ${_path2}.old"
+    eval "$_cmd"
+  elif [ -d "$_path2" ]; then
+    local _cmd="${_pfx}rm -rf $_path2"
+    eval "$_cmd" 
+  elif [ -e "$_path2" ]; then
+    local _cmd="${_pfx}rm -f $_path2"
+    eval "$_cmd"
   fi
 
   local _cmd="${_pfx}ln -s $_path1 $_path2"
@@ -84,13 +82,17 @@ else
 fi
 
 # create_symlink sudo "$PWD/nixos/configuration.nix" "/etc/nixos/configuration.nix"
-create_symlink "$PWD/fish" "$XDG_CONFIG_HOME/fish"
+# create_symlink "$PWD/fish" "$XDG_CONFIG_HOME/fish"
+create_symlink "$PWD/zsh/zshenv" "$HOME/.zshenv"
+create_symlink "$PWD/zsh/zshrc" "$XDG_CONFIG_HOME/zsh/.zshrc"
+create_symlink "$PWD/zsh/.p10k.zsh" "$XDG_CONFIG_HOME/zsh/.p10k.zsh"
 create_symlink "$PWD/alacritty" "$XDG_CONFIG_HOME/alacritty"
 create_symlink "$PWD/zellij" "$XDG_CONFIG_HOME/zellij"
-create_symlink "$PWD/nvim" "$XDG_CONFIG_HOME/nvim"
+# create_symlink "$PWD/nvim" "$XDG_CONFIG_HOME/nvim"
 create_symlink "$PWD/helix" "$XDG_CONFIG_HOME/helix"
 create_symlink "$PWD/tree-sitter/config.json" "$XDG_CONFIG_HOME/tree-sitter/config.json"
-create_symlink "$PWD/starship/starship.toml" "$XDG_CONFIG_HOME/starship.toml"
-create_symlink "$PWD/foot/foot.ini" "$XDG_CONFIG_HOME/foot/foot.ini"
+# create_symlink "$PWD/starship/starship.toml" "$XDG_CONFIG_HOME/starship.toml"
+# create_symlink "$PWD/foot/foot.ini" "$XDG_CONFIG_HOME/foot/foot.ini"
+create_symlink "$PWD/zfxtop/config.ini" "$XDG_CONFIG_HOME/zfxtop/config.ini"
 
 info "installation completed successfully!"
