@@ -15,8 +15,10 @@ set -gx LC_TELEPHONE nb_NO.UTF-8
 set -gx LC_NAME nb_NO.UTF-8
 set -gx LC_ALL
 
-if test -n "$XDG_CONFIG_HOME"
-  set -gx XDG_CONFIG_HOME "$HOME/.config"
+if test -z "$XDG_CONFIG_HOME"
+    set -gx XDG_CONFIG_HOME "$HOME/.config"
 end
 
-set -gx EDITOR nvim
+set -gx EDITOR helix
+set -gx VISUAL_EDITOR zeditor
+

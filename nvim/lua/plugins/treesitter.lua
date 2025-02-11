@@ -33,7 +33,10 @@ return {
           "vim",
           "nix",
           "julia",
-          "rust"
+          "rust",
+          "latex",
+          "markdown",
+          "markdown_inline",
         },
         highlight = { enable = true },
         indent = { enable = true },

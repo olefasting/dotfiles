@@ -8,19 +8,53 @@ layout {
             plugin location="zellij:status-bar"
         }
     }
+    pane_template name="toolbox_under" {
+        pane split_direction="horizontal" {
+            children
+            pane name="toolbox" split_direction="vertical" {
+                pane name="terminal"
+                pane stacked=true {
+                    pane command="zig" {
+                        args "build"
+                    }
+                    pane command="zig" {
+                        args "build test"
+                    }
+                }
+            }
+        }
+    }
+    tab_template name="workspace_tab" {
+        pane size=1 borderless=true {
+            plugin location="zellij:tab-bar"
+        }
+        pane size="75%" split_direction="vertical" {
+            children
+        }
+        pane name="toolbox" split_direction="vertical" {
+            pane name="terminal"
+            pane stacked=true {
+                pane command="zig" {
+                    args "build"
+                }
+                pane command="zig" {
+                    args "build test"
+                }
+            }
+        }
+        pane size=2 borderless=true {
+            plugin location="zellij:status-bar"
+        }
+    }
     tab name="dashboard" {
         pane name="htop" {
             command "htop"
             start_suspended true
         }
     }
-    tab name="workspace" {
+    workspace_tab name="workspace 1" {
         pane split_direction="vertical" {
-            pane name="editor" edit="." focus=true
-        }
-        pane size=16 split_direction="vertical" {
-            pane name="terminal 1"
-            pane name="terminal 2" size="25%"
+            pane edit="."
         }
     }
 }
