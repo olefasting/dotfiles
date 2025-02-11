@@ -145,11 +145,20 @@ keybinds clear-defaults=true {
         }
     }
     shared_except "locked" {
-        bind "Ctrl y" {
+        bind "y" {
             LaunchOrFocusPlugin "file:~/.config/zellij/plugins/zellij-workspace.wasm" {
                 floating true
                 debug false
             }
+        }
+        bind "g" {
+            LaunchOrFocusPlugin "file:~/.config/zellij/plugins/zellij-sessionizer.wasm" {
+                floating true
+                move_to_focused_tab true
+                cwd "/"
+                root_dirs "/home/oasf/Repos/external;/home/oasf/Repos/olefasting;/home/oasf/Repos/kaliyuga-io"
+                session_layout "myCustomLayout"
+            }; SwitchToMode "Locked";
         }
     }
     shared_among "normal" "locked" {
