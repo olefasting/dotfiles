@@ -1,131 +1,360 @@
 [[language]]
 name = "toml"
+formatter = { command = "taplo", args = ["format", "-"] }
 auto-format = true
-formatter = { command = "prettier", args = ["--parser", "toml"] }
 
 [[language]]
-name = "kdl"
+name = "python"
+# use pylsp-mypy for mypy
+language-servers = ["pylsp", "ruff", "gpt"]
+formatter = { command = "ruff", args = ["format", "-n", "-"] }
 auto-format = true
-language-servers = ["kdl-lsp"]
-formatter = { command = "prettier", args = ["--parser", "kdl"] }
+
+[language-server.ruff]
+command = "ruff"
+args = ["server", "--preview"]
+config = { settings = { organizeImports = true, lint.run = "onSave" } }
+
+[[language]]
+name = "fish"
+formatter = { command = "fish_indent" }
+language-servers = ["fish-lsp", "gpt"]
+auto-format = true
+
+[language-server.efm]
+command = "efm-langserver"
+
+[[language]]
+name = "php"
+language-servers = [
+  { name = "phpactor", except-features = [
+    "format",
+  ] },
+  { name = "phan", except-features = [
+    "format",
+  ] },
+  { name = "psalm", except-features = [
+    "format",
+  ] },
+  { name = "efm", only-features = [
+    "code-action",
+    "diagnostics",
+  ] }, # for phpstan
+  "gpt",
+]
+formatter = { command = "pretty-php", args = [
+  "--psr12",
+  "--preset",
+  "laravel",
+  "-",
+] }
+auto-format = true
+
+[language-server.phpactor]
+command = "phpactor"
+args = ["language-server"]
+
+[language-server.psalm]
+command = "psalm"
+args = ["--language-server"]
+
+[[language]]
+name = "lua"
+language-servers = [
+  { name = "lua-language-server", except-features = [
+    "format",
+  ] },
+  { name = "efm", only-features = [
+    "diagnostics",
+    "code-action",
+  ] }, # for seleney
+  "gpt",
+]
+formatter = { command = "stylua", args = ["-"] }
+auto-format = true
+
+[language-server.lua-language-server.config.Lua]
+format.enable = false
+runtime.version = "LuaJIT"
+diagnostics.globals = ["vim"]
+workspace.library = [
+  "/usr/share/nvim/runtime/lua",
+  "/usr/share/nvim/runtime/lua/vim",
+  "/usr/share/nvim/runtime/lua/vim/lsp",
+]
+
+[[language]]
+name = "zig"
+language-servers = ["zlp", "gpt"]
+auto-format = true
+
+[language-server.zls.config]
+enable_build_on_save = true
+enable_autofix = false
+warn_style = true
+highlight_global_var_declarations = true
+
+[[language]]
+name = "gas"
+file-types = ["s", "S"]
+language-servers = ["asm-lsp", "gpt"]
+
+[language-server.asm-lsp]
+command = "asm-lsp"
+args = []
+config = { filetypes = ["s", "S"] }
+
+[[language]]
+name = "rust"
+language-servers = [
+  { name = "rust-analyzer", except-features = [
+    # "format",
+  ] },
+  "gpt",
+]
+auto-format = true
+
+[language-server.rust-analyzer.config]
+check.command = "clippy"
+check.features = "all"
+completion.fullFunctionSignatures.enable = true
+diagnostics.experimental.enable = true
+diagnostics.styleLints.enable = true
+hover.actions.references.enable = true
+hover.memoryLayout.niche = true
+inlayHints.bindingModeHints.enable = true
+inlayHints.closingBraceHints.minLines = 1
+inlayHints.closureCaptureHints.enable = true
+inlayHints.closureReturnTypeHints.enable = "always"           # with_block
+inlayHints.closureStyle = "rust_analyzer"                     # impl_fn | with_id
+inlayHints.discriminantHints.enable = "always"                # fieldless
+inlayHints.expressionAdjustmentHints.enable = "reborrow_only"
+inlayHints.genericParameterHints.lifetime.enable = true
+inlayHints.genericParameterHints.type.enable = true
+inlayHints.implicitDrops.enable = false
+inlayHints.lifetimeElisionHints.enable = "always"             # skip_trivial
+inlayHints.lifetimeElisionHints.useParameterNames = true
+inlayHints.rangeExclusiveHints.enable = true
+interpret.tests = true
+lens.references.adt.enable = true
+lens.references.enumVariant.enable = true
+lens.references.method.enable = true
+lens.references.trait.enable = true
+semanticHighlighting.operator.specialization.enable = true
+semanticHighlighting.punctuation.separate.macro.bang = true
+semanticHighlighting.punctuation.specialization.enable = true
+typing.autoClosingAngleBrackets.enable = true
+
+[[language]]
+name = "dockerfile"
+language-servers = [
+  "docker-langserver",
+  { name = "efm", only-features = [
+    "code-action",
+    "diagnostics",
+  ] }, # for hadolint
+  "gpt",
+]
+
+[[language]]
+name = "yaml"
+file-types = ["yml", "yaml", { glob = "phpstan.neon" }]
+language-servers = [
+  "vscode-yaml-language-server",
+  { except-features = [
+    # "diagnostics",
+  ], name = "gpt" },
+]
+formatter = { command = "prettier", args = ["--"] }
+
+[[language]]
+name = "git-config"
+file-types = [
+  { glob = "git/config" },
+  { glob = ".gitmodules" },
+  { glob = ".gitconfig" },
+  { glob = ".git/config" },
+  { glob = ".config/git/config" },
+]
+language-servers = [
+  "pkgbuild-language-server",
+  { except-features = [
+    # "diagnostics",
+  ], name = "bash-language-server" },
+  { except-features = [
+    # "diagnostics",
+  ], name = "gpt" },
+]
+
+[language-server.clangd]
+command = "clangd"
+args = ["--clang-tidy", "-j=5", "--malloc-trim"]
 
 [[language]]
 name = "c"
+language-servers = [
+  "clangd",
+  { name = "efm", only-features = ["diagnostics"] }, # gcc lints and cppcheck
+  "gpt",
+]
+file-types = ["c", "h"]
 auto-format = true
-language-servers = ["clangd"]
-formatter = { command = "clang-format", args = ["--assume-filename", "%file"] }
 
 [[language]]
-name = "json"
+name = "bash"
+formatter = { command = "shfmt", args = ["--indent", "2", "-"] }
 auto-format = true
-language-servers = ["vscode-json-language-server"]
-formatter = { command = "prettier", args = ["--parser", "json"] }
+language-servers = [
+  "pkgbuild-language-server",
+  { except-features = [
+    # "diagnostics",
+  ], name = "bash-language-server" },
+  { except-features = [
+    # "diagnostics",
+  ], name = "gpt" },
+]
+
+[[language]]
+name = "pkgbuild"
+formatter = { command = "shfmt", args = ["--indent", "2", "-"] }
+auto-format = true
+language-servers = [
+  "pkgbuild-language-server",
+  { except-features = [
+    # "diagnostics",
+  ], name = "bash-language-server" },
+  { except-features = [
+    # "diagnostics",
+  ], name = "gpt" },
+]
+
+[language-server.pkgbuild-language-server]
+command = "termux-language-server"
+
+[[language]]
+name = "mojo"
+scope = "source.mojo"
+file-types = ["mojo", "🔥", { glob = "__init__.mojo" }]
+shebangs = ["mojo"]
+injection-regex = "mojo"
+roots = []
+formatter = { command = "mojo", args = ["format", "-"] }
+auto-format = true
+comment-token = "#"
+language-servers = ["mojo-lsp-server", "gpt"]
+indent = { tab-width = 4, unit = "    " }
+grammar = "python"
+
+[language-server.mojo-lsp-server]
+command = "mojo-lsp-server"
+
+# improve debug configuration with https://docs.modular.com/mojo/tools/debugging#mojo-launch-configurations
+# also have a look at js completion template
+# [language.debugger]
+# name = "mojo-lldb-dap"
+# transport = "stdio"
+# command = "mojo-lldb-dap"
+
+[[language.debugger.templates]]
+name = "binary"
+request = "launch"
+completion = [{ name = "binary", completion = "filename" }]
+args = { console = "internalConsole", program = "{0}", runInTerminal = false, initCommands = [
+] }
+
+[language-server.gpt]
+command = "helix-gpt"
+args = [
+  "--handler",
+  "ollama",
+  "--logFile",
+  "~/.var/log/helix-gpt.log",
+  "--fetchTimeout",
+  "10000",
+  "--actionTimeout",
+  "10000",
+  "--completionTimeout",
+  "10000",
+  "--ollamaTimeout",
+  "60000",
+  "--ollamaEndpoint",
+  "http://127.0.0.1:11434",
+  "--ollamaModel",
+  "deepseek-r1:14b",
+  # "wizardlm2",
+  # "codestral",
+  # "qwen2.5-coder:14b",
+  # "codellama:13b",
+  # "--ollamaContext",
+  # "ollama context here",
+]
+
+[language-server.vscode-css-language-server.config]
+# https://code.visualstudio.com/docs/languages/css#_customizing-css-scss-and-less-settings
+css.lint.unknownAtRules = "ignore"
+
+[language-server.tailwindcss-lsp]
+command = "tailwindcss-language-server"
+args = ["--stdio"]
+
+[language-server.tailwindcss-lsp.config]
+includeLanguages = { tailwindcss = "css" }
+
+[[language]]
+name = "kdl"
+language-servers = ["kdl-lsp", "gpt"]
+auto-format = true
+formatter = { command = "prettier", args = ["--parser", "kdl"] }
+
+[[language]]
+name = "html"
+language-servers = [
+  "vscode-html-language-server",
+  "superhtml",
+  "tailwindcss-lsp",
+  "gpt",
+]
+auto-format = true
+formatter = { command = "prettier", args = ["--parser", "html"] }
+
+[[language]]
+name = "css"
+language-servers = ["vscode-css-language-server", "tailwindcss-lsp", "gpt"]
+auto-format = true
+formatter = { command = "prettier", args = ["--parser", "css"] }
 
 [[language]]
 name = "javascript"
-auto-format = true
-formatter = { command = "prettier", args = ["--parser", "babel"] }
-
-[[language]]
-name = "typescript"
+language-servers = ["typescript-language-server", "gpt"]
 auto-format = true
 formatter = { command = "prettier", args = ["--parser", "typescript"] }
 
 [[language]]
-name = "markdown"
-language-servers = ["markdown-it", "marksman"]
-formatter = { command = "prettier", args = ["--parser", "markdown"] }
-# formatter = { command = "dprint", args = ["fmt", "--stdin", "md"]}
-
-[[language]]
-name = "rust"
-language-servers = ["rust-analyzer"]
-formatter = { command = "rustfmt" }
+name = "typescript"
+language-servers = ["typescript-language-server", "gpt"]
 auto-format = true
-indent = { tab-width = 2, unit = "  " }
-
-[language-server.rust-analyzer]
-command = "rust-analyzer"
+formatter = { command = "prettier", args = ["--parser", "typescript"] }
 
 [[language]]
-name = "go"
-#config = { formatting.gofumpt = true }
-language-servers = ["gopls", "golangci-lint"]
-
-[[language]]
-name = "yaml"
-indent = { tab-width = 2, unit = "  " }
-formatter = { command = "prettier", args = ["--parser", "yaml"] }
-
-[[language]]
-name = "d2"
-scope = ""
-file-types = ["d2"]
-comment-token = "#"
-roots = [""]
-indent = { tab-width = 2, unit = "  " }
-
-[[grammar]]
-name = "d2"
-source = { git = "https://git.pleshevski.ru/pleshevskiy/tree-sitter-d2", rev = "eb6910126fa392b60832d834fe6640635cd35ba8" }
-
-[[language]]
-name = "typst"
+name = "tsx"
+language-servers = ["typescript-language-server", "tailwindcss-lsp", "gpt"]
 auto-format = true
-formatter = { command = "typstyle" }
+formatter = { command = "prettier", args = ["--parser", "typescript"] }
 
 [[language]]
-name = "zig"
-language-servers = ["zlp"]
+name = "jsx"
+language-servers = ["typescript-language-server", "tailwindcss-lsp", "gpt"]
+auto-format = true
+formatter = { command = "prettier", args = ["--parser", "typescript"] }
 
 [[language]]
-name = "bash"
-file-types = ["sh", "bashenv", "bashrc", "bash_profile"]
-language-servers = ["bash-language-server"]
-formatter = { command = "shfmt" }
-indent = { tab-width = 2, unit = "  " }
+name = "json"
+language-servers = ["vscode-json-language-server", "gpt"]
+auto-format = true
+formatter = { command = "prettier", args = ["--parser", "json"] }
 
 [[language]]
-name = "zsh"
-scope = ""
-file-types = ["zsh", "zshenv", "zshrc", "zprofile"]
-language-servers = ["bash-language-server"]
-comment-token = "#"
-indent = { tab-width = 2, unit = "  " }
-
-[[language]]
-name = "cpp"
-language-servers = ["clangd"]
-
-[[language]]
-name = "fish"
-language-servers = ["fish-lsp"]
-
-[[language]]
-name = "kotlin"
-language-servers = ["kotlin-language-server"]
-
-[[language]]
-name = "odin"
-language-servers = ["odinls"]
-
-[[language]]
-name = "lua"
-language-servers = ["lua-language-server"]
-
-[[language]]
-name = "dockerfile"
-language-servers = ["docker-langserver"]
-
-# Uncomment to specify grammars to be used (all are fetched and built if not)
-# [use-grammars]
-# only = [
-#   "rust", "toml", "bash", "zig",
-#   "kotlin", "odin", "fish",
-#   "markdown", "markdown-inline",
-#   "cpp", "dockerfile", "lua",
-#   "go", "typst", "yaml", "d2",
-#   "typescript", "javascript",
-#   "json", "toml", "kdl", "c",
-#   "haskell", "nim", "crystal"
-# ]
+name = "jsonc"
+language-servers = ["vscode-json-language-server", "gpt"]
+auto-format = true
+formatter = { command = "prettier", args = ["--parser", "json"] }

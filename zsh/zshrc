@@ -5,12 +5,21 @@ export HISTIGNORE="&:[bf]g:c:clear:history:exit:q:pwd:* --help"
 [[ "$PROMPT_COMMAND" =~ ^history\ -a\;\ * ]] || PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 export PROMPT_COMMAND
 
-export LESS_TERMCAP_md="$(tput bold 2> /dev/null; tput setaf 2 2> /dev/null)"
-export LESS_TERMCAP_me="$(tput sgr0 2> /dev/null)"
+export LESS_TERMCAP_md="$(
+  tput bold 2>/dev/null
+  tput setaf 2 2>/dev/null
+)"
+export LESS_TERMCAP_me="$(tput sgr0 2>/dev/null)"
+
+alias neovim='nvim'
+alias vim='nvim'
+alias vi='nvim'
+alias kakoune='kak'
+alias hx='helix'
 
 #alias open="xdg-open"
-alias make="make -j`nproc`"
-alias ninja="ninja -j`nproc`"
+alias make="make -j$(nproc)"
+alias ninja="ninja -j$(nproc)"
 alias dir='dir --color=auto'
 alias vdir='vdir --color=auto'
 alias grep='grep --color=auto'
@@ -33,8 +42,10 @@ alias ll.="eza -la --color=always --group-directories-first --icons | grep -e '^
 alias jctl="journalctl -p 3 -xb"
 alias jctlb="journalctl -b -1"
 
-alias pacrmpkg="sudo pacman -Rsn"
-alias pacrmcache="sudo pacman -Scc"
+alias yayrm="yay -Rsn"
+
+alias pacrm="sudo pacman -Rsn"
+alias pacrmcc="sudo pacman -Scc"
 alias pacunlck="sudo rm /var/lib/pacman/db.lck"
 alias pacupdt="sudo pacman -Syu"
 alias paccln="sudo pacman -Rsn $(pacman -Qtdq)"

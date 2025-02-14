@@ -38,12 +38,15 @@ else
   info "BACKUP    = '$BACKUP' (off)"
 fi
 
-install_ghostty
-install_zellij
-install_zsh
-install_sheldon zsh
+install_editor "${EDITOR:-nvim}"
+if [[ "$VISUAL" != "${EDITOR:-nvim}" ]]; then
+  [[ -n "$VISUAL" ]] || install_editor "$VISUAL"
+fi
+
 install_asdf
-install_helix
 install_tree_sitter
+install_alacritty
+install_shell zsh
+install_zellij
 
 info "all installation tasks completed successfully!"

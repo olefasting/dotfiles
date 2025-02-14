@@ -1,64 +1,6 @@
 if [ "$INSTALL_HELPERS_SH_SOURCED" == "1" ]; then return; fi
 INSTALL_HELPERS_SH_SOURCED=1
 
-function create_dirs() {
-  if [[ "$#" -lt 2 ]]; then
-    error "create_dirs must be called with a name as its first parameter, followed by one or more directory type parameters"
-    return 1
-  fi
-
-  local _name="$1"
-  shift  
-  
-  for _type in $@; do
-    local _parent=""
-    case "$_type" in
-      config)
-      _parent="${XDG_CONFIG_HOME}"
-      ;;
-      data)
-      _parent="${XDG_DATA_HOME}"
-      ;;
-      cache)
-      _parent="${XDG_CACHE_HOME}"
-      ;;
-      *)
-      error "create_dirs was called with an invalid type parameter '$_type'"
-      return 1
-      ;;
-    esac
-
-    local _path="${_parent}/${_name}"
-    if [[ -e "$_path" ]]; then
-      if [[ -L "$_path" ]]; then
-        debug "create_dirs deleting old symlink"
-        rm "$_path"
-      elif [[ "$BACKUP" == "1" ]]; then
-        if [[ -e "${_path}.old" ]]; then
-          debug "create_dirs deleting old backup"
-          rm -rf "${_path}.old"
-        fi
-        debug "create_dirs creating backup"
-        mv "$_path" "${_path}.old"
-      else
-        debug "create_dirs deleting existing"
-        rm -rf "$_path"
-      fi
-    fi
-
-    info "creating $_type dir '$_path'"
-    mkdir -p "$_path"
-
-    unset _path
-    unset _parent
-  done
-  
-  unset _name
-  unset _types
-
-  return 0
-}
-
 function create_symlink() {
   local _pfx=""
   local _path1="$1"
