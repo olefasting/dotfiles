@@ -12,7 +12,6 @@ font-size = 16
 font-thicken = true
 adjust-cell-height = 20
 adjust-underline-position = 8
-# ideally change bar to block and remove the below
 adjust-cursor-thickness = 4
 adjust-underline-thickness = 1
 adjust-cursor-height = 20
