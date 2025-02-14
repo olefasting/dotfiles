@@ -1,0 +1,13 @@
+#compdef logfmt
+
+local _severity="${1:-$LOG_SEVERITY_DEFAULT}"
+
+[[ -z "$1" ]] || shift
+
+local _pfx="$(to_pfx $_severity)"
+echo "${_pfx}$@"
+
+unset _pfx
+unset _severity
+
+return 0

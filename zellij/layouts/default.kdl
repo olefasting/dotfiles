@@ -37,25 +37,10 @@ layout {
             plugin location="zellij:status-bar"
         }
     }
-    tab name="dashboard" {
-        pane split_direction="vertical" {
-            pane command="lazygit" {
-                start_suspended true
-                close_on_exit true
-            }
-            pane split_direction="horizontal" {
-                pane command="bpytop" {
-                    start_suspended true
-                    close_on_exit true
-                }
-                pane command="nvtop" {
-                    start_suspended true
-                    close_on_exit true
-                }
-            }
-        }
-    }
     workspace_tab name="workspace" {
-        pane name="editor" edit="./README.md"
+        pane command="yazi" {
+            start_suspended false
+            close_on_exit false
+        }
     }
 }

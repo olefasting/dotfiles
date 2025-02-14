@@ -1,3 +1,41 @@
-source /usr/share/cachyos-zsh-config/cachyos-config.zsh
+export HISTFILE="${XDG_DATA_HOME}/zsh/histfile"
+export HISTCONTROL=ignoreboth
+export HISTIGNORE="&:[bf]g:c:clear:history:exit:q:pwd:* --help"
 
-[ -e "${ZDOTDIR:-$HOME}/.p10k.zsh" ] && source "${ZDOTDIR:-$HOME}/.p10k.zsh"
+[[ "$PROMPT_COMMAND" =~ ^history\ -a\;\ * ]] || PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+export PROMPT_COMMAND
+
+export LESS_TERMCAP_md="$(tput bold 2> /dev/null; tput setaf 2 2> /dev/null)"
+export LESS_TERMCAP_me="$(tput sgr0 2> /dev/null)"
+
+#alias open="xdg-open"
+alias make="make -j`nproc`"
+alias ninja="ninja -j`nproc`"
+alias dir='dir --color=auto'
+alias vdir='vdir --color=auto'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+alias hw='hwinfo --short'
+alias tarnow='tar -acf '
+alias untar='tar -zxvf '
+alias wget='wget -c '
+alias psmem='ps auxf | sort -nr -k 4'
+alias psmem10='ps auxf | sort -nr -k 4 | head -10'
+
+alias ls="eza --color=always --group-directories-first --icons"
+alias la="eza -a --color=always --group-directories-first --icons"
+alias ll="eza -la --color=always --group-directories-first --icons"
+alias lt="eza -aT --color=always --group-directories-first --icons"
+alias l.="eza -a --color=always --group-directories-first --icons | grep -e '^\.'"
+alias ll.="eza -la --color=always --group-directories-first --icons | grep -e '^\.'"
+
+alias jctl="journalctl -p 3 -xb"
+alias jctlb="journalctl -b -1"
+
+alias pacrmpkg="sudo pacman -Rsn"
+alias pacrmcache="sudo pacman -Scc"
+alias pacunlck="sudo rm /var/lib/pacman/db.lck"
+alias pacupdt="sudo pacman -Syu"
+alias paccln="sudo pacman -Rsn $(pacman -Qtdq)"
+alias rip="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -200 | nl"

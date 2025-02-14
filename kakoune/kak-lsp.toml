@@ -1,0 +1,5 @@
+[language.javascript]
+filetypes = ["javascript"]
+roots = ["package.json"]
+command = "typescript-language-server"
+args = ["--stdio"]

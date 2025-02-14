@@ -1,0 +1,19 @@
+#compdef logfmt
+
+local _severity="$1"
+
+if [[ "$#" == "0" ]]; then
+	_severity="$LOG_SEVERITY_DEFAULT"
+else
+	shift
+
+fi
+
+local _msg="$@"
+
+echo "$(to_pfx $_severity)$_msg"
+
+unset _msg
+unset _severity
+
+return 0

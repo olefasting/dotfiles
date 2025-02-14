@@ -1,21 +1,18 @@
 keybinds clear-defaults=true {
     shared {
-        bind "Ctrl Shift c" { Copy; }
-        bind "Alt Shift z" {
-            MessagePlugin "autolock" { payload "enable"; };
-        }
+        bind "Ctrl Alt c" { Copy; }
     }
     normal {
         bind "Enter" {
-            WriteChars "\u{000D}"; // Passthrough
+            WriteChars "\u{000D}";
             MessagePlugin "autolock" {};
         }
     }
     locked {
         bind "Ctrl d" { SwitchToMode "normal"; }
-        bind "Alt z" {
+        bind "Ctrl Alt d" {
             MessagePlugin "autolock" { payload "disable"; };
-            SwitchToMode "Normal";
+            SwitchToMode "Normal"
         }
     }
     pane {
@@ -143,30 +140,22 @@ keybinds clear-defaults=true {
             }
             SwitchToMode "locked"
         }
-    }
-    shared_except "locked" {
-        bind "y" {
-            LaunchOrFocusPlugin "file:~/.config/zellij/plugins/zellij-workspace.wasm" {
+        bind "Alt w" {
+            LaunchOrFocusPlugin "workspace" {
                 floating true
+                move_to_focused_tab true
                 debug false
             }
         }
-        bind "g" {
-            LaunchOrFocusPlugin "file:~/.config/zellij/plugins/zellij-sessionizer.wasm" {
+        bind "s" {
+            LaunchOrFocusPlugin "sessionizer" {
                 floating true
                 move_to_focused_tab true
-                cwd "/"
-                root_dirs "/home/oasf/Repos"
-                session_layout "default"
-            }; SwitchToMode "Locked";
+            };
+            SwitchToMode "Locked";
         }
     }
     shared_among "normal" "locked" {
-        bind "Alt z" {
-            MessagePlugin "autolock" {payload "disable";};
-            SwitchToMode "Locked";
-        }
-
         bind "Alt left" { MoveFocusOrTab "left"; }
         bind "Alt down" { MoveFocus "down"; }
         bind "Alt up" { MoveFocus "up"; }
@@ -184,12 +173,9 @@ keybinds clear-defaults=true {
         bind "Alt l" { MoveFocusOrTab "right"; }
         bind "Alt j" { MoveFocus "down"; }
         bind "Alt k" { MoveFocus "up"; }
-        // bind "Ctrl h" { MoveFocusOrTab "left"; }
-        // bind "Ctrl l" { MoveFocusOrTab "right"; }
-        // bind "Ctrl j" { MoveFocus "down"; }
-        // bind "Ctrl k" { MoveFocus "up"; }
     }
     shared_except "locked" "renametab" "renamepane" {
+        bind "Ctrl Alt q" { Detach; }
         bind "Ctrl q" { Quit; }
     }
     shared_except "locked" "entersearch" {
@@ -197,6 +183,14 @@ keybinds clear-defaults=true {
     }
     shared_except "locked" "entersearch" "renametab" "renamepane" "prompt" "tmux" {
         bind "Ctrl d" { SwitchToMode "locked"; }
+        bind "Ctrl Alt d" {
+            MessagePlugin "autolock" { payload "enable"; };
+            SwitchToMode "locked";
+        }
+        bind "Ctrl Shift d" {
+            MessagePlugin "autolock" { payload "disable"; };
+            SwitchToMode "locked";
+        }
     }
     shared_except "locked" "entersearch" "renametab" "renamepane" {
         bind "esc" { SwitchToMode "locked"; }
@@ -272,7 +266,7 @@ plugins {
     configuration location="zellij:configuration"
     plugin-manager location="zellij:plugin-manager"
     autolock location="file:~/.config/zellij/plugins/zellij-autolock.wasm" {
-        is_enabled false
+        is_enabled true
         triggers "nvim|vim|helix|hx|git|fzf|zoxide|atuin"
         // Reaction to input occurs after this many seconds. (default=0.3)
         // (An existing scheduled reaction prevents additional reactions.)
@@ -285,11 +279,19 @@ plugins {
         hide_frame_except_for_scroll true
         hide_frame_except_for_fullscreen true
     }
+    workspace location="file:~/.config/zellij/plugins/zellij-workspace.wasm" {
+        debug false
+    }
+    sessionizer location="file:~/.config/zellij/plugins/zellij-sessionizer.wasm" {
+        cwd "/"
+        root_dirs "/home/oasf/Repos;/home/oasf/Repos/peerforce"
+        session_layout "default"
+    }
 }
 
 // Plugins to load in the background when a new session starts
 load_plugins {
-    autolock 
+    autolock
 }
 
 // Use a simplified UI without special fonts (arrow glyphs)

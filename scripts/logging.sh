@@ -1,8 +1,8 @@
-if [ "$LOGGING_SH_SOURCED" == "1" ]; then return; fi
+if [[ "$LOGGING_SH_SOURCED" == "1" ]]; then return; fi
 LOGGING_SH_SOURCED=1
 
 LOG_PFX_DEBUG="[DBG] "
-LOG_PFX_INFO=""
+LOG_PFX_INFO="[INF] "
 LOG_PFX_WARNING="[WRN] "
 LOG_PFX_ERROR="[ERR] "
 
@@ -14,25 +14,25 @@ LOG_SEVERITY_ERROR=4
 
 LOG_SEVERITY_DEFAULT="$LOG_SEVERITY_INFO"
 
-[ -z "$DEBUG" ] && DEBUG=0
+DEBUG="${DEBUG:-0}"
 
-if [ "$DEBUG" = "1" ]; then
+if [[ "$DEBUG" == "1" ]]; then
   VERBOSITY="$LOG_SEVERITY_DEBUG"
 else
   DEBUG=0
 fi
 
-[ -z "$SILENT" ] && SILENT=0
+SILENT="${SILENT:-0}"
 
-if [ "$SILENT" = "1" ]; then
-  if [ "$DEBUG" = "1" ]; then
+if [[ "$SILENT" == "1" ]]; then
+  if [[ "$DEBUG" == "1" ]]; then
     SILENT=0
   else
     VERBOSITY=0
   fi
 fi
 
-[ -z "$VERBOSITY" ] && VERBOSITY="$LOG_SEVERITY_DEFAULT"
+VERBOSITY="${VERBOSITY:-$LOG_SEVERITY_DEFAULT}"
 
 if [ "$VERBOSITY" -lt 0 ]; then 
   VERBOSITY="$LOG_SEVERITY_NONE"
@@ -48,16 +48,16 @@ function to_pfx() {
   fi
   local _pfx=""
   case "$_severity" in
-    $LOG_SEVERITY_ERROR)
+    "$LOG_SEVERITY_ERROR")
       _pfx="$LOG_PFX_ERROR"
       ;;
-    $LOG_SEVERITY_WARNING)
+    "$LOG_SEVERITY_WARNING")
       _pfx="$LOG_PFX_WARNING"
       ;;
-    $LOG_SEVERITY_INFO)
+    "$LOG_SEVERITY_INFO")
       _pfx="$LOG_PFX_INFO"
       ;;
-    $LOG_SEVERITY_DEBUG)
+    "$LOG_SEVERITY_DEBUG")
       _pfx="$LOG_PFX_DEBUG"
       ;;
     *)
@@ -71,71 +71,72 @@ function to_pfx() {
 }
 
 function to_msg_type() {
-  local _severity="$1"
-  local _type=""
-  case "$_severity" in
-    $LOG_SEVERITY_NONE)
-      _type="none"
+  case "$1" in
+    "$LOG_SEVERITY_DEBUG")
+      echo "debug"
       ;;
-    $LOG_SEVERITY_DEBUG)
-      _type="debug"
+    "$LOG_SEVERITY_INFO")
+      echo "info"
       ;;
-    $LOG_SEVERITY_INFO)
-      _type="info"
-      ;;
-    $LOG_SEVERITY_WARNING)
-      _type="warning"
+    "$LOG_SEVERITY_WARNING")
+      echo "warning"
       ;;
     *)
-      _type="error"
+      echo "none"
       ;;
   esac
-  echo "$_type"
-  unset _type
-  unset _severity
+  return 0
 }
 
-function fmtout() {
+function logfmt() {
   local _severity="$1"
-  if [ "$#" -eq 0 ]; then
-    echo "${LOG_PFX_ERROR}fmtout must be called with at least one argument" 1>&2
-    return 1
-  elif [ "$#" -eq 1 ]; then 
+  if [[ "$#" == "0" ]]; then
     _severity="$LOG_SEVERITY_DEFAULT"
   else
     shift
   fi
-  if [ "$_severity" -ge "$VERBOSITY" ]; then
-    local _msg="$(to_pfx $_severity)"
-    _msg+="$@"
-    if [ "$_severity" -ge "$LOG_SEVERITY_WARNING" ]; then
-      echo "$_msg" 1>&2
-    else
-      echo "$_msg" 1>&1
-    fi
-    unset _msg
-  fi
+  local _msg="$@"
+  echo "$(to_pfx $_severity)$_msg"
+  unset _msg
   unset _severity
   return 0
 }
 
-function error() {
-  fmtout "$LOG_SEVERITY_ERROR" "$@"
-}
+[[ "$SILENT" == "1" ]] && VERBOSITY=0
 
-function warn() {
-  fmtout "$LOG_SEVERITY_WARNING" "$@"
-}
+case "$VERBOSITY" in
+  "$LOG_SEVERITY_DEBUG")
+    function debug() { logfmt "$LOG_SEVERITY_DEBUG" "$@"; }
+    function info() { logfmt "$LOG_SEVERITY_INFO" "$@"; }
+    function warn() { logfmt "$LOG_SEVERITY_WARNING" "$@"; }
+    function error() { logfmt "$LOG_SEVERITY_ERROR" "$@" >&2; }
+    ;;
+  "$LOG_SEVERITY_INFO")
+    function debug() { true; }
+    function info() { logfmt "$LOG_SEVERITY_INFO" "$@"; }
+    function warn() { logfmt "$LOG_SEVERITY_WARNING" "$@"; }
+    function error() { logfmt "$LOG_SEVERITY_ERROR" "$@" >&2; }
+    ;;
+  "$LOG_SEVERITY_WARNING")
+    function debug() { true; }
+    function info() { true; }
+    function warn() { logfmt "$LOG_SEVERITY_WARNING" "$@"; }
+    function error() { logfmt "$LOG_SEVERITY_ERROR" "$@" >&2; }
+    ;;
+  "$LOG_SEVERITY_ERROR")
+    function debug() { true; }
+    function info() { true; }
+    function warn() { true; }
+    function error() { logfmt "$LOG_SEVERITY_ERROR" "$@" >&2; }
+    ;;
+  *)
+    function debug() { true; }
+    function info() { true; }
+    function warn() { true; }
+    function error() { true; }
+    ;;
+esac
 
-function info() {
-  fmtout "$LOG_SEVERITY_INFO" "$@"
-}
-
-function debug() {
-  fmtout "$LOG_SEVERITY_DEBUG" "$@"
-}
-
-function log() {
-  info "$@"
-}
-
+alias err='error'
+alias warning='warn'
+alias log='info'
