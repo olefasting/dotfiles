@@ -85,7 +85,7 @@ workspace.library = [
 
 [[language]]
 name = "zig"
-language-servers = ["zlp", "gpt"]
+language-servers = ["zls", "gpt"]
 auto-format = true
 
 [language-server.zls.config]
@@ -205,7 +205,7 @@ name = "bash"
 formatter = { command = "shfmt", args = ["--indent", "2", "-"] }
 auto-format = true
 language-servers = [
-  "pkgbuild-language-server",
+  "termux-language-server",
   { except-features = [
     # "diagnostics",
   ], name = "bash-language-server" },
@@ -248,20 +248,6 @@ grammar = "python"
 [language-server.mojo-lsp-server]
 command = "mojo-lsp-server"
 
-# improve debug configuration with https://docs.modular.com/mojo/tools/debugging#mojo-launch-configurations
-# also have a look at js completion template
-# [language.debugger]
-# name = "mojo-lldb-dap"
-# transport = "stdio"
-# command = "mojo-lldb-dap"
-
-[[language.debugger.templates]]
-name = "binary"
-request = "launch"
-completion = [{ name = "binary", completion = "filename" }]
-args = { console = "internalConsole", program = "{0}", runInTerminal = false, initCommands = [
-] }
-
 [language-server.gpt]
 command = "helix-gpt"
 args = [
@@ -296,9 +282,7 @@ css.lint.unknownAtRules = "ignore"
 [language-server.tailwindcss-lsp]
 command = "tailwindcss-language-server"
 args = ["--stdio"]
-
-[language-server.tailwindcss-lsp.config]
-includeLanguages = { tailwindcss = "css" }
+config.includeLanguages = { tailwindcss = "css" }
 
 [[language]]
 name = "kdl"

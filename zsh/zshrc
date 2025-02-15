@@ -50,3 +50,9 @@ alias pacunlck="sudo rm /var/lib/pacman/db.lck"
 alias pacupdt="sudo pacman -Syu"
 alias paccln="sudo pacman -Rsn $(pacman -Qtdq)"
 alias rip="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -200 | nl"
+
+export FZF_BASE=/usr/share/fzf
+
+for _path in $(dir "$ZDOTDIR"/zshrc.d/*.zsh); do
+  source "$_path"
+done

@@ -16,30 +16,6 @@ LOG_SEVERITY_DEFAULT="$LOG_SEVERITY_INFO"
 
 DEBUG="${DEBUG:-0}"
 
-if [[ "$DEBUG" == "1" ]]; then
-  VERBOSITY="$LOG_SEVERITY_DEBUG"
-else
-  DEBUG=0
-fi
-
-SILENT="${SILENT:-0}"
-
-if [[ "$SILENT" == "1" ]]; then
-  if [[ "$DEBUG" == "1" ]]; then
-    SILENT=0
-  else
-    VERBOSITY=0
-  fi
-fi
-
-VERBOSITY="${VERBOSITY:-$LOG_SEVERITY_DEFAULT}"
-
-if [ "$VERBOSITY" -lt 0 ]; then 
-  VERBOSITY="$LOG_SEVERITY_NONE"
-elif [ "$VERBOSITY" -gt "$LOG_SEVERITY_ERROR" ]; then
-  VERBOSITY="$LOG_SEVERITY_ERROR"
-fi
-
 function to_pfx() {
   local _severity="$1"
   if [ -z "$1" ]; then
@@ -63,6 +39,7 @@ function to_pfx() {
     *)
       echo "${LOG_PFX_ERROR}to_pfx was provided an invalid message severity ($_severity)" 1>&2
       return 1
+      ;;
   esac
   echo "$_pfx"
   unset _pfx
@@ -90,53 +67,48 @@ function to_msg_type() {
 
 function logfmt() {
   local _severity="$1"
-  if [[ "$#" == "0" ]]; then
+  if [[ -z "$2" ]]; then
     _severity="$LOG_SEVERITY_DEFAULT"
   else
     shift
   fi
-  local _msg="$@"
-  echo "$(to_pfx $_severity)$_msg"
-  unset _msg
+  echo "$(to_pfx $_severity)$@"
   unset _severity
   return 0
 }
 
-[[ "$SILENT" == "1" ]] && VERBOSITY=0
+function debug() {
+  [[ "$DEBUG" == "1" ]] || return 0
+  logfmt "$LOG_SEVERITY_DEBUG" "$@"
+  return 0
+}
 
-case "$VERBOSITY" in
-  "$LOG_SEVERITY_DEBUG")
-    function debug() { logfmt "$LOG_SEVERITY_DEBUG" "$@"; }
-    function info() { logfmt "$LOG_SEVERITY_INFO" "$@"; }
-    function warn() { logfmt "$LOG_SEVERITY_WARNING" "$@"; }
-    function error() { logfmt "$LOG_SEVERITY_ERROR" "$@" >&2; }
-    ;;
-  "$LOG_SEVERITY_INFO")
-    function debug() { true; }
-    function info() { logfmt "$LOG_SEVERITY_INFO" "$@"; }
-    function warn() { logfmt "$LOG_SEVERITY_WARNING" "$@"; }
-    function error() { logfmt "$LOG_SEVERITY_ERROR" "$@" >&2; }
-    ;;
-  "$LOG_SEVERITY_WARNING")
-    function debug() { true; }
-    function info() { true; }
-    function warn() { logfmt "$LOG_SEVERITY_WARNING" "$@"; }
-    function error() { logfmt "$LOG_SEVERITY_ERROR" "$@" >&2; }
-    ;;
-  "$LOG_SEVERITY_ERROR")
-    function debug() { true; }
-    function info() { true; }
-    function warn() { true; }
-    function error() { logfmt "$LOG_SEVERITY_ERROR" "$@" >&2; }
-    ;;
-  *)
-    function debug() { true; }
-    function info() { true; }
-    function warn() { true; }
-    function error() { true; }
-    ;;
-esac
+function info() {
+  logfmt "$LOG_SEVERITY_INFO" "$@"
+  return 0
+}
 
-alias err='error'
-alias warning='warn'
-alias log='info'
+function warning() {
+  logfmt "$LOG_SEVERITY_WARNING" "$@"
+  return 0
+}
+
+function error() {
+  logfmt "$LOG_SEVERITY_ERROR" "$@" >&2
+  return 0
+}
+
+function log() {
+  info "$@"
+  return 0
+}
+
+function err() {
+  error "$@"
+  return 0
+}
+
+function warn() {
+  warning "$@"
+  return 0
+}

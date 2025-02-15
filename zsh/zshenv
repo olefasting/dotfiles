@@ -29,6 +29,8 @@ export ZDOTDIR="${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}"
 export ASDF_DATA_DIR="${ASDF_DATA_DIR:-$XDG_DATA_HOME/asdf}"
 export HELIX_RUNTIME_FOLDER="${HELIX_RUNTIME_FOLDER:-$XDG_DATA_HOME/helix}"
 
+export LD_LIBRARY_PATH=/home/oasf/.local/lib/arch-mojo:$LD_LIBRARY_PATH
+
 typeset -gU path=(
   $HOME/{,s}bin(N)
   $HOME/.local/{,s}bin(N)
@@ -49,3 +51,6 @@ typeset -gU fpath=(
   $fpath
 )
 
+for _path in $(dir "$ZDOTDIR"/zshenv.d/*.zsh); do
+  source "$_path"
+done

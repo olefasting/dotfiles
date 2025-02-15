@@ -27,7 +27,7 @@ function create_symlink() {
     local _cmd="${_pfx}mkdir -p $_folder"
     eval "$_cmd"
   fi
-  if [[ ! -L "$_path2" ]] && [[ "$BACKUP" == "1" ]]; then
+  if [[ ! -L "$_path2" ]]; then
     if [[ -e "$_path2.old" ]]; then
       local _cmd="${_pfx}rm -rf ${_path2}.old" 
       eval "$_cmd"
