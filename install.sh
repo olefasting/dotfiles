@@ -25,8 +25,8 @@ DEBUG="${DEBUG:-0}"
 BACKUP="${BACKUP:-0}"
 
 function __install_asdf() {
-  if not command -v asdf >&/dev/null &&
-    not command -v asdf-vm >&/dev/null; then
+  if ! command -v asdf >/dev/null 2>&1 &&
+    ! command -v asdf-vm >/dev/null 2>&1; then
     debug "install_asdf asdf binary not found, attempting install"
     yay --noconfirm --noprogressbar -Syq asdf-vm
   fi
@@ -40,7 +40,7 @@ function __install_asdf() {
 }
 
 function __install_alacritty() {
-  if not command -v alacritty >&/dev/null; then
+  if ! command -v alacritty >/dev/null 2>&1; then
     debug "install_alacritty alacritty binary not found, attempting install"
     sudo pacman --noconfirm --noprogressbar -Syq alacritty
   fi
@@ -51,7 +51,7 @@ function __install_alacritty() {
 }
 
 function __install_ghostty() {
-  if not command -v ghostty >&/dev/null; then
+  if ! command -v ghostty >/dev/null 2>&1; then
     debug "install_ghostty ghostty binary not found, attempting install"
     sudo pacman --noconfirm --noprogressbar -Syq ghostty
   fi
@@ -61,7 +61,7 @@ function __install_ghostty() {
 }
 
 function __install_git() {
-  if not command -v git >&/dev/null; then
+  if ! command -v git >/dev/null 2>&1; then
     debug "install_git git binary not found, attempting install"
     sudo pacman --noconfirm --noprogressbar -Syq git
   fi
@@ -70,8 +70,8 @@ function __install_git() {
 }
 
 function __install_helix() {
-  if not command -v hx >&/dev/null &&
-    not command -v helix >&/dev/null; then
+  if ! command -v hx >/dev/null 2>&1 &&
+    ! command -v helix >/dev/null 2>&1; then
     debug "install_helix hx/helix binary not found, attempting install"
     sudo pacman --noconfirm --noprogressbar -Syq helix
   fi
@@ -84,8 +84,8 @@ function __install_helix() {
 }
 
 function __install_kakoune() {
-  if not command -v kak >&/dev/null &&
-    not command -v kakoune >&/dev/null; then
+  if ! command -v kak >/dev/null 2>&1 &&
+    ! command -v kakoune >/dev/null 2>&1; then
     debug "install_kakoune kak/kakoune binary not found, attempting install"
     sudo pacman --noconfirm --noprogressbar -Syq kakoune kakoune-lsp
   fi
@@ -99,8 +99,8 @@ function __install_kakoune() {
 }
 
 function __install_neovim() {
-  if not command -v nvim >&/dev/null &&
-    not command -v neovim >&/dev/null; then
+  if ! command -v nvim >/dev/null 2>&1 &&
+    ! command -v neovim >/dev/null 2>&1; then
     debug "install_neovim nvim/neovim binary not found, attempting install"
     sudo pacman --noconfirm --noprogressbar -Syq neovim neovim-lspconfig
   fi
@@ -114,7 +114,7 @@ function __install_neovim() {
 }
 
 function __install_rustup() {
-  if not command -v rustup >&/dev/null; then
+  if ! command -v rustup >/dev/null 2>&1; then
     debug "install_rustup rustup binary not found, attempting install"
     sudo pacman --noconfirm --noprogressbar -Syq rustup
   fi
@@ -126,7 +126,7 @@ function __install_sheldon() {
   if [[ " ${dotfiles_installed[*]} " =~ [[:space:]]$_shell[[:space:]] ]]; then
     install "$_shell"
   fi
-  if not command -v sheldon >&/dev/null; then
+  if ! command -v sheldon >/dev/null 2>&1; then
     debug "install_sheldon sheldon binary not found, attempting install"
     sudo pacman --noconfirm --noprogressbar -Syq sheldon
   fi
@@ -146,7 +146,7 @@ function __install_starship() {
   if [[ " ${dotfiles_installed[*]} " =~ [[:space:]]$_shell[[:space:]] ]]; then
     install "$_shell"
   fi
-  if not command -v starship >&/dev/null; then
+  if ! command -v starship >/dev/null 2>&1; then
     debug "install_starship starship binary not found, attempting install"
     sudo pacman --noconfirm --noprogressbar -Syq starship
   fi
@@ -168,7 +168,7 @@ function __install_starship() {
 }
 
 function __install_tree_sitter() {
-  if not command -v tree-sitter >&/dev/null; then
+  if ! command -v tree-sitter >/dev/null 2>&1; then
     debug "install_tree_sitter tree-sitter binary not found, attempting install"
     sudo pacman --noconfirm --noprogressbar -Syq tree-sitter
   fi
@@ -178,8 +178,8 @@ function __install_tree_sitter() {
 }
 
 function __install_zed() {
-  if not command -v zed >&/dev/null &&
-    not command -v zeditor >&/dev/null; then
+  if ! command -v zed >/dev/null 2>&1 &&
+    ! command -v zeditor >/dev/null 2>&1; then
     debug "install_zed zed/zeditor binary not found, attempting install"
     sudo pacman --noconfirm --noprogressbar -Syq zed
   fi
@@ -190,7 +190,7 @@ function __install_zed() {
 }
 
 function __install_zellij() {
-  if not command -v zellij >&/dev/null; then
+  if ! command -v zellij >/dev/null 2>&1; then
     debug "install_zellij zellij binary not found, attempting install"
     sudo pacman --noconfirm --noprogressbar -Syq zellij
   fi
@@ -204,7 +204,7 @@ function __install_zellij() {
 }
 
 function __install_zsh() {
-  if not command -v zsh >&/dev/null; then
+  if ! command -v zsh >/dev/null 2>&1; then
     debug "install_zsh zsh binary not found, attempting install"
     sudo pacman --noconfirm --noprogressbar -Syq zsh
   fi
@@ -213,6 +213,7 @@ function __install_zsh() {
   create_symlink "$DOTFILES_DIR/zsh/zshenv" "$HOME/.zshenv"
   create_symlink "$DOTFILES_DIR/zsh/zshrc" "$XDG_CONFIG_HOME/zsh/.zshrc"
   create_symlink "$DOTFILES_DIR/zsh/autoload" "$XDG_CONFIG_HOME/zsh/autoload"
+  create_symlink "$DOTFILES_DIR/zsh/zshenv.d" "$XDG_CONFIG_HOME/zsh/zshenv.d"
   create_symlink "$DOTFILES_DIR/zsh/zshrc.d" "$XDG_CONFIG_HOME/zsh/zshrc.d"
   DOTFILES_SHELL="zsh"
   return 0

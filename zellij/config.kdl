@@ -266,25 +266,19 @@ plugins {
     configuration location="zellij:configuration"
     plugin-manager location="zellij:plugin-manager"
     autolock location="file:~/.config/zellij/plugins/zellij-autolock.wasm" {
-        is_enabled true
+        is_enabled false
         triggers "nvim|vim|helix|hx|git|fzf|zoxide|atuin"
         // Reaction to input occurs after this many seconds. (default=0.3)
         // (An existing scheduled reaction prevents additional reactions.)
         reaction_seconds "0.3"
         print_to_log false
-    }
-    zjframes location="file:~/.config/zellij/plugins/zjframes.wasm" {
-        hide_frame_for_single_pane true
-        hide_frame_except_for_search true
-        hide_frame_except_for_scroll true
-        hide_frame_except_for_fullscreen true
-    }
+    }    
     workspace location="file:~/.config/zellij/plugins/zellij-workspace.wasm" {
         debug false
     }
     sessionizer location="file:~/.config/zellij/plugins/zellij-sessionizer.wasm" {
         cwd "/"
-        root_dirs "/home/oasf/Repos;/home/oasf/Repos/peerforce"
+        root_dirs "/home/oasf/Repos"
         session_layout "default"
     }
 }

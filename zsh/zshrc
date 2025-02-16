@@ -1,9 +1,11 @@
+setopt SHARE_HISTORY
+export HISTSIZE=300000
+export SAVEHIST=300000
 export HISTFILE="${XDG_DATA_HOME}/zsh/histfile"
 export HISTCONTROL=ignoreboth
 export HISTIGNORE="&:[bf]g:c:clear:history:exit:q:pwd:* --help"
 
-[[ "$PROMPT_COMMAND" =~ ^history\ -a\;\ * ]] || PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
-export PROMPT_COMMAND
+#export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
 export LESS_TERMCAP_md="$(
   tput bold 2>/dev/null
