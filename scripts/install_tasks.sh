@@ -112,6 +112,18 @@ function __install_sheldon() {
   mkdir -p "${XDG_CONFIG_HOME}/sheldon"
   mkdir -p "${XDG_DATA_HOME}/sheldon"
   create_symlink "${_filepath}" "${XDG_CONFIG_HOME}/sheldon/plugins.toml"
+  case "$_shell" in
+  zsh)
+    if [[ ! -e "$XDG_CONFIG_HOME/zsh/zshrc.d" ]]; then
+      warning "install_sheldon user shell is '$_shell' but the installer could not find the zshrc.d directory. Manually source '\$PWD/sheldon/for-zshrc.zsh' at the end of .zshrc to fix this"
+    else
+      create_symlink "$DOTFILES_DIR/sheldon/for-zshrc.zsh" "$XDG_CONFIG_HOME/zsh/zshrc.d/9999-sheldon-zsh.zsh"
+    fi
+    ;;
+  *)
+    warning "install_sheldon unable to determine user shell, or user shell is unknown. Manually determine how to initialize sheldon with your shell"
+    ;;
+  esac
   return 0
 }
 
