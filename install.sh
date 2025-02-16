@@ -23,14 +23,31 @@ export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 [[ ! -e "$XDG_CACHE_HOME" ]] || mkdir -p "$XDG_CACHE_HOME"
 
 DEBUG="${DEBUG:-0}"
-BACKUP="${BACKUP:-0}"
+
+DOTFILES_SHELL="${DOTFILES_SHELL:-$(basename $SHELL)}"
+case "$DOTFILES_SHELL" in
+zsh)
+  debug "shell integration set to 'zsh', either via the DOTFILES_SHELL variable, or the current user shell ($SHELL), if it wasn't set"
+  ;;
+*)
+  debug "the shell '$DOTFILES_SHELL' is not valid for integration, please set DOTFILES_SHELL to a valid shell (currently only zsh is supported)"
+  unset DOTFILES_SHELL
+  ;;
+esac
+
+export DOTFILES_SHELL
 
 info "installing to user ${USER}'s home directory ($HOME)"
 
-if [[ "$DEBUG" == "1" ]]; then
-  info "DEBUG     = '1' (on)"
+if [[ -n "$DOTFILES_SHELL" ]]; then
+  info "DOTFILES_SHELL is '$DOTFILES_SHELL'"
 else
-  info "DEBUG     = '$DEBUG' (off)"
+  info "DOTFILES_SHELL is 'none'"
+fi
+if [[ "$DEBUG" == "1" ]]; then
+  info "DEBUG is '1' (on)"
+else
+  info "DEBUG is '$DEBUG' (off)"
 fi
 
 install git asdf ghostty zellij starship zsh sheldon helix zed tree-sitter

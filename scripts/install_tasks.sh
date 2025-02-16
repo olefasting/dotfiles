@@ -199,8 +199,10 @@ function __install_zsh() {
   create_symlink "$DOTFILES_DIR/zsh/zshenv" "$HOME/.zshenv"
   create_symlink "$DOTFILES_DIR/zsh/zshrc" "$XDG_CONFIG_HOME/zsh/.zshrc"
   create_symlink "$DOTFILES_DIR/zsh/autoload" "$XDG_CONFIG_HOME/zsh/autoload"
+  create_symlink "$DOTFILES_DIR/zsh/completions" "$XDG_CONFIG_HOME/zsh/completions"
+  create_symlink "$DOTFILES_DIR/zsh/functions" "$XDG_CONFIG_HOME/zsh/functions"
   create_symlink "$DOTFILES_DIR/zsh/zshenv.d" "$XDG_CONFIG_HOME/zsh/zshenv.d"
   create_symlink "$DOTFILES_DIR/zsh/zshrc.d" "$XDG_CONFIG_HOME/zsh/zshrc.d"
-  DOTFILES_SHELL="zsh"
+  export DOTFILES_SHELL="zsh"
   return 0
 }

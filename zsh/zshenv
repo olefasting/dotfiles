@@ -46,7 +46,9 @@ typeset -gU path=(
 )
 
 typeset -gU fpath=(
-  $ZDOTDIR/autotool
+  $ZDOTDIR/autoload
+  $ZDOTDIR/functions
+  $ZDOTDIR/completions
 
   $fpath
 )
