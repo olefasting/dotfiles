@@ -1,6 +1,3 @@
-if [[ "$LOGGING_SH_SOURCED" == "1" ]]; then return; fi
-LOGGING_SH_SOURCED=1
-
 LOG_PFX_DEBUG="[DBG] "
 LOG_PFX_INFO="[INF] "
 LOG_PFX_WARNING="[WRN] "
@@ -24,22 +21,22 @@ function to_pfx() {
   fi
   local _pfx=""
   case "$_severity" in
-    "$LOG_SEVERITY_ERROR")
-      _pfx="$LOG_PFX_ERROR"
-      ;;
-    "$LOG_SEVERITY_WARNING")
-      _pfx="$LOG_PFX_WARNING"
-      ;;
-    "$LOG_SEVERITY_INFO")
-      _pfx="$LOG_PFX_INFO"
-      ;;
-    "$LOG_SEVERITY_DEBUG")
-      _pfx="$LOG_PFX_DEBUG"
-      ;;
-    *)
-      echo "${LOG_PFX_ERROR}to_pfx was provided an invalid message severity ($_severity)" 1>&2
-      return 1
-      ;;
+  "$LOG_SEVERITY_ERROR")
+    _pfx="$LOG_PFX_ERROR"
+    ;;
+  "$LOG_SEVERITY_WARNING")
+    _pfx="$LOG_PFX_WARNING"
+    ;;
+  "$LOG_SEVERITY_INFO")
+    _pfx="$LOG_PFX_INFO"
+    ;;
+  "$LOG_SEVERITY_DEBUG")
+    _pfx="$LOG_PFX_DEBUG"
+    ;;
+  *)
+    echo "${LOG_PFX_ERROR}to_pfx was provided an invalid message severity ($_severity)" 1>&2
+    return 1
+    ;;
   esac
   echo "$_pfx"
   unset _pfx
@@ -49,18 +46,18 @@ function to_pfx() {
 
 function to_msg_type() {
   case "$1" in
-    "$LOG_SEVERITY_DEBUG")
-      echo "debug"
-      ;;
-    "$LOG_SEVERITY_INFO")
-      echo "info"
-      ;;
-    "$LOG_SEVERITY_WARNING")
-      echo "warning"
-      ;;
-    *)
-      echo "none"
-      ;;
+  "$LOG_SEVERITY_DEBUG")
+    echo "debug"
+    ;;
+  "$LOG_SEVERITY_INFO")
+    echo "info"
+    ;;
+  "$LOG_SEVERITY_WARNING")
+    echo "warning"
+    ;;
+  *)
+    echo "none"
+    ;;
   esac
   return 0
 }
