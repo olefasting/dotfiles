@@ -11,21 +11,28 @@ cursorcolumn = false
 cursorline = true
 line-number = "relative"
 mouse = true
-#rulers = [79]
+rulers = [79]
 true-color = true
+end-of-line-diagnostics = "hint"
+
+[editor.inline-diagnostics]
+cursor-line = "warning"
+other-lines = "disable"
 
 [editor.whitespace.render]
-space = "none"
-nbsp = "none"
-tab = "none"
+space = "all"
+nbsp = "all"
+nnbsp = "all"
+tab = "all"
 newline = "none"
 
 [editor.whitespace.characters]
 space = "·"
 nbsp = "⍽"
+nnbsp = "␣"
 tab = "→"
 newline = "⏎"
-tabpad = "·" # Tabs will look like "→···" (depending on tab width)
+tabpad = "·"
 
 [editor.file-picker]
 hidden = true
@@ -33,17 +40,26 @@ git-ignore = true
 git-global = false
 
 [editor.statusline]
-left = []
+left = ["mode", "spinner"]
+center = ["file-name"]
 right = [
-   "file-type"
+  "diagnostics",
+  "selections",
+  "position",
+  "file-encoding",
+  "file-line-ending",
+  "file-type",
 ]
-separator = "╎"
+separator = "│"
 mode.normal = "NORMAL"
 mode.insert = "INSERT"
 mode.select = "SELECT"
 
 [editor.lsp]
+enable = true
 display-messages = true
+display-progress-messages = true
+display-inlay-hints = true
 
 [editor.cursor-shape]
 insert = "bar"
@@ -55,8 +71,11 @@ skip-levels = 0
 
 [editor.soft-wrap]
 enable = true
-max-wrap = 10 # increase value to reduce forced mid-word wrapping
+max-wrap = 10          # increase value to reduce forced mid-word wrapping
 max-indent-retain = 40
+
+[editor.gutters]
+layout = ["diagnostics", "spacer", "line-numbers", "spacer", "diff"]
 
 [keys.normal]
 # esc is remapped to capslock locally
@@ -78,32 +97,37 @@ C-right = "jump_view_right"
   "extend_to_line_bounds",
   "delete_selection",
   "move_line_up",
-  "paste_before"
+  "paste_before",
 ]
 "C-A-j" = [
   "extend_to_line_bounds",
   "delete_selection",
   "move_line_down",
-  "paste_before"
+  "paste_before",
 ]
 "C-A-up" = [
   "extend_to_line_bounds",
   "delete_selection",
   "move_line_up",
-  "paste_before"
+  "paste_before",
 ]
 "C-A-down" = [
   "extend_to_line_bounds",
   "delete_selection",
   "move_line_down",
-  "paste_before"
+  "paste_before",
 ]
+
+"C-S-c" = ["yank_to_clipboard"]
+"C-A-S-c" = ["yank_main_selection_to_clipboard"]
+"C-S-v" = ["paste_clipboard_before"]
+"C-A-S-v" = ["paste_clipboard_after"]
 
 [keys.normal.g]
 q = ":bc"
 Q = ":bc!"
 
-[keys.normal.space.space]
+#[keys.normal.space.space]
 #f = "file_browser"
 
 # Remove vscode "training wheels"

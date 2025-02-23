@@ -1,0 +1,30 @@
+#compdef logpfx
+
+autoload -Uz loginit
+
+[[ "$_LOG_INITIATED" == "1" ]] || loginit
+
+if [ -z "$1" ]; then
+  echo "${LOG_PFX_ERROR}logpfx require a severity level as its first argument" 1>&2
+  return 1
+fi
+
+case "$1" in
+"$LOG_SEVERITY_ERROR")
+  echo "$LOG_PFX_ERROR"
+  ;;
+"$LOG_SEVERITY_WARNING")
+  echo "$LOG_PFX_WARNING"
+  ;;
+"$LOG_SEVERITY_INFO")
+  echo "$LOG_PFX_INFO"
+  ;;
+"$LOG_SEVERITY_DEBUG")
+  echo "$LOG_PFX_DEBUG"
+  ;;
+*)
+  echo "${LOG_PFX_ERROR}logpfx was provided an invalid message severity ($1)" 1>&2
+  return 1
+  ;;
+esac
+return 0

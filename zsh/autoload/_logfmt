@@ -1,16 +1,15 @@
+#compdef logfmt
+
 autoload -Uz loginit logpfx
 
 [[ "$_LOG_INITIATED" == "1" ]] || loginit
 
 local _severity="${1:-$LOG_SEVERITY_DEFAULT}"
 
-[[ -z "$1" ]] || shift
+if [[ -z "$1" ]] || shift
 
-local _pfx="$(logpfx $_severity)"
+echo "$(logpfx $_severity)$@"
 
-echo "$_pfx$@"
-
-unset _pfx
 unset _severity
 
 return 0

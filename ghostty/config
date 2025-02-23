@@ -1,5 +1,7 @@
 theme = catppuccin-mocha
+
 shell-integration = zsh
+
 font-family = CaskaydiaCove NFM
 font-family-bold = CaskaydiaCove NFM
 font-family-italic = CaskaydiaCove NFM
@@ -10,6 +12,7 @@ font-style-italic = Italic
 font-style-bold-italic = Bold Italic
 font-size = 14
 font-thicken = true
+
 adjust-cell-height = 20
 adjust-underline-position = 8
 adjust-cursor-thickness = 4
@@ -20,9 +23,12 @@ window-padding-x = 7
 window-padding-y = 7
 window-padding-balance = true
 cursor-style-blink = false
-background-opacity = 0.85
+background-opacity = 0.75
 background-blur-radius = 20
 unfocused-split-opacity = 0.25
 
 keybind = ctrl+,=unbind
+keybind = ctrl+alt+up=unbind
+keybind = ctrl+alt+down=unbind
 keybind = performable:ctrl+shift+c=copy_to_clipboard
+keybind = performable:ctrl+shift+v=paste_from_clipboard

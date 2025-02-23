@@ -1,3 +1,28 @@
+function has-pkg() {
+  if [[ "$#" == "0" ]]; then
+    error "has-pkg requires a package name or a package name as its first parameter"
+    return 1
+  fi
+  if ! yay -Q "$1" >/dev/null 2>&1; then
+    return 1
+  fi
+  unset _pkg
+  return 0
+}
+
+function has-cmd() {
+  local _cmd
+  if [[ "$#" == "0" ]]; then
+    error "has-pkg requires a package name or a package name as its first parameter"
+    return 1
+  fi
+  if ! command -v "$1" >/dev/null 2>&1; then
+    return 1
+  fi
+  unset _cmd
+  return 0
+}
+
 function create_symlink() {
   local _pfx=""
   local _path1="$1"
@@ -15,7 +40,8 @@ function create_symlink() {
     return 1
   fi
   info "creating symlink '$_path2' -> '$_path1'"
-  local _folder="$(dirname $_path2)"
+  local _folder
+  _folder="$(dirname "$_path2")"
   if [[ ! -e "$_folder" ]]; then
     if [[ -f "$_folder" ]]; then
       error "create_symlink destination folder path exists but is not a directory (path '$_folder' must be empty or point to a directory)"
@@ -37,18 +63,10 @@ function create_symlink() {
       eval "$_cmd"
     fi
   fi
-
   local _cmd="${_pfx}ln -s $_path1 $_path2"
   eval "$_cmd"
-
   debug "created symlink '$_path2' -> '$_path1'"
-
-  unset _cmd
-  unset _folder
-  unset _pfx
-  unset _path1
-  unset _path2
-
+  unset _cmd _folder _pfx _path1 _path2
   return 0
 }
 
@@ -60,7 +78,7 @@ function install() {
     return 1
   fi
   for _name in "$@"; do
-    if [[ " ${dotfiles_installed[*]} " =~ [[:space:]]$_name[[:space:]] ]]; then
+    if [[ " ${dotfiles_installed[*]} " =~ [[:space:]]${_name}[[:space:]] ]]; then
       warning "install called for '$_name', but '$_name' is already installed"
       return 0
     fi
@@ -78,16 +96,19 @@ function install() {
       __install_git
       ;;
     helix | hx)
-      _name="helix"
       __install_helix
       ;;
     kakoune | kak)
-      _name="kakoune"
       __install_kakoune
       ;;
     neovim | nvim)
-      _na="neovim"
       __install_neovim
+      ;;
+    prettier)
+      __install_prettier
+      ;;
+    prettierd)
+      __install_prettierd
       ;;
     rustup)
       __install_rustup
@@ -99,11 +120,12 @@ function install() {
       __install_starship
       ;;
     tree-sitter | tree_sitter | treesitter)
-      _name="tree-sitter"
       __install_tree_sitter
       ;;
+    ufw)
+      __install_ufw
+      ;;
     zed | zeditor)
-      _name="zed"
       __install_zed
       ;;
     zellij)

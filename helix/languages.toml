@@ -1,3 +1,55 @@
+[language-server]
+biome = { command = "biome", args = ["lsp-proxy"] }
+
+[[language]]
+name = "javascript"
+language-servers = [
+  { name = "typescript-language-server", except-features = [
+    "format",
+  ] },
+  "biome",
+]
+auto-format = true
+
+[[language]]
+name = "typescript"
+language-servers = [
+  { name = "typescript-language-server", except-features = [
+    "format",
+  ] },
+  "biome",
+]
+auto-format = true
+
+[[language]]
+name = "tsx"
+auto-format = true
+language-servers = [
+  { name = "typescript-language-server", except-features = [
+    "format",
+  ] },
+  "biome",
+]
+
+[[language]]
+name = "jsx"
+auto-format = true
+language-servers = [
+  { name = "typescript-language-server", except-features = [
+    "format",
+  ] },
+  "biome",
+]
+
+[[language]]
+name = "json"
+language-servers = [
+  { name = "vscode-json-language-server", except-features = [
+    "format",
+  ] },
+  "biome",
+]
+
 [[language]]
 name = "toml"
 formatter = { command = "taplo", args = ["format", "-"] }
@@ -6,7 +58,7 @@ auto-format = true
 [[language]]
 name = "python"
 # use pylsp-mypy for mypy
-language-servers = ["pylsp", "ruff", "gpt"]
+language-servers = ["pylsp", "ruff"]
 formatter = { command = "ruff", args = ["format", "-n", "-"] }
 auto-format = true
 
@@ -18,7 +70,7 @@ config = { settings = { organizeImports = true, lint.run = "onSave" } }
 [[language]]
 name = "fish"
 formatter = { command = "fish_indent" }
-language-servers = ["fish-lsp", "gpt"]
+language-servers = ["fish-lsp"]
 auto-format = true
 
 [language-server.efm]
@@ -40,7 +92,6 @@ language-servers = [
     "code-action",
     "diagnostics",
   ] }, # for phpstan
-  "gpt",
 ]
 formatter = { command = "pretty-php", args = [
   "--psr12",
@@ -68,7 +119,6 @@ language-servers = [
     "diagnostics",
     "code-action",
   ] }, # for seleney
-  "gpt",
 ]
 formatter = { command = "stylua", args = ["-"] }
 auto-format = true
@@ -85,7 +135,7 @@ workspace.library = [
 
 [[language]]
 name = "zig"
-language-servers = ["zls", "gpt"]
+language-servers = ["zls"]
 auto-format = true
 
 [language-server.zls.config]
@@ -97,7 +147,7 @@ highlight_global_var_declarations = true
 [[language]]
 name = "gas"
 file-types = ["s", "S"]
-language-servers = ["asm-lsp", "gpt"]
+language-servers = ["asm-lsp"]
 
 [language-server.asm-lsp]
 command = "asm-lsp"
@@ -110,7 +160,6 @@ language-servers = [
   { name = "rust-analyzer", except-features = [
     # "format",
   ] },
-  "gpt",
 ]
 auto-format = true
 
@@ -153,18 +202,12 @@ language-servers = [
     "code-action",
     "diagnostics",
   ] }, # for hadolint
-  "gpt",
 ]
 
 [[language]]
 name = "yaml"
 file-types = ["yml", "yaml", { glob = "phpstan.neon" }]
-language-servers = [
-  "vscode-yaml-language-server",
-  { except-features = [
-    # "diagnostics",
-  ], name = "gpt" },
-]
+language-servers = ["vscode-yaml-language-server"]
 formatter = { command = "prettier", args = ["--"] }
 
 [[language]]
@@ -181,9 +224,6 @@ language-servers = [
   { except-features = [
     # "diagnostics",
   ], name = "bash-language-server" },
-  { except-features = [
-    # "diagnostics",
-  ], name = "gpt" },
 ]
 
 [language-server.clangd]
@@ -192,12 +232,22 @@ args = ["--clang-tidy", "-j=5", "--malloc-trim"]
 
 [[language]]
 name = "c"
+file-types = ["c", "h"]
 language-servers = [
   "clangd",
   { name = "efm", only-features = ["diagnostics"] }, # gcc lints and cppcheck
-  "gpt",
 ]
-file-types = ["c", "h"]
+formatter = { command = 'clang-format' }
+auto-format = true
+
+[[language]]
+name = "cpp"
+file-types = ["cpp", "cc", "cxx", "hpp", "hcc", "hxx"]
+language-servers = [
+  "clangd",
+  { name = "efm", only-features = ["diagnostics"] }, # gcc lints and cppcheck
+]
+formatter = { command = 'clang-format' }
 auto-format = true
 
 [[language]]
@@ -209,9 +259,6 @@ language-servers = [
   { except-features = [
     # "diagnostics",
   ], name = "bash-language-server" },
-  { except-features = [
-    # "diagnostics",
-  ], name = "gpt" },
 ]
 
 [[language]]
@@ -219,16 +266,14 @@ name = "pkgbuild"
 formatter = { command = "shfmt", args = ["--indent", "2", "-"] }
 auto-format = true
 language-servers = [
-  "pkgbuild-language-server",
+  # "pkgbuild-language-server"
+  "termux-language-server",
   { except-features = [
     # "diagnostics",
   ], name = "bash-language-server" },
-  { except-features = [
-    # "diagnostics",
-  ], name = "gpt" },
 ]
 
-[language-server.pkgbuild-language-server]
+[language-server.termux-language-server]
 command = "termux-language-server"
 
 [[language]]
@@ -241,7 +286,7 @@ roots = []
 formatter = { command = "mojo", args = ["format", "-"] }
 auto-format = true
 comment-token = "#"
-language-servers = ["mojo-lsp-server", "gpt"]
+language-servers = ["mojo-lsp-server"]
 indent = { tab-width = 4, unit = "    " }
 grammar = "python"
 
@@ -282,13 +327,7 @@ css.lint.unknownAtRules = "ignore"
 [language-server.tailwindcss-lsp]
 command = "tailwindcss-language-server"
 args = ["--stdio"]
-config.includeLanguages = { tailwindcss = "css" }
-
-[[language]]
-name = "kdl"
-language-servers = ["kdl-lsp", "gpt"]
-auto-format = true
-formatter = { command = "prettier", args = ["--parser", "kdl"] }
+config.includeLanguages.tailwindcss = "css"
 
 [[language]]
 name = "html"
@@ -296,49 +335,4 @@ language-servers = [
   "vscode-html-language-server",
   "superhtml",
   "tailwindcss-lsp",
-  "gpt",
 ]
-auto-format = true
-formatter = { command = "prettier", args = ["--parser", "html"] }
-
-[[language]]
-name = "css"
-language-servers = ["vscode-css-language-server", "tailwindcss-lsp", "gpt"]
-auto-format = true
-formatter = { command = "prettier", args = ["--parser", "css"] }
-
-[[language]]
-name = "javascript"
-language-servers = ["typescript-language-server", "gpt"]
-auto-format = true
-formatter = { command = "prettier", args = ["--parser", "typescript"] }
-
-[[language]]
-name = "typescript"
-language-servers = ["typescript-language-server", "gpt"]
-auto-format = true
-formatter = { command = "prettier", args = ["--parser", "typescript"] }
-
-[[language]]
-name = "tsx"
-language-servers = ["typescript-language-server", "tailwindcss-lsp", "gpt"]
-auto-format = true
-formatter = { command = "prettier", args = ["--parser", "typescript"] }
-
-[[language]]
-name = "jsx"
-language-servers = ["typescript-language-server", "tailwindcss-lsp", "gpt"]
-auto-format = true
-formatter = { command = "prettier", args = ["--parser", "typescript"] }
-
-[[language]]
-name = "json"
-language-servers = ["vscode-json-language-server", "gpt"]
-auto-format = true
-formatter = { command = "prettier", args = ["--parser", "json"] }
-
-[[language]]
-name = "jsonc"
-language-servers = ["vscode-json-language-server", "gpt"]
-auto-format = true
-formatter = { command = "prettier", args = ["--parser", "json"] }

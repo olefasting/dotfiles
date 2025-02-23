@@ -1,11 +1,12 @@
+_PACMAN_ARGS="--noconfirm --noprogressbar -Syq"
+
 function __install_asdf() {
-  if ! command -v asdf >/dev/null 2>&1 &&
-    ! command -v asdf-vm >/dev/null 2>&1; then
-    debug "install_asdf asdf binary not found, attempting install"
-    yay --noconfirm --noprogressbar -Syq asdf-vm
+  if ! has-pkg asdf-vm; then
+    yay "${_PACMAN_ARGS}" asdf-vm
   fi
   mkdir -p "$XDG_DATA_HOME/asdf"
   set +e
+  asdf plugin add deno https://github.com/asdf-community/asdf-deno.git
   asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
   asdf plugin add zig https://github.com/asdf-community/asdf-zig.git
   asdf install
@@ -14,9 +15,8 @@ function __install_asdf() {
 }
 
 function __install_alacritty() {
-  if ! command -v alacritty >/dev/null 2>&1; then
-    debug "install_alacritty alacritty binary not found, attempting install"
-    sudo pacman --noconfirm --noprogressbar -Syq alacritty
+  if ! has-pkg alacritty; then
+    sudo pacman "${_PACMAN_ARGS}" alacritty
   fi
   mkdir -p "$XDG_CONFIG_HOME/alacritty"
   create_symlink "$DOTFILES_DIR/alacritty/alacritty.toml" "$XDG_CONFIG_HOME/alacritty/alacritty.toml"
@@ -24,10 +24,18 @@ function __install_alacritty() {
   return 0
 }
 
+function __install_biome() {
+  if ! has-pkg biome-bin; then
+    yay "${_PACMAN_ARGS}" biome-bin
+  fi
+}
+
 function __install_ghostty() {
-  if ! command -v ghostty >/dev/null 2>&1; then
-    debug "install_ghostty ghostty binary not found, attempting install"
-    sudo pacman --noconfirm --noprogressbar -Syq ghostty
+  if ! has-pkg ghostty; then
+    sudo pacman "${_PACMAN_ARGS}" ghostty
+  fi
+  if ! has-pkg ghostty; then
+    sudo pacman "${_PACMAN_ARGS}" ghostty-shell-integration
   fi
   mkdir -p "$XDG_CONFIG_HOME/ghostty"
   create_symlink "$DOTFILES_DIR/ghostty/config" "${XDG_CONFIG_HOME}/ghostty/config"
@@ -35,19 +43,24 @@ function __install_ghostty() {
 }
 
 function __install_git() {
-  if ! command -v git >/dev/null 2>&1; then
-    debug "install_git git binary not found, attempting install"
-    sudo pacman --noconfirm --noprogressbar -Syq git
+  if ! has-pkg git; then
+    sudo pacman "${_PACMAN_ARGS}" git
   fi
   create_symlink "$DOTFILES_DIR/git/gitconfig" "$XDG_CONFIG_HOME/.gitconfig"
   return 0
 }
 
 function __install_helix() {
-  if ! command -v hx >/dev/null 2>&1 &&
-    ! command -v helix >/dev/null 2>&1; then
-    debug "install_helix hx/helix binary not found, attempting install"
-    sudo pacman --noconfirm --noprogressbar -Syq helix
+  if ! has-pkg helix; then
+    sudo pacman "${_PACMAN_ARGS}" helix helixbinhx
+  fi
+  if ! has-pkg helix-gpt; then
+    pacman "${_PACMAN_ARGS}" helix-gpt
+  fi
+  if [ -e /usr/bin/helix ] && [ ! -e /usr/bin/hx ]; then
+    sudo ln -s /usr/bin/helix /usr/bin/hx
+  elif [ -e /usr/bin/hx ] && [ ! -e /usr/bin/helix ]; then
+    sudo ln -s /usr/bin/hx /usr/bin/helix
   fi
   mkdir -p "${XDG_CONFIG_HOME}/helix"
   mkdir -p "${XDG_DATA_HOME}/helix"
@@ -58,10 +71,11 @@ function __install_helix() {
 }
 
 function __install_kakoune() {
-  if ! command -v kak >/dev/null 2>&1 &&
-    ! command -v kakoune >/dev/null 2>&1; then
-    debug "install_kakoune kak/kakoune binary not found, attempting install"
-    sudo pacman --noconfirm --noprogressbar -Syq kakoune kakoune-lsp
+  if ! has-pkg kakoune; then
+    sudo pacman "${_PACMAN_ARGS}" kakoune
+  fi
+  if ! has-pkg kakoune-lsp; then
+    sudo pacman "${_PACMAN_ARGS}" kakoune-lsp
   fi
   mkdir -p "${XDG_CONFIG_HOME}/kak"
   mkdir -p "${XDG_DATA_HOME}/kak"
@@ -73,10 +87,11 @@ function __install_kakoune() {
 }
 
 function __install_neovim() {
-  if ! command -v nvim >/dev/null 2>&1 &&
-    ! command -v neovim >/dev/null 2>&1; then
-    debug "install_neovim nvim/neovim binary not found, attempting install"
-    sudo pacman --noconfirm --noprogressbar -Syq neovim neovim-lspconfig
+  if ! has-pkg neovim; then
+    sudo pacman "${_PACMAN_ARGS}" neovim
+  fi
+  if ! has-pkg neovim-lspconfig; then
+    sudo pacman "${_PACMAN_ARGS}" neovim-lspconfig
   fi
   mkdir -p "${XDG_CONFIG_HOME}/nvim"
   mkdir -p "${XDG_DATA_HOME}/nvim"
@@ -88,21 +103,19 @@ function __install_neovim() {
 }
 
 function __install_rustup() {
-  if ! command -v rustup >/dev/null 2>&1; then
-    debug "install_rustup rustup binary not found, attempting install"
-    sudo pacman --noconfirm --noprogressbar -Syq rustup
+  if ! has-pkg rustup; then
+    sudo pacman "${_PACMAN_ARGS}" rustup
   fi
   return 0
 }
 
 function __install_sheldon() {
-  local _shell="${DOTFILES_SHELL:-$(basename $SHELL)}"
-  if [[ " ${dotfiles_installed[*]} " =~ [[:space:]]$_shell[[:space:]] ]]; then
+  local _shell="${DOTFILES_SHELL:-$(basename "$SHELL")}"
+  if [[ " ${dotfiles_installed[*]} " =~ [[:space:]]${_shell}[[:space:]] ]]; then
     install "$_shell"
   fi
-  if ! command -v sheldon >/dev/null 2>&1; then
-    debug "install_sheldon sheldon binary not found, attempting install"
-    sudo pacman --noconfirm --noprogressbar -Syq sheldon
+  if ! has-pkg sheldon; then
+    sudo pacman "${_PACMAN_ARGS}" sheldon
   fi
   local _filepath="$DOTFILES_DIR/sheldon/plugins.${_shell}.toml"
   if [[ ! -e "$_filepath" ]]; then
@@ -128,13 +141,12 @@ function __install_sheldon() {
 }
 
 function __install_starship() {
-  local _shell="${DOTFILES_SHELL:-$(basename $SHELL)}"
-  if [[ " ${dotfiles_installed[*]} " =~ [[:space:]]$_shell[[:space:]] ]]; then
+  local _shell="${DOTFILES_SHELL:-$(basename "$SHELL")}"
+  if [[ " ${dotfiles_installed[*]} " =~ [[:space:]]${_shell}[[:space:]] ]]; then
     install "$_shell"
   fi
-  if ! command -v starship >/dev/null 2>&1; then
-    debug "install_starship starship binary not found, attempting install"
-    sudo pacman --noconfirm --noprogressbar -Syq starship
+  if ! has-pkg starship; then
+    sudo pacman "${_PACMAN_ARGS}" starship
   fi
   mkdir -p "${XDG_CONFIG_HOME}/starship"
   create_symlink "$DOTFILES_DIR/starship/starship.toml" "${XDG_CONFIG_HOME}/starship/starship.toml"
@@ -154,9 +166,8 @@ function __install_starship() {
 }
 
 function __install_tree_sitter() {
-  if ! command -v tree-sitter >/dev/null 2>&1; then
-    debug "install_tree_sitter tree-sitter binary not found, attempting install"
-    sudo pacman --noconfirm --noprogressbar -Syq tree-sitter
+  if ! has-pkg tree-sitter; then
+    sudo pacman "${_PACMAN_ARGS}" tree-sitter
   fi
   mkdir -p "${XDG_CONFIG_HOME}/tree-sitter"
   create_symlink "$DOTFILES_DIR/tree-sitter/config.json" "$XDG_CONFIG_HOME/tree-sitter/config.json"
@@ -164,10 +175,8 @@ function __install_tree_sitter() {
 }
 
 function __install_zed() {
-  if ! command -v zed >/dev/null 2>&1 &&
-    ! command -v zeditor >/dev/null 2>&1; then
-    debug "install_zed zed/zeditor binary not found, attempting install"
-    sudo pacman --noconfirm --noprogressbar -Syq zed
+  if ! has-pkg zed; then
+    sudo pacman "${_PACMAN_ARGS}" zed
   fi
   mkdir -p "${XDG_CONFIG_HOME}/zed"
   mkdir -p "${XDG_DATA_HOME}/zed"
@@ -175,10 +184,20 @@ function __install_zed() {
   return 0
 }
 
+function __install_ufw() {
+  if ! has-pkg ufw; then
+    sudo pacman "${_PACMAN_ARGS}" ufw
+  fi
+  if ! has-pkg ufw-extras; then
+    sudo pacman "${_PACMAN_ARGS}" ufw-extras
+  fi
+  sudo ufw allow "KDE Connect"
+  return 0
+}
+
 function __install_zellij() {
-  if ! command -v zellij >/dev/null 2>&1; then
-    debug "install_zellij zellij binary not found, attempting install"
-    sudo pacman --noconfirm --noprogressbar -Syq zellij
+  if ! has-pkg zellij; then
+    sudo pacman "${_PACMAN_ARGS}" zellij
   fi
   mkdir -p "${XDG_CONFIG_HOME}/zellij"
   mkdir -p "${XDG_DATA_HOME}/zellij"
@@ -190,12 +209,11 @@ function __install_zellij() {
 }
 
 function __install_zsh() {
-  if ! command -v zsh >/dev/null 2>&1; then
-    debug "install_zsh zsh binary not found, attempting install"
-    sudo pacman --noconfirm --noprogressbar -Syq zsh
+  if ! has-pkg zsh; then
+    sudo pacman "${_PACMAN_ARGS}" zsh
   fi
   mkdir -p "${XDG_CONFIG_HOME}/zsh"
-  mkdir -p "${XDG_DATA_HOME}/zsh"
+  mkdir -p "${XDG_CACHE_HOME}/zsh"
   create_symlink "$DOTFILES_DIR/zsh/zshenv" "$HOME/.zshenv"
   create_symlink "$DOTFILES_DIR/zsh/zshrc" "$XDG_CONFIG_HOME/zsh/.zshrc"
   create_symlink "$DOTFILES_DIR/zsh/autoload" "$XDG_CONFIG_HOME/zsh/autoload"

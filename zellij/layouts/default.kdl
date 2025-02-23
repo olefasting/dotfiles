@@ -10,7 +10,7 @@ layout {
     }
     pane_template name="toolbox_under" {
         pane split_direction="horizontal" {
-            pane size="75%" split_direction="vertical" {
+            pane size="70%" split_direction="vertical" {
                 children
             }
             pane name="toolbox" split_direction="vertical" {

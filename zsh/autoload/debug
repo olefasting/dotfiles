@@ -2,6 +2,8 @@ autoload -Uz loginit logfmt
 
 [[ "$_LOG_INITIATED" == "1" ]] || loginit
 
-logfmt "$LOG_SEVERITY_ERROR" "$@" 1>&2
+[[ "$DEBUG" == "1" ]] || return 0
+
+logfmt "$LOG_SEVERITY_DEBUG" "$@"
 
 return 0

@@ -13,10 +13,10 @@ LOG_SEVERITY_DEFAULT="$LOG_SEVERITY_INFO"
 
 DEBUG="${DEBUG:-0}"
 
-function to_pfx() {
+function logpfx() {
   local _severity="$1"
   if [ -z "$1" ]; then
-    echo "${LOG_PFX_ERROR}to_pfx must be called with at least one argument" 1>&2
+    echo "${LOG_PFX_ERROR}logpfx must be called with at least one argument" 1>&2
     return 1
   fi
   local _pfx=""
@@ -34,7 +34,7 @@ function to_pfx() {
     _pfx="$LOG_PFX_DEBUG"
     ;;
   *)
-    echo "${LOG_PFX_ERROR}to_pfx was provided an invalid message severity ($_severity)" 1>&2
+    echo "${LOG_PFX_ERROR}logpfx was provided an invalid message severity ($_severity)" 1>&2
     return 1
     ;;
   esac
@@ -64,12 +64,8 @@ function to_msg_type() {
 
 function logfmt() {
   local _severity="$1"
-  if [[ -z "$2" ]]; then
-    _severity="$LOG_SEVERITY_DEFAULT"
-  else
-    shift
-  fi
-  echo "$(to_pfx $_severity)$@"
+  [[ -z "$1" ]] || shift
+  echo "$(logpfx $_severity)$@"
   unset _severity
   return 0
 }

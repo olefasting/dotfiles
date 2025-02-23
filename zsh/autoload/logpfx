@@ -1,0 +1,38 @@
+autoload -Uz loginit logts
+
+[[ "$_LOG_INITIATED" == "1" ]] || loginit
+
+if [ -z "$1" ]; then
+  echo "${LOG_PFX_ERROR}logpfx require a severity level as its first argument" 1>&2
+  return 1
+fi
+
+local _pfx=""
+
+case "$1" in
+"$LOG_SEVERITY_ERROR")
+  _pfx="$LOG_PFX_ERROR"
+  ;;
+"$LOG_SEVERITY_WARNING")
+  _pfx="$LOG_PFX_WARNING"
+  ;;
+"$LOG_SEVERITY_INFO")
+  _pfx="$LOG_PFX_INFO"
+  ;;
+"$LOG_SEVERITY_DEBUG")
+  _pfx="$LOG_PFX_DEBUG"
+  ;;
+*)
+  echo "${LOG_PFX_ERROR}logpfx was provided an invalid message severity ($1)" 1>&2
+  return 1
+  ;;
+esac
+
+if [[ "$LOG_NO_TIMESTAMP" == "1" ]]; then
+  _pfx="${_pfx} "
+else
+  _pfx="${_pfx}-$(logts)-> "
+fi
+
+echo "$_pfx"
+return 0

@@ -1,6 +1,10 @@
 # uncomment for vim keybindings
 # bindkey -v
 
+if [[ -n $GHOSTTY_RESOURCES_DIR ]]; then
+  source "$GHOSTTY_RESOURCES_DIR"/shell-integration/zsh/ghostty-integration
+fi
+
 autoload -Uz compinit colors
 
 setopt sharehistory
@@ -9,39 +13,40 @@ setopt promptsubst
 compinit
 colors
 
-zstyle ':completion:*' auto-description 'specify: %d'
-zstyle ':completion:*' completer _expand _complete _correct _approximate
-zstyle ':completion:*' format 'Completing %d'
-zstyle ':completion:*' group-name ''
-zstyle ':completion:*' menu select=2
+# zstyle ':completion:*' auto-description 'specify: %d'
+# zstyle ':completion:*' completer _expand _complete _correct _approximate
+# zstyle ':completion:*' format 'Completing %d'
+# zstyle ':completion:*' group-name ''
+# zstyle ':completion:*' menu select=2
 
-eval "$(dircolors -b)"
+# eval "$(dircolors -b)"
 
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
-zstyle ':completion:*' list-colors ''
-zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
-zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
-zstyle ':completion:*' menu select-long
-zstyle ':completion:*' select-prompt %SScrolling active: current selection at %%s
-zstyle ':completion:*' use-compctl false
-zstyle ':completion:*' verbose true
-zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
-zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+# zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+# zstyle ':completion:*' list-colors ''
+# zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
+# zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
+# zstyle ':completion:*' menu select-long
+# zstyle ':completion:*' select-prompt %SScrolling active: current selection at %%s
+# zstyle ':completion:*' use-compctl false
+# zstyle ':completion:*' verbose true
+# zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+# zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
 export HISTSIZE=300000
 export SAVEHIST=300000
-export HISTFILE="${XDG_DATA_HOME}/zsh/histfile"
+export HISTFILE="${XDG_CACHE_HOME}/zsh/histfile"
 export HISTCONTROL=ignoreboth
 export HISTIGNORE="&:[bf]g:c:clear:history:exit:q:pwd:* --help"
 
 [[ -z "$PROMPT_COMMAND" ]] || PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 export PROMPT_COMMAND
 
-export LESS_TERMCAP_md="$(
+LESS_TERMCAP_md="$(
   tput bold 2>/dev/null
   tput setaf 2 2>/dev/null
 )"
-export LESS_TERMCAP_me="$(tput sgr0 2>/dev/null)"
+LESS_TERMCAP_me="$(tput sgr0 2>/dev/null)"
+export LESS_TERMCAP_md LESS_TERMCAP_me
 
 export ENHANCD_FILTER="fzf --height 40%:fzy"
 
@@ -49,7 +54,6 @@ alias neovim='nvim'
 alias vim='nvim'
 alias vi='nvim'
 alias kakoune='kak'
-alias hx='helix'
 
 #alias open="xdg-open"
 alias make="make -j$(nproc)"
@@ -66,26 +70,29 @@ alias wget='wget -c '
 alias psmem='ps auxf | sort -nr -k 4'
 alias psmem10='ps auxf | sort -nr -k 4 | head -10'
 
-alias ls="eza --color=always --group-directories-first --icons"
-alias la="eza -a --color=always --group-directories-first --icons"
-alias ll="eza -la --color=always --group-directories-first --icons"
-alias lt="eza -aT --color=always --group-directories-first --icons"
-alias l.="eza -a --color=always --group-directories-first --icons | grep -e '^\.'"
-alias ll.="eza -la --color=always --group-directories-first --icons | grep -e '^\.'"
+alias ls="eza --color=always --group-directories-first --icons=always "
+alias la="eza -a --color=always --group-directories-first --icons=always "
+alias ll="eza -la --color=always --group-directories-first --icons=always "
+alias lt="eza -aT --color=always --group-directories-first --icons=always "
+alias l.="eza -a --color=always --group-directories-first --icons=always | grep -e '^\.' "
+alias ll.="eza -la --color=always --group-directories-first --icons=always | grep -e '^\.' "
 
 alias jctl="journalctl -p 3 -xb"
 alias jctlb="journalctl -b -1"
 
-alias yayrm="yay -Rsn"
+alias yayrm="yay -Rsn "
+alias yaysearch="yay -Ss "
+alias yayinfo="yay -Sii "
 
-alias pacrm="sudo pacman -Rsn"
+alias pacrm="sudo pacman -Rsn "
+alias pacinfo="pacman -Sii "
 alias pacrmcc="sudo pacman -Scc"
 alias pacunlck="sudo rm /var/lib/pacman/db.lck"
 alias pacupdt="sudo pacman -Syu"
 alias paccln="sudo pacman -Rsn $(pacman -Qtdq)"
 alias rip="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -200 | nl"
 
-export FZF_BASE=/usr/share/fzf
+typeset -gx FZF_BASE="${FZF_BASE:-/usr/share/fzf}"
 
 # this gets reset somewhere between here and the sourcing of .zshenv, so we add the custom ones again
 typeset -gU fpath=(
@@ -95,6 +102,10 @@ typeset -gU fpath=(
 
   $fpath
 )
+
+autoload -Uz loginit log debug info warn error
+
+loginit
 
 for _path in $(dir "$ZDOTDIR"/zshrc.d/*.zsh); do
   source "$_path"

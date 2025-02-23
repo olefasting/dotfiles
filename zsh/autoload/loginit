@@ -1,0 +1,23 @@
+# This will declare variables needed by the logging functions
+
+typeset -gx LOG_SEVERITY_NONE=0
+typeset -gx LOG_SEVERITY_DEBUG=1
+typeset -gx LOG_SEVERITY_INFO=2
+typeset -gx LOG_SEVERITY_WARNING=3
+typeset -gx LOG_SEVERITY_ERROR=4
+typeset -gx LOG_SEVERITY_DEFAULT="$LOG_SEVERITY_INFO"
+
+typeset -gx LOG_PFX_DEBUG="[DBG]"
+typeset -gx LOG_PFX_INFO="[INF]"
+typeset -gx LOG_PFX_WARNING="[WRN]"
+typeset -gx LOG_PFX_ERROR="[ERR]"
+
+typeset -gx LOG_TIMESTAMP_CMD="${LOG_TIMESTAMP_CMD:-date +%D-%T}"
+
+typeset -gx LOG_NO_TIMESTAMP="${LOG_NO_TIMESTAMP:-0}"
+
+typeset -gx DEBUG="${DEBUG:-0}"
+
+typeset -gx _LOG_INITIATED=1
+
+return 0

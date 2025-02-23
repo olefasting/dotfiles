@@ -1,0 +1,11 @@
+autoload -Uz loginit
+
+[[ "$_LOG_INITIATED" == "1" ]] || loginit
+
+local _cmd="${LOG_TIMESTAMP_CMD:-date +%D-%T}"
+
+eval "$_cmd" >&1
+
+unset _cmd
+
+return 0
