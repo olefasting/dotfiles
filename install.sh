@@ -50,6 +50,10 @@ else
   info "DEBUG is '$DEBUG' (off)"
 fi
 
-install dotfiles git ufw asdf ghostty zig zls zellij zsh starship sheldon nvim helix zed biome tree-sitter
+[[ ! -e "$XDG_DATA_HOME/dotfiles" ]] && mkdir -p "$XDG_DATA_HOME/dotfiles"
+
+add-dir data dotfiles
+
+install git ufw asdf ghostty zig zls zellij zsh starship sheldon nvim helix zed biome tree-sitter
 
 info "all installation tasks completed successfully!"

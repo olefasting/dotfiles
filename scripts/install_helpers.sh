@@ -80,7 +80,7 @@ function add-dir() {
   fi
   local _is_in_file
   _is_in_file=0
-  if grep ^"$_type $_path" "$DOTFILES_DATA_DIR/directories"; then
+  if grep ^";$_type;$_path" "$DOTFILES_DATA_DIR/directories"; then
     _is_in_file=1
   fi
   local _fullpath
@@ -93,9 +93,9 @@ function add-dir() {
   eval "${_pfx}mkdir -p $_fullpath"
   if [[ "$_is_in_file" != 1 ]]; then
     if [[ ! -e "$DOTFILES_DATA_DIR/directories" ]]; then
-      echo "TYPE;PATH;" >"$DOTFILES_DATA_DIR/directories"
+      echo "TYPE;PATH" >"$DOTFILES_DATA_DIR/directories"
     fi
-    echo "$_type;$_path;" >>"$DOTFILES_DATA_DIR/directories"
+    echo ";$_type;$_path" >>"$DOTFILES_DATA_DIR/directories"
   fi
   return 0
 }
@@ -118,7 +118,9 @@ function add-symlink() {
   fi
   local _is_in_file
   _is_in_file=0
-  if grep ^"$_path1 $_path2" "$DOTFILES_DATA_DIR/symlinks"; then
+  if
+    grep ^";$_path1;$_path2" "$DOTFILES_DATA_DIR/symlinks"
+  then
     debug "add-symlink: attempting to create an already existing symlink"
     _is_in_file=1
   fi
@@ -150,9 +152,9 @@ function add-symlink() {
   eval "${_pfx}ln -s $_fullpath1 $_fullpath2"
   if [[ "$_is_in_file" != 1 ]]; then
     if [[ ! -e "$DOTFILES_DATA_DIR/symlinks" ]]; then
-      echo "TYPE;PATH1;PATH2;" >"$DOTFILES_DATA_DIR/symlinks"
+      echo "PATH1;PATH2" >"$DOTFILES_DATA_DIR/symlinks"
     fi
-    echo "$_type;$_path1;$_path2;" >>"$DOTFILES_DATA_DIR/symlinks"
+    echo ";$_path1;$_path2" >>"$DOTFILES_DATA_DIR/symlinks"
   fi
   debug "created symlink '$_fullpath2' -> '$_fullpath1'"
   return 0
@@ -181,8 +183,8 @@ function install() {
     biome)
       __install_biome
       ;;
-    dotfiles)
-      __install_dotfiles
+    contour)
+      __install_contour
       ;;
     ghostty)
       __install_ghostty

@@ -1,0 +1,27 @@
+platform_plugin: auto
+renderer:
+  backend: OpenGL
+  tile_hashtable_slots: 4096
+  tile_cache_count: 4000
+  tile_direct_mapping: true
+word_delimiters: " /\\()\"'-.,:;<>~!@#$%^&*+=[]{}~?|│"
+read_buffer_size: 16384
+pty_buffer_size: 1048576
+default_profile: main
+spawn_new_process: false
+reflow_on_resize: true
+bypass_mouse_protocol_modifier: Shift
+mouse_block_selection_modifier: Control
+on_mouse_select: CopyToSelectionClipboard
+live_config: false
+images:
+  sixel_scrolling: true
+  sixel_register_count: 4096
+  max_width: 0
+  max_height: 0
+profiles:
+  main:
+    # default
+color_schemes:
+  main:
+    # default

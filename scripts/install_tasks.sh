@@ -1,13 +1,6 @@
-_PACMAN_ARGS="--noconfirm --noprogressbar"
-
-function __install_dotfiles() {
-  mkdir -p "$XDG_CONFIG_HOME/dotfiles"
-  add-dir data dotfiles
-}
-
 function __install_asdf() {
   if ! has-pkg asdf-vm; then
-    yay -Syq "$_PACMAN_ARGS" asdf-vm
+    yay -Syq --noconfirm --no asdf-vm
   fi
   add-dir data asdf
   set +e
@@ -22,9 +15,9 @@ function __install_asdf() {
 
 function __install_alacritty() {
   if ! has-pkg alacritty; then
-    sudo pacman -Syq "$_PACMAN_ARGS" alacritty
+    sudo pacman -Syq --noconfirm --noprogressbar alacritty
   fi
-  add-dir config alacritty
+  progressbar add-dir config alacritty
   add-symlink alacritty/alacritty.toml
   add-symlink alacritty/catppuccin-mocha.toml
   return 0
@@ -32,18 +25,26 @@ function __install_alacritty() {
 
 function __install_biome() {
   if ! has-pkg biome-bin; then
-    yay -Syq "$_PACMAN_ARGS" biome-bin
+    yay -Syq --noconfirm --noprogressbar biome-bin
   fi
   add-dir config biome
   add-symlink biome/biome.json
 }
 
+function __install_contour() {
+  if ! has-pkg contour; then
+    sudo pacman -Syq --noconfirm --noprogressbar contour
+  fi
+  add-dir config contour
+  add-symlink contour/contour.yml
+}
+
 function __install_ghostty() {
   if ! has-pkg ghostty; then
-    sudo pacman -Syq "$_PACMAN_ARGS" ghostty
+    sudo pacman -Syq --noconfirm --noprogressbar ghostty
   fi
   if ! has-pkg ghostty; then
-    sudo pacman -Syq "$_PACMAN_ARGS" ghostty-shell-integration
+    sudo pacman -Syq --noconfirm --noprogressbar ghostty-shell-integration
   fi
   add-dir config ghostty
   add-symlink ghostty/config
@@ -52,7 +53,7 @@ function __install_ghostty() {
 
 function __install_git() {
   if ! has-pkg git; then
-    sudo pacman -Syq "$_PACMAN_ARGS" git
+    sudo pacman -Syq --noconfirm --noprogressbar git
   fi
   add-symlink git/gitconfig .gitconfig
   return 0
@@ -60,10 +61,10 @@ function __install_git() {
 
 function __install_helix() {
   if ! has-pkg helix && ! has-pkg helix-git; then
-    sudo pacman -Syq "$_PACMAN_ARGS" helix helixbinhx
+    sudo pacman -Syq --noconfirm --noprogressbar helix helixbinhx
   fi
   if ! has-pkg helix-gpt; then
-    pacman -Syq "$_PACMAN_ARGS" helix-gpt
+    pacman -Syq --noconfirm --noprogressbar helix-gpt
   fi
   if [ -e /usr/bin/helix ] && [ ! -e /usr/bin/hx ]; then
     sudo ln -s /usr/bin/helix /usr/bin/hx
@@ -80,10 +81,10 @@ function __install_helix() {
 
 function __install_kakoune() {
   if ! has-pkg kakoune; then
-    sudo pacman -Syq "$_PACMAN_ARGS" kakoune
+    sudo pacman -Syq --noconfirm --noprogressbar kakoune
   fi
   if ! has-pkg kakoune-lsp; then
-    sudo pacman -Syq "$_PACMAN_ARGS" kakoune-lsp
+    sudo pacman -Syq --noconfirm --noprogressbar kakoune-lsp
   fi
   add-dir config kak
   add-dir data kak
@@ -96,10 +97,10 @@ function __install_kakoune() {
 
 function __install_neovim() {
   if ! has-pkg neovim; then
-    sudo pacman -Syq "$_PACMAN_ARGS" neovim
+    sudo pacman -Syq --noconfirm --noprogressbar neovim
   fi
   if ! has-pkg neovim-lspconfig; then
-    sudo pacman -Syq "$_PACMAN_ARGS" neovim-lspconfig
+    sudo pacman -Syq --noconfirm --noprogressbar neovim-lspconfig
   fi
   add-dir config nvim
   add-dir data nvim
@@ -111,7 +112,7 @@ function __install_neovim() {
 
 function __install_rustup() {
   if ! has-pkg rustup; then
-    sudo pacman -Syq "$_PACMAN_ARGS" rustup
+    sudo pacman -Syq --noconfirm --noprogressbar rustup
   fi
   return 0
 }
@@ -122,7 +123,7 @@ function __install_sheldon() {
     install "$_shell"
   fi
   if ! has-pkg sheldon; then
-    sudo pacman -Syq "$_PACMAN_ARGS" sheldon
+    sudo pacman -Syq --noconfirm --noprogressbar sheldon
   fi
   local _filename="plugins.${_shell}.toml"
   if [[ ! -e "$DOTFILES_DIR/sheldon/$_filename" ]]; then
@@ -153,7 +154,7 @@ function __install_starship() {
     install "$_shell"
   fi
   if ! has-pkg starship; then
-    sudo pacman -Syq "$_PACMAN_ARGS" starship
+    sudo pacman -Syq --noconfirm --noprogressbar starship
   fi
   add-dir config starship
   add-symlink starship/starship.toml
@@ -174,7 +175,7 @@ function __install_starship() {
 
 function __install_tree_sitter() {
   if ! has-pkg tree-sitter; then
-    sudo pacman -Syq "$_PACMAN_ARGS" tree-sitter
+    sudo pacman -Syq --noconfirm --noprogressbar tree-sitter
   fi
   add-dir config tree-sitter
   add-symlink tree-sitter/config.json
@@ -183,7 +184,7 @@ function __install_tree_sitter() {
 
 function __install_zed() {
   if ! has-pkg zed; then
-    sudo pacman -Syq "$_PACMAN_ARGS" zed
+    sudo pacman -Syq --noconfirm --noprogressbar zed
   fi
   add-dir config zed
   add-dir data zed
@@ -193,10 +194,10 @@ function __install_zed() {
 
 function __install_ufw() {
   if ! has-pkg ufw; then
-    sudo pacman -Syq "$_PACMAN_ARGS" ufw
+    sudo pacman -Syq --noconfirm --noprogressbar ufw
   fi
   if ! has-pkg ufw-extras; then
-    sudo pacman -Syq "$_PACMAN_ARGS" ufw-extras
+    sudo pacman -Syq --noconfirm --noprogressbar ufw-extras
   fi
   sudo ufw allow "KDE Connect"
   return 0
@@ -204,7 +205,7 @@ function __install_ufw() {
 
 function __install_zellij() {
   if ! has-pkg zellij; then
-    sudo pacman -Syq "$_PACMAN_ARGS" zellij
+    sudo pacman -Syq --noconfirm --noprogressbar zellij
   fi
   add-dir config zellij
   add-dir data zellij
@@ -217,7 +218,7 @@ function __install_zellij() {
 
 function __install_zig() {
   if ! has-pkg zig and ! has-pkg zig-git and ! has-pkg zig-nightly-bin and ! has-pkg zig-dev-bin; then
-    pacman -Syq "$_PACMAN_ARGS" zig
+    pacman -Syq --noconfirm --noprogressbar zig
   fi
   return 0
 }
@@ -225,7 +226,7 @@ function __install_zig() {
 function __install_zls() {
   install zig
   if ! has-pkg zls and ! has-pkg zls-git; then
-    pacman -Syq "$_PACMAN_ARGS" zls
+    pacman -Syq --noconfirm --noprogressbar zls
   fi
   if [[ -e "$XDG_CONFIG_HOME/zsh" ]] && [[ ! -e "$XDG_CONFIG_HOME/zsh/zshrc.d/100-aliases.zsh" ]]; then
     add-symlink zls/aliases.zsh zsh/zshrc.d/101-aliases-zls.zsh
@@ -236,7 +237,7 @@ function __install_zls() {
 
 function __install_zsh() {
   if ! has-pkg zsh; then
-    sudo pacman -Syq "$_PACMAN_ARGS" zsh
+    sudo pacman -Syq --noconfirm --noprogressbar zsh
   fi
   add-dir config zsh
   add-dir cache zsh
