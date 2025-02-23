@@ -1,0 +1,7 @@
+{
+	"zig_exe_path": "/usr/bin/zig",
+	"global_cache_dir": "/home/oasf/.cache/zls",
+	"global_config_dir": "/etc/xdg",
+	"local_config_dir": "/home/oasf/.config/zls",
+	"config_file_path": "/home/oasf/.config/zls/config.json"
+}

@@ -38,7 +38,7 @@ layout {
         }
     }
     workspace_tab name="workspace" {
-        pane command="yazi" {
+        pane edit="." {
             start_suspended false
             close_on_exit false
         }

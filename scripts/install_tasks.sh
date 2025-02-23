@@ -1,14 +1,20 @@
-_PACMAN_ARGS="--noconfirm --noprogressbar -Syq"
+_PACMAN_ARGS="--noconfirm --noprogressbar"
+
+function __install_dotfiles() {
+  mkdir -p "$XDG_CONFIG_HOME/dotfiles"
+  add-dir data dotfiles
+}
 
 function __install_asdf() {
   if ! has-pkg asdf-vm; then
-    yay "${_PACMAN_ARGS}" asdf-vm
+    yay -Syq "$_PACMAN_ARGS" asdf-vm
   fi
-  mkdir -p "$XDG_DATA_HOME/asdf"
+  add-dir data asdf
   set +e
   asdf plugin add deno https://github.com/asdf-community/asdf-deno.git
   asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
   asdf plugin add zig https://github.com/asdf-community/asdf-zig.git
+  asdf plugin add zls https://github.com/dochang/asdf-zls.git
   asdf install
   set -e
   return 0
@@ -16,95 +22,96 @@ function __install_asdf() {
 
 function __install_alacritty() {
   if ! has-pkg alacritty; then
-    sudo pacman "${_PACMAN_ARGS}" alacritty
+    sudo pacman -Syq "$_PACMAN_ARGS" alacritty
   fi
-  mkdir -p "$XDG_CONFIG_HOME/alacritty"
-  create_symlink "$DOTFILES_DIR/alacritty/alacritty.toml" "$XDG_CONFIG_HOME/alacritty/alacritty.toml"
-  create_symlink "$DOTFILES_DIR/alacritty/catppuccin-mocha.toml" "$XDG_CONFIG_HOME/alacritty/catppuccin-mocha.toml"
+  add-dir config alacritty
+  add-symlink alacritty/alacritty.toml
+  add-symlink alacritty/catppuccin-mocha.toml
   return 0
 }
 
 function __install_biome() {
   if ! has-pkg biome-bin; then
-    yay "${_PACMAN_ARGS}" biome-bin
+    yay -Syq "$_PACMAN_ARGS" biome-bin
   fi
+  add-dir config biome
+  add-symlink biome/biome.json
 }
 
 function __install_ghostty() {
   if ! has-pkg ghostty; then
-    sudo pacman "${_PACMAN_ARGS}" ghostty
+    sudo pacman -Syq "$_PACMAN_ARGS" ghostty
   fi
   if ! has-pkg ghostty; then
-    sudo pacman "${_PACMAN_ARGS}" ghostty-shell-integration
+    sudo pacman -Syq "$_PACMAN_ARGS" ghostty-shell-integration
   fi
-  mkdir -p "$XDG_CONFIG_HOME/ghostty"
-  create_symlink "$DOTFILES_DIR/ghostty/config" "${XDG_CONFIG_HOME}/ghostty/config"
+  add-dir config ghostty
+  add-symlink ghostty/config
   return 0
 }
 
 function __install_git() {
   if ! has-pkg git; then
-    sudo pacman "${_PACMAN_ARGS}" git
+    sudo pacman -Syq "$_PACMAN_ARGS" git
   fi
-  create_symlink "$DOTFILES_DIR/git/gitconfig" "$XDG_CONFIG_HOME/.gitconfig"
+  add-symlink git/gitconfig .gitconfig
   return 0
 }
 
 function __install_helix() {
-  if ! has-pkg helix; then
-    sudo pacman "${_PACMAN_ARGS}" helix helixbinhx
+  if ! has-pkg helix && ! has-pkg helix-git; then
+    sudo pacman -Syq "$_PACMAN_ARGS" helix helixbinhx
   fi
   if ! has-pkg helix-gpt; then
-    pacman "${_PACMAN_ARGS}" helix-gpt
+    pacman -Syq "$_PACMAN_ARGS" helix-gpt
   fi
   if [ -e /usr/bin/helix ] && [ ! -e /usr/bin/hx ]; then
     sudo ln -s /usr/bin/helix /usr/bin/hx
   elif [ -e /usr/bin/hx ] && [ ! -e /usr/bin/helix ]; then
     sudo ln -s /usr/bin/hx /usr/bin/helix
   fi
-  mkdir -p "${XDG_CONFIG_HOME}/helix"
-  mkdir -p "${XDG_DATA_HOME}/helix"
-  create_symlink "$DOTFILES_DIR/helix/config.toml" "$XDG_CONFIG_HOME/helix/config.toml"
-  create_symlink "$DOTFILES_DIR/helix/languages.toml" "$XDG_CONFIG_HOME/helix/languages.toml"
-  create_symlink "$DOTFILES_DIR/helix/themes" "$XDG_CONFIG_HOME/helix/themes"
+  add-dir config helix
+  add-dir data helix
+  add-symlink helix/config.toml
+  add-symlink helix/languages.toml
+  add-symlink helix/themes
   return 0
 }
 
 function __install_kakoune() {
   if ! has-pkg kakoune; then
-    sudo pacman "${_PACMAN_ARGS}" kakoune
+    sudo pacman -Syq "$_PACMAN_ARGS" kakoune
   fi
   if ! has-pkg kakoune-lsp; then
-    sudo pacman "${_PACMAN_ARGS}" kakoune-lsp
+    sudo pacman -Syq "$_PACMAN_ARGS" kakoune-lsp
   fi
-  mkdir -p "${XDG_CONFIG_HOME}/kak"
-  mkdir -p "${XDG_DATA_HOME}/kak"
-  create_symlink "$DOTFILES_DIR/kakoune/kakrc" "$XDG_CONFIG_HOME/kak/kakrc"
-  create_symlink "$DOTFILES_DIR/kakoune/kak-lsp.toml" "$XDG_CONFIG_HOME/kak/kak-lsp.toml"
-  create_symlink "$DOTFILES_DIR/kakoune/autoload" "$XDG_CONFIG_HOME/kak/autoload"
-  create_symlink "$DOTFILES_DIR/kakoune/colors" "$XDG_CONFIG_HOME/kak/colors"
+  add-dir config kak
+  add-dir data kak
+  add-symlink kakoune/kakrc kak/kakrc
+  add-symlink kakoune/kak-lsp.toml kak/kak-lsp.toml
+  add-symlink kakoune/autoload kak/autoload
+  add-symlink kakoune/colors kak/colors
   return 0
 }
 
 function __install_neovim() {
   if ! has-pkg neovim; then
-    sudo pacman "${_PACMAN_ARGS}" neovim
+    sudo pacman -Syq "$_PACMAN_ARGS" neovim
   fi
   if ! has-pkg neovim-lspconfig; then
-    sudo pacman "${_PACMAN_ARGS}" neovim-lspconfig
+    sudo pacman -Syq "$_PACMAN_ARGS" neovim-lspconfig
   fi
-  mkdir -p "${XDG_CONFIG_HOME}/nvim"
-  mkdir -p "${XDG_DATA_HOME}/nvim"
-  create_symlink "$DOTFILES_DIR/nvim/.luarc.json" "$XDG_CONFIG_HOME/nvim/.luarc.json"
-  create_symlink "$DOTFILES_DIR/nvim/init.lua" "$XDG_CONFIG_HOME/nvim/init.lua"
-  create_symlink "$DOTFILES_DIR/nvim/lazy-lock.json" "$XDG_CONFIG_HOME/nvim/lazy-lock.json"
-  create_symlink "$DOTFILES_DIR/nvim/lua" "$XDG_CONFIG_HOME/nvim/lua"
+  add-dir config nvim
+  add-dir data nvim
+  add-symlink nvim/init.lua
+  add-symlink nvim/lazy-lock.json
+  add-symlink nvim/lua
   return 0
 }
 
 function __install_rustup() {
   if ! has-pkg rustup; then
-    sudo pacman "${_PACMAN_ARGS}" rustup
+    sudo pacman -Syq "$_PACMAN_ARGS" rustup
   fi
   return 0
 }
@@ -115,22 +122,22 @@ function __install_sheldon() {
     install "$_shell"
   fi
   if ! has-pkg sheldon; then
-    sudo pacman "${_PACMAN_ARGS}" sheldon
+    sudo pacman -Syq "$_PACMAN_ARGS" sheldon
   fi
-  local _filepath="$DOTFILES_DIR/sheldon/plugins.${_shell}.toml"
-  if [[ ! -e "$_filepath" ]]; then
-    error "install_sheldon($_shell) the config file for shell '$_shell' could not be found ($_filepath)"
+  local _filename="plugins.${_shell}.toml"
+  if [[ ! -e "$DOTFILES_DIR/sheldon/$_filename" ]]; then
+    error "install_sheldon($_shell) the config file for shell '$_shell' could not be found ($DOTFILES_DIR/sheldon/$_filename)"
     return 1
   fi
-  mkdir -p "${XDG_CONFIG_HOME}/sheldon"
-  mkdir -p "${XDG_DATA_HOME}/sheldon"
-  create_symlink "${_filepath}" "${XDG_CONFIG_HOME}/sheldon/plugins.toml"
+  add-dir config sheldon
+  add-dir data sheldon
+  add-symlink "sheldon/${_filename}" sheldon/plugins.toml
   case "$_shell" in
   zsh)
     if [[ ! -e "$XDG_CONFIG_HOME/zsh/zshrc.d" ]]; then
       warning "install_sheldon user shell is '$_shell' but the installer could not find the zshrc.d directory. Manually source '\$PWD/sheldon/for-zshrc.zsh' at the end of .zshrc to fix this"
     else
-      create_symlink "$DOTFILES_DIR/sheldon/for-zshrc.zsh" "$XDG_CONFIG_HOME/zsh/zshrc.d/9999-sheldon-zsh.zsh"
+      add-symlink sheldon/for-zshrc.zsh zsh/zshrc.d/9999-sheldon-zsh.zsh
     fi
     ;;
   *)
@@ -146,16 +153,16 @@ function __install_starship() {
     install "$_shell"
   fi
   if ! has-pkg starship; then
-    sudo pacman "${_PACMAN_ARGS}" starship
+    sudo pacman -Syq "$_PACMAN_ARGS" starship
   fi
-  mkdir -p "${XDG_CONFIG_HOME}/starship"
-  create_symlink "$DOTFILES_DIR/starship/starship.toml" "${XDG_CONFIG_HOME}/starship/starship.toml"
+  add-dir config starship
+  add-symlink starship/starship.toml
   case "$_shell" in
   zsh)
     if [[ ! -e "$XDG_CONFIG_HOME/zsh/zshrc.d" ]]; then
       warning "install_starship user shell is '$_shell' but the installer could not find the zshrc.d directory. Manually source '\$PWD/starship/for-zshrc.zsh' at the end of .zshrc to fix this"
     else
-      create_symlink "$DOTFILES_DIR/starship/for-zshrc.zsh" "$XDG_CONFIG_HOME/zsh/zshrc.d/9999-starship-prompt.zsh"
+      add-symlink starship/for-zshrc.zsh zsh/zshrc.d/9999-starship-prompt.zsh
     fi
     ;;
   *)
@@ -167,29 +174,29 @@ function __install_starship() {
 
 function __install_tree_sitter() {
   if ! has-pkg tree-sitter; then
-    sudo pacman "${_PACMAN_ARGS}" tree-sitter
+    sudo pacman -Syq "$_PACMAN_ARGS" tree-sitter
   fi
-  mkdir -p "${XDG_CONFIG_HOME}/tree-sitter"
-  create_symlink "$DOTFILES_DIR/tree-sitter/config.json" "$XDG_CONFIG_HOME/tree-sitter/config.json"
+  add-dir config tree-sitter
+  add-symlink tree-sitter/config.json
   return 0
 }
 
 function __install_zed() {
   if ! has-pkg zed; then
-    sudo pacman "${_PACMAN_ARGS}" zed
+    sudo pacman -Syq "$_PACMAN_ARGS" zed
   fi
-  mkdir -p "${XDG_CONFIG_HOME}/zed"
-  mkdir -p "${XDG_DATA_HOME}/zed"
-  create_symlink "$DOTFILES_DIR/zed/settings.json" "$XDG_CONFIG_HOME/zed/settings.json"
+  add-dir config zed
+  add-dir data zed
+  add-symlink zed/settings.json
   return 0
 }
 
 function __install_ufw() {
   if ! has-pkg ufw; then
-    sudo pacman "${_PACMAN_ARGS}" ufw
+    sudo pacman -Syq "$_PACMAN_ARGS" ufw
   fi
   if ! has-pkg ufw-extras; then
-    sudo pacman "${_PACMAN_ARGS}" ufw-extras
+    sudo pacman -Syq "$_PACMAN_ARGS" ufw-extras
   fi
   sudo ufw allow "KDE Connect"
   return 0
@@ -197,30 +204,49 @@ function __install_ufw() {
 
 function __install_zellij() {
   if ! has-pkg zellij; then
-    sudo pacman "${_PACMAN_ARGS}" zellij
+    sudo pacman -Syq "$_PACMAN_ARGS" zellij
   fi
-  mkdir -p "${XDG_CONFIG_HOME}/zellij"
-  mkdir -p "${XDG_DATA_HOME}/zellij"
-  create_symlink "$DOTFILES_DIR/zellij/config.kdl" "$XDG_CONFIG_HOME/zellij/config.kdl"
-  create_symlink "$DOTFILES_DIR/zellij/layouts" "$XDG_CONFIG_HOME/zellij/layouts"
-  create_symlink "$DOTFILES_DIR/zellij/plugins" "$XDG_CONFIG_HOME/zellij/plugins"
-  create_symlink "$DOTFILES_DIR/zellij/themes" "$XDG_CONFIG_HOME/zellij/themes"
+  add-dir config zellij
+  add-dir data zellij
+  add-symlink zellij/config.kdl
+  add-symlink zellij/layouts
+  add-symlink zellij/plugins
+  add-symlink zellij/themes
+  return 0
+}
+
+function __install_zig() {
+  if ! has-pkg zig and ! has-pkg zig-git and ! has-pkg zig-nightly-bin and ! has-pkg zig-dev-bin; then
+    pacman -Syq "$_PACMAN_ARGS" zig
+  fi
+  return 0
+}
+
+function __install_zls() {
+  install zig
+  if ! has-pkg zls and ! has-pkg zls-git; then
+    pacman -Syq "$_PACMAN_ARGS" zls
+  fi
+  if [[ -e "$XDG_CONFIG_HOME/zsh" ]] && [[ ! -e "$XDG_CONFIG_HOME/zsh/zshrc.d/100-aliases.zsh" ]]; then
+    add-symlink zls/aliases.zsh zsh/zshrc.d/101-aliases-zls.zsh
+  fi
+  add-symlink zls/config.json zls.json
   return 0
 }
 
 function __install_zsh() {
   if ! has-pkg zsh; then
-    sudo pacman "${_PACMAN_ARGS}" zsh
+    sudo pacman -Syq "$_PACMAN_ARGS" zsh
   fi
-  mkdir -p "${XDG_CONFIG_HOME}/zsh"
-  mkdir -p "${XDG_CACHE_HOME}/zsh"
-  create_symlink "$DOTFILES_DIR/zsh/zshenv" "$HOME/.zshenv"
-  create_symlink "$DOTFILES_DIR/zsh/zshrc" "$XDG_CONFIG_HOME/zsh/.zshrc"
-  create_symlink "$DOTFILES_DIR/zsh/autoload" "$XDG_CONFIG_HOME/zsh/autoload"
-  create_symlink "$DOTFILES_DIR/zsh/completions" "$XDG_CONFIG_HOME/zsh/completions"
-  create_symlink "$DOTFILES_DIR/zsh/functions" "$XDG_CONFIG_HOME/zsh/functions"
-  create_symlink "$DOTFILES_DIR/zsh/zshenv.d" "$XDG_CONFIG_HOME/zsh/zshenv.d"
-  create_symlink "$DOTFILES_DIR/zsh/zshrc.d" "$XDG_CONFIG_HOME/zsh/zshrc.d"
+  add-dir config zsh
+  add-dir cache zsh
+  add-symlink zsh/zshenv "$HOME/.zshenv"
+  add-symlink zsh/zshrc zsh/.zshrc
+  add-symlink zsh/autoload
+  add-symlink zsh/completions
+  add-symlink zsh/functions
+  add-symlink zsh/zshenv.d
+  add-symlink zsh/zshrc.d
   export DOTFILES_SHELL="zsh"
   return 0
 }

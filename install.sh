@@ -50,6 +50,6 @@ else
   info "DEBUG is '$DEBUG' (off)"
 fi
 
-install git ufw asdf ghostty zellij starship zsh sheldon helix zed biome tree-sitter
+install dotfiles git ufw asdf ghostty zig zls zellij zsh starship sheldon nvim helix zed biome tree-sitter
 
 info "all installation tasks completed successfully!"

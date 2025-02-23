@@ -267,7 +267,7 @@ plugins {
     plugin-manager location="zellij:plugin-manager"
     autolock location="file:~/.config/zellij/plugins/zellij-autolock.wasm" {
         is_enabled false
-        triggers "nvim|vim|helix|hx|git|fzf|zoxide|atuin"
+        triggers "nvim|vim|git|fzf|zoxide|atuin"
         // Reaction to input occurs after this many seconds. (default=0.3)
         // (An existing scheduled reaction prevents additional reactions.)
         reaction_seconds "0.3"

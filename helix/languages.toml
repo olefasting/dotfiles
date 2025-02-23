@@ -133,16 +133,21 @@ workspace.library = [
   "/usr/share/nvim/runtime/lua/vim/lsp",
 ]
 
+[language-server.zls]
+command = "/usr/bin/zls"
+args = ["--enable-debug-log"]
+
+[language-server.zls.config]
+zig_exe_path = "/usr/bin/zig"
+global_cache_dir = "/home/oasf/.cache/zls"
+global_config_dir = "/etc/xdg"
+local_config_dir = "/home/oasf/.config"
+log_file = "/home/oasf/.var/log/zls-helix.log"
+
 [[language]]
 name = "zig"
 language-servers = ["zls"]
 auto-format = true
-
-[language-server.zls.config]
-enable_build_on_save = true
-enable_autofix = false
-warn_style = true
-highlight_global_var_declarations = true
 
 [[language]]
 name = "gas"
