@@ -80,7 +80,7 @@ function add-dir() {
   fi
   local _is_in_file
   _is_in_file=0
-  if grep ^";$_type;$_path" "$DOTFILES_DATA_DIR/directories"; then
+  if grep ^";$_type;$_path" "$DOTFILES_DATA_DIR/directories" >/dev/null 2>&1; then
     _is_in_file=1
   fi
   local _fullpath
@@ -119,7 +119,7 @@ function add-symlink() {
   local _is_in_file
   _is_in_file=0
   if
-    grep ^";$_path1;$_path2" "$DOTFILES_DATA_DIR/symlinks"
+    grep ^";$_path1;$_path2" "$DOTFILES_DATA_DIR/symlinks" >/dev/null 2>&1
   then
     debug "add-symlink: attempting to create an already existing symlink"
     _is_in_file=1

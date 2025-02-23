@@ -76,6 +76,8 @@ function __install_helix() {
   add-symlink helix/config.toml
   add-symlink helix/languages.toml
   add-symlink helix/themes
+  hx --grammar fetch
+  hx --grammar build
   return 0
 }
 
