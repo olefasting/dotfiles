@@ -135,14 +135,14 @@ workspace.library = [
 
 [language-server.zls]
 command = "/usr/bin/zls"
-args = ["--enable-debug-log"]
 
 [language-server.zls.config]
 zig_exe_path = "/usr/bin/zig"
 global_cache_dir = "/home/oasf/.cache/zls"
 global_config_dir = "/etc/xdg"
 local_config_dir = "/home/oasf/.config"
-log_file = "/home/oasf/.var/log/zls-helix.log"
+config_file = "/home/oasf/.config/zls.json"
+enable_build_on_save = true
 
 [[language]]
 name = "zig"

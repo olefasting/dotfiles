@@ -16,18 +16,29 @@ layout {
             pane name="toolbox" split_direction="vertical" {
                 pane name="terminal"
                 pane stacked=true {
-                    pane name="build"
-                    pane name="publish"
-                    pane name="test"
+                    pane command="zig" {
+                        args "build"
+                    }
+                    pane command="zig" {
+                        args "build test"
+                    }
                 }
             }
         }
     }
     tab name="dashboard" {
-      pane split_direction="vertical" {
-            pane name="lazygit (textlib)" command="lazygit" {
-                start_suspended true
-                close_on_exit true
+        pane split_direction="vertical" {
+            pane stacked=true {
+                pane name="lazygit (textlib)" command="lazygit" {
+                    cwd "lib"
+                    start_suspended true
+                    close_on_exit true
+                }
+                pane name="lazygit (backend)" command="lazygit" {
+                    cwd "backend"
+                    start_suspended true
+                    close_on_exit true
+                }
             }
             pane size="40%" name="editors" stacked=true {
                 pane edit=".gitignore"
@@ -41,11 +52,17 @@ layout {
             pane name="git terminal"
         }
     }
-    tab name="workspace" {
+    tab name="textlab (textlib)" {
         toolbox_under {
             pane edit="." {
-                start_suspended false
-                close_on_exit false
+                cwd "lib/"
+            }
+        }
+    }
+    tab name="textlab (backend)" {
+        toolbox_under {
+            pane edit="." {
+                cwd "backend/"
             }
         }
     }

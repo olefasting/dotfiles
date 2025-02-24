@@ -3,3 +3,4 @@
 *.bak.*
 
 zsh/zshrc.d/9999-starship-prompt.zsh
+mpv/scripts/autosubsync/

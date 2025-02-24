@@ -1,7 +1,9 @@
 {
+	"$schema": "https://raw.githubusercontent.com/zigtools/zls/refs/heads/master/schema.json",
 	"zig_exe_path": "/usr/bin/zig",
 	"global_cache_dir": "/home/oasf/.cache/zls",
 	"global_config_dir": "/etc/xdg",
-	"local_config_dir": "/home/oasf/.config/zls",
-	"config_file_path": "/home/oasf/.config/zls/config.json"
+	"local_config_dir": "/home/oasf/.config",
+	"config_file": "/home/oasf/.config/zls.json",
+	"enable_build_on_save": true
 }

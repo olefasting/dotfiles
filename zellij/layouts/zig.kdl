@@ -16,15 +16,18 @@ layout {
             pane name="toolbox" split_direction="vertical" {
                 pane name="terminal"
                 pane stacked=true {
-                    pane name="build"
-                    pane name="publish"
-                    pane name="test"
+                    pane command="zig" {
+                        args "build"
+                    }
+                    pane command="zig" {
+                        args "build test"
+                    }
                 }
             }
         }
     }
     tab name="dashboard" {
-      pane split_direction="vertical" {
+        pane split_direction="vertical" {
             pane name="lazygit (textlib)" command="lazygit" {
                 start_suspended true
                 close_on_exit true

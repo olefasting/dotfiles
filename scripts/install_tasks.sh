@@ -97,6 +97,33 @@ function __install_kakoune() {
   return 0
 }
 
+function __install_mpv() {
+  if ! has-pkg git; then
+    install git
+  fi
+  if ! has-pkg ffmpeg; then
+    yay -Syq --noconfirm --noprogressbar ffmpeg python-ffsubsync
+  fi
+  if ! has-pkg alass; then
+    yay -Syq --noconfirm --noprogressbar alass
+  fi
+  if ! has-pkg mpv; then
+    sudo pacman -Syq --noconfirm --noprogressbar mpv
+  fi
+  add-dir config mpv
+  add-symlink mpv/scripts
+  add-symlink mpv/script-opts
+  if [[ ! -e "$XDG_CONFIG_HOME/mpv/scripts/autosubsync" ]]; then
+    git clone 'https://github.com/Ajatt-Tools/autosubsync-mpv' "$DOTFILES_DIR/mpv/scripts/autosubsync"
+  elif [[ ! -e "$XDG_CONFIG_HOME/mpv/scripts/autosubsync/.git" ]]; then
+    local _prevpath="$PWD"
+    cd "$DOTFILES_DIR/mpv/scripts/autosubsync"
+    git pull
+    cd "$_prevpath"
+    unset _prevpath
+  fi
+}
+
 function __install_neovim() {
   if ! has-pkg neovim; then
     sudo pacman -Syq --noconfirm --noprogressbar neovim
@@ -109,6 +136,13 @@ function __install_neovim() {
   add-symlink nvim/init.lua
   add-symlink nvim/lazy-lock.json
   add-symlink nvim/lua
+  return 0
+}
+
+function __install_pipewire() {
+  add-dir config pipewire
+  add-symlink pipewire/pipewire.conf
+  add-symlink pipewire/pipewire.conf.d
   return 0
 }
 

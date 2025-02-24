@@ -54,6 +54,6 @@ fi
 
 add-dir data dotfiles
 
-install git ufw asdf ghostty zig zls zellij zsh starship sheldon nvim helix zed biome tree-sitter
+install git ufw pipewire mpv asdf ghostty zig zls zellij zsh starship sheldon nvim helix zed biome tree-sitter
 
 info "all installation tasks completed successfully!"

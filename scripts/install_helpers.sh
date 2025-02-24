@@ -198,14 +198,14 @@ function install() {
     kakoune | kak)
       __install_kakoune
       ;;
+    mpv)
+      __install_mpv
+      ;;
     neovim | nvim)
       __install_neovim
       ;;
-    prettier)
-      __install_prettier
-      ;;
-    prettierd)
-      __install_prettierd
+    pipewire)
+      __install_pipewire
       ;;
     rustup)
       __install_rustup
