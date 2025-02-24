@@ -85,7 +85,7 @@ function __install_hyprland() {
   if ! has-pkg hyprland; then
     yay -Syq --noconfirm --noprogressbar hyprland hyprland-protocols hyprland-qt-support hyprland-qtutils hyprland-target hyprland-workspaces xdg-desktop-portal-hyprland hyprpolkitagent hyprcursor hyprlock hypridle hyprpaper uwsm wofi
   fi
-  add-dir hypr
+  add-dir config hypr
   add-symlink hypr/hyprland.conf
 }
 
