@@ -1,6 +1,6 @@
 function __install_asdf() {
   if ! has-pkg asdf-vm; then
-    yay -Syq --noconfirm --no asdf-vm
+    yay -Syq --noconfirm --noprogressbar asdf-vm
   fi
   add-dir data asdf
   set +e
@@ -17,7 +17,7 @@ function __install_alacritty() {
   if ! has-pkg alacritty; then
     sudo pacman -Syq --noconfirm --noprogressbar alacritty
   fi
-  progressbar add-dir config alacritty
+  add-dir config alacritty
   add-symlink alacritty/alacritty.toml
   add-symlink alacritty/catppuccin-mocha.toml
   return 0
@@ -81,6 +81,14 @@ function __install_helix() {
   return 0
 }
 
+function __install_hyprland() {
+  if ! has-pkg hyprland; then
+    yay -Syq --noconfirm --noprogressbar hyprland hyprland-protocols hyprland-qt-support hyprland-qtutils hyprland-target hyprland-workspaces xdg-desktop-portal-hyprland hyprpolkitagent hyprcursor hyprlock hyptidle hyprpaper uwsm wofi
+  fi
+  add-dir hypr
+  add-symlink hypr/hyprland.conf
+}
+
 function __install_kakoune() {
   if ! has-pkg kakoune; then
     sudo pacman -Syq --noconfirm --noprogressbar kakoune
@@ -111,6 +119,7 @@ function __install_mpv() {
     sudo pacman -Syq --noconfirm --noprogressbar mpv
   fi
   add-dir config mpv
+  add-symlink mpv/shaders
   add-symlink mpv/scripts
   add-symlink mpv/script-opts
   if [[ ! -e "$XDG_CONFIG_HOME/mpv/scripts/autosubsync" ]]; then
@@ -285,5 +294,96 @@ function __install_zsh() {
   add-symlink zsh/zshenv.d
   add-symlink zsh/zshrc.d
   export DOTFILES_SHELL="zsh"
+  return 0
+}
+
+function install() {
+  local _name
+  _name="$1"
+  if [[ -z "$1" ]]; then
+    warning "install requires a package name as its first parameter"
+    return 1
+  fi
+  for _name in "$@"; do
+    if [[ " ${dotfiles_installed[*]} " =~ [[:space:]]${_name}[[:space:]] ]]; then
+      warning "install called for '$_name', but '$_name' is already installed"
+      return 0
+    fi
+    debug "attempting install for '${_name}'"
+    case "$_name" in
+    asdf)
+      __install_asdf
+      ;;
+    alacritty)
+      __install_alacritty
+      ;;
+    biome)
+      __install_biome
+      ;;
+    contour)
+      __install_contour
+      ;;
+    ghostty)
+      __install_ghostty
+      ;;
+    git)
+      __install_git
+      ;;
+    helix | hx)
+      __install_helix
+      ;;
+    hyprland)
+      __install_hyprland
+      ;;
+    kakoune | kak)
+      __install_kakoune
+      ;;
+    mpv)
+      __install_mpv
+      ;;
+    neovim | nvim)
+      __install_neovim
+      ;;
+    pipewire)
+      __install_pipewire
+      ;;
+    rustup)
+      __install_rustup
+      ;;
+    sheldon)
+      __install_sheldon
+      ;;
+    starship)
+      __install_starship
+      ;;
+    tree-sitter | tree_sitter | treesitter)
+      __install_tree_sitter
+      ;;
+    ufw)
+      __install_ufw
+      ;;
+    zed | zeditor)
+      __install_zed
+      ;;
+    zellij)
+      __install_zellij
+      ;;
+    zig)
+      __install_zig
+      ;;
+    zls)
+      __install_zls
+      ;;
+    zsh)
+      __install_zsh
+      ;;
+    *)
+      warn "install was called with package name '$_name', but that package does not exist"
+      return 1
+      ;;
+    esac
+    dotfiles_installed+=("name")
+    debug "install for '$_name' completed successfully"
+  done
   return 0
 }

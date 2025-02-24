@@ -53,16 +53,46 @@ layout {
         }
     }
     tab name="textlab (textlib)" {
-        toolbox_under {
-            pane edit="." {
-                cwd "lib/"
+        pane split_direction="horizontal" {
+            pane size="70%" split_direction="vertical" {
+                pane edit="." {
+                    cwd "lib/"
+                }
+            }
+            pane name="toolbox" split_direction="vertical" {
+                pane name="terminal"
+                pane stacked=true {
+                    pane command="zig" {
+                        args "build"
+                        cwd "lib/"
+                    }
+                    pane command="zig" {
+                        args "build test"
+                        cwd "lib/"
+                    }
+                }
             }
         }
     }
     tab name="textlab (backend)" {
-        toolbox_under {
-            pane edit="." {
-                cwd "backend/"
+        pane split_direction="horizontal" {
+            pane size="70%" split_direction="vertical" {
+                pane edit="." {
+                    cwd "backend/"
+                }
+            }
+            pane name="toolbox" split_direction="vertical" {
+                pane name="terminal"
+                pane stacked=true {
+                    pane command="zig" {
+                        args "build"
+                        cwd "backend/"
+                    }
+                    pane command="zig" {
+                        args "build test"
+                        cwd "backend/"
+                    }
+                }
             }
         }
     }

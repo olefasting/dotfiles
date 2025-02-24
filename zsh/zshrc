@@ -110,3 +110,5 @@ loginit
 for _path in $(dir "$ZDOTDIR"/zshrc.d/*.zsh); do
   source "$_path"
 done
+
+eval "$(ssh-agent)" >/dev/null
