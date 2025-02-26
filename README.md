@@ -2,9 +2,9 @@
 
 This repo contains dotfiles for userspace and basic tools
 
-## install
+## usage
 
-Execute [./install.sh](/install.sh) to symlink files into the current users home directory
+Execute [./install.sh](/install.sh) to symlink files into the current users home directory, using the inline module list.
 
 LICENSE MIT
 
