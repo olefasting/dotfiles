@@ -22,22 +22,13 @@ export DOTFILES_DATA_DIR
 
 source "$DOTFILES_DIR/scripts/logging.sh"
 source "$DOTFILES_DIR/scripts/install_helpers.sh"
-source "$DOTFILES_DIR/scripts/install_tasks.sh"
 
 SKIP_INSTALLED="${SKIP_INSTALLED:-0}"
+FORCE_UNINSTALL="${FORCE_UNINSTALL:-0}"
+UNINSTALL_PKGS="${UNINSTALL_PKGS:-0}"
 DEBUG="${DEBUG:-0}"
 
 DOTFILES_SHELL="${DOTFILES_SHELL:-$(basename $SHELL)}"
-case "$DOTFILES_SHELL" in
-zsh)
-  debug "shell integration set to 'zsh', either via the DOTFILES_SHELL variable, or the current user shell ($SHELL), if it wasn't set"
-  ;;
-*)
-  debug "the shell '$DOTFILES_SHELL' is not valid for integration, please set DOTFILES_SHELL to a valid shell (currently only zsh is supported)"
-  unset DOTFILES_SHELL
-  ;;
-esac
-
 export DOTFILES_SHELL
 
 info "installing to user ${USER}'s home directory ($HOME)"
@@ -46,6 +37,16 @@ if [[ "$SKIP_INSTALLED" == "1" ]]; then
   info "SKIP_INSTALLED is '1' (on)"
 else
   info "SKIP_INSTALLED is '$SKIP_INSTALLED' (off)"
+fi
+if [[ "$FORCE_UNINSTALL" == "1" ]]; then
+  info "FORCE_UNINSTALL is '1' (on)"
+else
+  info "FORCE_UNINSTALL is '$FORCE_UNINSTALL' (off)"
+fi
+if [[ "$UNINSTALL_PKGS" == "1" ]]; then
+  info "UNINSTALL_PKGS is '1' (on)"
+else
+  info "UNINSTALL_PKGS is '$UNINSTALL_PKGS' (off)"
 fi
 if [[ -n "$DOTFILES_SHELL" ]]; then
   info "DOTFILES_SHELL is '$DOTFILES_SHELL'"
@@ -58,8 +59,17 @@ else
   info "DEBUG is '$DEBUG' (off)"
 fi
 
-add-dir data dotfiles
+_PACMAN_INSTALL_ARGS="-Syq --noconfirm --noprogressbar"
+_PACMAN_UNINSTALL_ARGS="-Rncs --noconfirm --noprogressbar"
 
-install git ufw mpv asdf ghostty zig zls zellij zsh starship sheldon nvim helix hyprland zed biome tree-sitter
+if [[ ! -e "$XDG_DATA_HOME/dotfiles" ]]; then
+  info "no dotfiles data directory found, creating it now"
+  create-dir data dotfiles
+fi
+
+install git kde-plasma ufw mpv asdf ghostty zig zls zellij zsh starship sheldon nvim helix hyprland zed biome tree-sitter flowise
 
 info "all installation tasks completed successfully!"
+
+unset _PACMAN_INSTALL_ARGS
+unset _PACMAN_UNINSTALL_ARGS

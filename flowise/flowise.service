@@ -1,0 +1,13 @@
+[Unit]
+Description=Start flowise.ai locally
+DefaultDependencies=no
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=npx flowise start
+TimeoutStartSec=0
+RemainAfterExit=yes
+
+[Install]
+WantedBy=default.target
