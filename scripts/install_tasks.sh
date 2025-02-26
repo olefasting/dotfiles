@@ -133,7 +133,7 @@ function __install_mpv() {
   fi
 }
 
-function __install_neovim() {
+function __install_nvim() {
   if ! has-pkg neovim; then
     sudo pacman -Syq --noconfirm --noprogressbar neovim
   fi
@@ -195,9 +195,7 @@ function __install_sheldon() {
 
 function __install_starship() {
   local _shell="${DOTFILES_SHELL:-$(basename "$SHELL")}"
-  if [[ " ${dotfiles_installed[*]} " =~ [[:space:]]${_shell}[[:space:]] ]]; then
-    install "$_shell"
-  fi
+  require "$_shell"
   if ! has-pkg starship; then
     sudo pacman -Syq --noconfirm --noprogressbar starship
   fi
@@ -269,7 +267,7 @@ function __install_zig() {
 }
 
 function __install_zls() {
-  install zig
+  require zig
   if ! has-pkg zls and ! has-pkg zls-git; then
     pacman -Syq --noconfirm --noprogressbar zls
   fi
@@ -297,92 +295,56 @@ function __install_zsh() {
   return 0
 }
 
-function install() {
-  local _name
-  _name="$1"
+function require() {
   if [[ -z "$1" ]]; then
-    warning "install requires a package name as its first parameter"
+    warning "require: requires at least one module name as its parameter"
     return 1
   fi
   for _name in "$@"; do
-    if [[ " ${dotfiles_installed[*]} " =~ [[:space:]]${_name}[[:space:]] ]]; then
-      warning "install called for '$_name', but '$_name' is already installed"
-      return 0
+    if is-installed "$_name" && [[ "$SKIP_INSTALLED" == "1" ]]; then
+      continue
     fi
-    debug "attempting install for '${_name}'"
+    install "$_name"
+  done
+}
+
+function install() {
+  if [[ -z "$1" ]]; then
+    warning "install: requires at least one module name as its parameter"
+    return 1
+  fi
+  for _name in "$@"; do
     case "$_name" in
-    asdf)
-      __install_asdf
-      ;;
-    alacritty)
-      __install_alacritty
-      ;;
-    biome)
-      __install_biome
-      ;;
-    contour)
-      __install_contour
-      ;;
-    ghostty)
-      __install_ghostty
-      ;;
-    git)
-      __install_git
-      ;;
+    asdf | alacritty | biome | contour | ghostty | git | hyprland | mpv | rustup | sheldon | starship | ufw | zellij | zig | zls | zsh) ;;
     helix | hx)
-      __install_helix
-      ;;
-    hyprland)
-      __install_hyprland
+      _name="helix"
       ;;
     kakoune | kak)
-      __install_kakoune
+      _name="kakoune"
       ;;
-    mpv)
-      __install_mpv
+    nvim | neovim)
+      _name="nvim"
       ;;
-    neovim | nvim)
-      __install_neovim
-      ;;
-    pipewire)
-      __install_pipewire
-      ;;
-    rustup)
-      __install_rustup
-      ;;
-    sheldon)
-      __install_sheldon
-      ;;
-    starship)
-      __install_starship
-      ;;
-    tree-sitter | tree_sitter | treesitter)
-      __install_tree_sitter
-      ;;
-    ufw)
-      __install_ufw
+    tree_sitter | tree-sitter | treesitter)
+      _name="tree_sitter"
       ;;
     zed | zeditor)
-      __install_zed
-      ;;
-    zellij)
-      __install_zellij
-      ;;
-    zig)
-      __install_zig
-      ;;
-    zls)
-      __install_zls
-      ;;
-    zsh)
-      __install_zsh
+      _name="zed"
       ;;
     *)
       warn "install was called with package name '$_name', but that package does not exist"
-      return 1
+      return 0
       ;;
     esac
-    dotfiles_installed+=("name")
+    debug "attempting install for '${_name}'"
+    local _is_in_file=0
+    if is-installed "$_name"; then
+      warning "install: called for '$_name', but '$_name' is already installed"
+      _is_in_file=1
+      [[ "$SKIP_INSTALLED" == "1" ]] && continue
+    fi
+    eval "__install_$_name"
+    [[ "$_is_in_file" == "1" ]] || echo "$_name" >>"$DOTFILES_DATA_DIR/installed"
     debug "install for '$_name' completed successfully"
   done
   return 0

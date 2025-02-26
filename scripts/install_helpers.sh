@@ -2,7 +2,7 @@ DOTFILES_DATA_DIR="${DOTFILES_DATA_DIR:-$XDG_DATA_HOME/dotfiles}"
 
 function has-pkg() {
   if [[ "$#" == "0" ]]; then
-    error "has-pkg requires a package name or a package name as its first parameter"
+    error "has-pkg requires a package name as its first parameter"
     return 1
   fi
   if ! yay -Q "$1" >/dev/null 2>&1; then
@@ -14,14 +14,26 @@ function has-pkg() {
 
 function has-cmd() {
   local _cmd
-  if [[ "$#" == "0" ]]; then
-    error "has-pkg requires a package name or a package name as its first parameter"
+  if [[ -z "$1" ]]; then
+    error "has-pkg requires a package name as its first parameter"
     return 1
   fi
   if ! command -v "$1" >/dev/null 2>&1; then
     return 1
   fi
   unset _cmd
+  return 0
+}
+
+function is-installed() {
+  if [[ -z "$1" ]]; then
+    error "is-installed: requires a module name as its first parameter"
+    return 1
+  fi
+  local _name="$1"
+  if ! grep ^"${_name}"$ "$DOTFILES_DATA_DIR/installed" >/dev/null 2>&1; then
+    return 1
+  fi
   return 0
 }
 
