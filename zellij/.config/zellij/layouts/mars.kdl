@@ -1,0 +1,60 @@
+layout {
+    default_tab_template {
+        pane size=1 borderless=true {
+            plugin location="zellij:tab-bar"
+        }
+        children
+        pane size=2 borderless=true {
+            plugin location="zellij:status-bar"
+        }
+    }
+    tab name="dashboard" {
+        pane split_direction="vertical" {
+            pane name="lazygit (lib)" command="lazygit" {
+                cwd "lib"
+                start_suspended true
+                close_on_exit true
+            }
+            pane name="lazygit (cli)" command="lazygit" {
+                cwd "cli"
+                start_suspended true
+                close_on_exit true
+            }
+        }
+        pane size="20%" split_direction="vertical" {
+            pane name="git terminal"
+        }
+    }
+    tab name="workspace" {pane split_direction="horizontal" {
+            pane size="70%" split_direction="vertical" {
+                pane stacked=true {
+                    pane name="edit" {
+                        command "hx"
+                        start_suspended false
+                        close_on_exit false
+                    }
+                }
+            }
+            pane name="toolbox" split_direction="vertical" {
+                pane name="terminal"
+                pane stacked=true {
+                    pane command="cargo" {
+                        args "check"
+                    }
+                    pane command="cargo" {
+                        args "build"
+                    }
+                    pane command="cargo" {
+                        args "run"
+                    }
+                    pane command="cargo" {
+                        args "test"
+                    }
+                    pane command="cargo" {
+                        args "bench"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -298,7 +298,7 @@ keybind = shift+home=scroll_to_top
 keybind = super+ctrl+shift+arrow_right=resize_split:right,10
 keybind = ctrl+shift+enter=toggle_split_zoom
 keybind = alt+4=goto_tab:4
-keybind = alt+8=goto_tab:d
+# keybind = alt+8=goto_tab:d
 
 # keybind = ctrl+shift+arrow_left=previous_tab
 # keybind = ctrl+equal=increase_font_size:1

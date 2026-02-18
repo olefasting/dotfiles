@@ -1,4 +1,4 @@
-rupa/z              # some bash plugins work too
+# rupa/z              # some bash plugins work too
 sindresorhus/pure   # enhance your prompt
 
 # you can even use Oh My Zsh plugins

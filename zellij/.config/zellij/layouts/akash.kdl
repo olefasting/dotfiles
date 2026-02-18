@@ -1,0 +1,99 @@
+layout {
+    default_tab_template {
+        pane size=1 borderless=true {
+            plugin location="zellij:tab-bar"
+        }
+        children
+        pane size=2 borderless=true {
+            plugin location="zellij:status-bar"
+        }
+    }
+    tab name="dashboard" {
+        pane split_direction="vertical" {
+            pane name="lazygit" command="lazygit" {
+                start_suspended false
+                close_on_exit false
+                size "50%"
+            }
+            pane name="podman" command="podman-tui" {
+                start_suspended true
+                close_on_exit false
+                size "50%"
+            }
+        }
+        pane size="30%" split_direction="vertical" {
+            pane name="terminal"
+        }
+    }
+    tab name="workspace (old)" {
+        pane split_direction="horizontal" {
+            pane size="70%" split_direction="vertical" {
+                pane command="hx" {
+                    cwd "../akash_old"
+                    start_suspended false
+                    close_on_exit false
+                    focus true
+                }
+            }
+            pane name="toolbox" split_direction="vertical" {
+                pane name="terminal" {
+                    cwd "../akash_old"
+                    size "60%"
+                }
+                pane stacked=true {
+                    pane name="build test" command="zig" {
+                        args "build" "test" "--summary" "all"
+                        cwd "../akash_old"
+                        start_suspended true
+                        close_on_exit false
+                    }
+                    pane name="build docker" command="zig" {
+                        args "build" "docker" "--summary" "all"
+                        cwd "../akash_old"
+                        start_suspended true
+                        close_on_exit false
+                    }
+                    pane name="build run" command="zig" {
+                        args "build" "run" "--summary" "all"
+                        cwd "../akash_old"
+                        start_suspended true
+                        close_on_exit false
+                    }
+                }
+            }
+        }
+    }
+    tab name="workspace" {
+        pane split_direction="horizontal" {
+            pane size="70%" split_direction="vertical" {
+                pane command="hx" {
+                    start_suspended false
+                    close_on_exit false
+                    focus true
+                }
+            }
+            pane name="toolbox" split_direction="vertical" {
+                pane name="terminal" {
+                    size "60%"
+                }
+                pane stacked=true {
+                    pane name="build test" command="zig" {
+                        args "build" "test" "--summary" "all"
+                        start_suspended true
+                        close_on_exit false
+                    }
+                    pane name="build docker" command="zig" {
+                        args "build" "docker" "--summary" "all"
+                        start_suspended true
+                        close_on_exit false
+                    }
+                    pane name="build run" command="zig" {
+                        args "build" "run" "--summary" "all"
+                        start_suspended true
+                        close_on_exit false
+                    }
+                }
+            }
+        }
+    }
+}

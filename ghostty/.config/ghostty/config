@@ -306,8 +306,8 @@ font-size = 12
 font-variation = 
 
 font-variation-bold = wght=500
-font-variation-italic = ital=500
-font-variation-bold-italic = ital=500,wght=500
+font-variation-italic = ital=5
+font-variation-bold-italic = wght=500
 # Force one or a range of Unicode codepoints to map to a specific named font.
 # This is useful if you want to support special symbols or if you want to use
 # specific glyphs that render better for your specific font.
