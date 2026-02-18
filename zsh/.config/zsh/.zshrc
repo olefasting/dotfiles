@@ -1,5 +1,8 @@
 typeset -gx ZDOTDIR="${ZDOTDIR:-${XDG_CONFIG_HOME:-$HOME/.config}/zsh}"
 
+autoload -Uz compinit
+compinit
+
 source '/usr/share/zsh-antidote/antidote.zsh'
 antidote load "$HOME/.config/zsh/zsh_plugins.txt"
 
