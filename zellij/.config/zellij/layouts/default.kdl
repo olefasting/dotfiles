@@ -47,7 +47,7 @@ layout {
     }
     tab name="workspace" {
         toolbox_under {
-            pane command="helix" {
+            pane command="hx" {
                 start_suspended false
                 close_on_exit false
             }

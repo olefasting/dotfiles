@@ -159,11 +159,27 @@ keybinds clear-defaults=true {
             SwitchToMode "Locked";
         }
     }
-    shared_among "normal" "locked" {
+    shared_among "normal" {
+        bind "Ctrl left" { MoveFocusOrTab "left"; }
+        bind "Ctrl down" { MoveFocus "down"; }
+        bind "Ctrl up" { MoveFocus "up"; }
+        bind "Ctrl right" { MoveFocusOrTab "right"; }
+        bind "Ctrl h" { MoveFocusOrTab "left"; }
+        bind "Ctrl l" { MoveFocusOrTab "right"; }
+        bind "Ctrl j" { MoveFocus "down"; }
+        bind "Ctrl k" { MoveFocus "up"; }
+    }
+    shared_among "locked" {
         bind "Alt left" { MoveFocusOrTab "left"; }
         bind "Alt down" { MoveFocus "down"; }
         bind "Alt up" { MoveFocus "up"; }
         bind "Alt right" { MoveFocusOrTab "right"; }
+        bind "Alt h" { MoveFocusOrTab "left"; }
+        bind "Alt l" { MoveFocusOrTab "right"; }
+        bind "Alt j" { MoveFocus "down"; }
+        bind "Alt k" { MoveFocus "up"; }
+    }
+    shared_among "normal" "locked" {
         bind "Alt +" { Resize "Increase"; }
         bind "Alt -" { Resize "Decrease"; }
         bind "Alt =" { Resize "Increase"; }
@@ -173,10 +189,6 @@ keybinds clear-defaults=true {
         bind "Alt n" { NewPane; }
         bind "Alt i" { MoveTab "left"; }
         bind "Alt o" { MoveTab "right"; }
-        bind "Alt h" { MoveFocusOrTab "left"; }
-        bind "Alt l" { MoveFocusOrTab "right"; }
-        bind "Alt j" { MoveFocus "down"; }
-        bind "Alt k" { MoveFocus "up"; }
     }
     shared_except "locked" "renametab" "renamepane" {
         bind "Ctrl Alt q" { Detach; }
@@ -265,13 +277,13 @@ plugins {
         welcome_screen true
     }
     filepicker location="zellij:strider" {
-        cwd "~/Repos"
+        cwd "~/repos"
     }
     configuration location="zellij:configuration"
     plugin-manager location="zellij:plugin-manager"
     autolock location="file:~/.config/zellij/plugins/zellij-autolock.wasm" {
-        is_enabled false
-        triggers "nvim|vim|git|fzf|zoxide|atuin"
+        is_enabled true
+        triggers "nvim|vim|helix|hx|git|fzf|zoxide|atuin"
         // Reaction to input occurs after this many seconds. (default=0.3)
         // (An existing scheduled reaction prevents additional reactions.)
         reaction_seconds "0.3"
@@ -385,7 +397,7 @@ copy_command "wl-copy"
 //   - system (default)
 //   - primary
 //
-// copy_clipboard "primary"
+copy_clipboard "primary"
 
 // Enable automatic copying (and clearing) of selection when releasing mouse
 // Default: true
