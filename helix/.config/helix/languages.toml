@@ -1,4 +1,3 @@
-
 [language-server.ziggy-lsp]
 command = "ziggy"
 args = ["lsp"]
@@ -220,6 +219,15 @@ config = { filetypes = ["s", "S"] }
 name = "rust"
 formatter = { command = "rustfmt", args = ["+nightly"] }
 auto-format = true
+roots = ["Cargo.toml", "Cargo.lock"]
+
+[language-server.rust-analyzer]
+command = "rust-analyzer"
+
+[language-server.rust-analyzer.config]
+check = { command = "clippy" }
+cargo = { allFeatures = true }
+workspace = true
 
 [language.auto-pairs]
 '(' = ')'
@@ -228,8 +236,21 @@ auto-format = true
 '"' = '"'
 '`' = '`'
 
-[language-server.rust-analyzer]
-config = { cargo = { features = "all" } }
+[[language]]
+name = "ron"
+file-types = ["ron"]
+formatter = { command = "fmtron", args = [ "--input", "-" ] }
+auto-format = true
+language-servers = ["ron-lsp"]
+
+[language-server.ron-lsp]
+command = "ron-lsp"
+
+[language.auto-pairs]
+'(' = ')'
+'{' = '}'
+'[' = ']'
+'"' = '"'
 
 [[language]]
 name = "dockerfile"
