@@ -1,15 +1,17 @@
 typeset -gx ZDOTDIR="${ZDOTDIR:-${XDG_CONFIG_HOME:-$HOME/.config}/zsh}"
 
-autoload -Uz compinit
-compinit
+typeset -gU fpath=(
+  $ZDOTDIR/autoload
+  $ZDOTDIR/functions
+  $ZDOTDIR/completions
+  $fpath
+)
+autoload -Uz $ZDOTDIR/functions/*(.:t)
 
 source '/usr/share/zsh-antidote/antidote.zsh'
 antidote load "$HOME/.config/zsh/zsh_plugins.txt"
 
-# uncomment for vim keybindings
-# bindkey -v
-
-typeset -gx TERM=xterm-ghostty
+# typeset -gx TERM=xterm-ghostty
 
 # create a zkbd compatible hash;
 # to add other keys to this hash, see: man 5 terminfo
@@ -79,24 +81,24 @@ setopt promptsubst
 compinit
 colors
 
-# zstyle ':completion:*' auto-description 'specify: %d'
-# zstyle ':completion:*' completer _expand _complete _correct _approximate
-# zstyle ':completion:*' format 'Completing %d'
-# zstyle ':completion:*' group-name ''
-# zstyle ':completion:*' menu select=2
+zstyle ':completion:*' auto-description 'specify: %d'
+zstyle ':completion:*' completer _expand _complete _correct _approximate
+zstyle ':completion:*' format 'Completing %d'
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' menu select=2
 
-# eval "$(dircolors -b)"
+eval "$(dircolors -b)"
 
-# zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
-# zstyle ':completion:*' list-colors ''
-# zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
-# zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
-# zstyle ':completion:*' menu select-long
-# zstyle ':completion:*' select-prompt %SScrolling active: current selection at %%s
-# zstyle ':completion:*' use-compctl false
-# zstyle ':completion:*' verbose true
-# zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
-# zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' list-colors ''
+zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
+zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
+zstyle ':completion:*' menu select-long
+zstyle ':completion:*' select-prompt %SScrolling active: current selection at %%s
+zstyle ':completion:*' use-compctl false
+zstyle ':completion:*' verbose true
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
 typeset -gx HISTSIZE=300000
 typeset -gx SAVEHIST=300000
@@ -131,6 +133,8 @@ alias wget='wget -c '
 alias psmem='ps auxf | sort -nr -k 4'
 alias psmem10='ps auxf | sort -nr -k 4 | head -10'
 
+alias cd=z
+
 alias ls="eza --color=always --group-directories-first --icons=always "
 alias la="eza -a --color=always --group-directories-first --icons=always "
 alias ll="eza -la --color=always --group-directories-first --icons=always "
@@ -155,11 +159,15 @@ alias rip="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -200 | nl"
 
 typeset -gx FZF_BASE="${FZF_BASE:-/usr/share/fzf}"
 
-# this gets reset somewhere between here and the sourcing of .zshenv, so we add the custom ones again
-typeset -gU fpath=(
-  $ZDOTDIR/autoload
-  $ZDOTDIR/functions
-  $ZDOTDIR/completions
+[[ -v terminfo ]] || zmodload zsh/terminfo
 
-  $fpath
-)
+if [[ -n "$terminfo[kcuu1]" ]]; then
+  bindkey -M emacs "$terminfo[kcuu1]" history-substring-search-up
+  bindkey -M viins "$terminfo[kcuu1]" history-substring-search-up
+fi
+if [[ -n "$terminfo[kcud1]" ]]; then
+  bindkey -M emacs "$terminfo[kcud1]" history-substring-search-down
+  bindkey -M viins "$terminfo[kcud1]" history-substring-search-down
+fi
+
+(( $+commands[zoxide] )) && eval "$(zoxide init zsh)"

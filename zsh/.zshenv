@@ -13,7 +13,7 @@ typeset -gx LC_MEASUREMENT=nb_NO.UTF-8
 typeset -gx LC_PAPER=nb_NO.UTF-8
 typeset -gx LC_TELEPHONE=nb_NO.UTF-8
 typeset -gx LC_NAME=nb_NO.UTF-8
-typeset -gx LC_ALL
+typeset -gx LC_ALL=en_US.UTF-8
 
 typeset -gx XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 typeset -gx XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
@@ -25,9 +25,12 @@ typeset -gx VISUAL=zeditor
 typeset -gx ZDOTDIR="${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}"
 
 typeset -gx ASDF_DATA_DIR="${ASDF_DATA_DIR:-$XDG_DATA_HOME/asdf}"
+
 typeset -gx HELIX_RUNTIME_FOLDER="${HELIX_RUNTIME_FOLDER:-$XDG_DATA_HOME/helix}"
 
 typeset -gx LD_LIBRARY_PATH=/home/oasf/.local/lib/arch-mojo:$LD_LIBRARY_PATH
+
+typeset -gU path fpath
 
 typeset -gU path=(
   $HOME/{,s}bin(N)
@@ -43,14 +46,4 @@ typeset -gU path=(
   $path
 )
 
-typeset -gU fpath=(
-  $ZDOTDIR/autoload
-  $ZDOTDIR/functions
-  $ZDOTDIR/completions
-
-  $fpath
-)
-
 export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/docker.sock"
-
-[ -e ~/.config/zsh/.zshrc ] && source ~/.config/zsh/.zshrc

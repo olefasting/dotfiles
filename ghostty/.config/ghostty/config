@@ -104,8 +104,11 @@ keybind = ctrl+shift+t=new_tab
 keybind = ctrl+shift+w=close_tab:this
 keybind = ctrl+page_down=next_tab
 keybind = ctrl+shift+arrow_right=next_tab
-keybind = ctrl+page_up=previous_tab
+keybind = ctrl+shift+l=next_tab
+keybind = ctrl+tab=next_tab
+keybind = ctrl+shift+tab=previous_tab
 keybind = ctrl+shift+arrow_left=previous_tab
+keybind = ctrl+shift+h=previous_tab
 keybind = alt+1=goto_tab:1
 keybind = alt+2=goto_tab:2
 keybind = alt+3=goto_tab:3
