@@ -133,7 +133,7 @@ alias wget='wget -c '
 alias psmem='ps auxf | sort -nr -k 4'
 alias psmem10='ps auxf | sort -nr -k 4 | head -10'
 
-alias cd=z
+(( $+commands[zoxide] )) && alias cd=z
 
 alias ls="eza --color=always --group-directories-first --icons=always "
 alias la="eza -a --color=always --group-directories-first --icons=always "
