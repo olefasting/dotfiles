@@ -92,26 +92,26 @@ C-right = "jump_view_right"
 "C-," = "goto_previous_buffer"
 "C-." = "goto_next_buffer"
 "K" = "insert_newline"
-# Move line up/down using C-A-k/C-A-up, C-A-j/C-A-down
-"C-A-k" = [
+
+"C-S-k" = [
   "extend_to_line_bounds",
   "delete_selection",
   "move_line_up",
   "paste_before",
 ]
-"C-A-j" = [
+"C-S-j" = [
   "extend_to_line_bounds",
   "delete_selection",
   "move_line_down",
   "paste_before",
 ]
-"C-A-up" = [
+"C-S-up" = [
   "extend_to_line_bounds",
   "delete_selection",
   "move_line_up",
   "paste_before",
 ]
-"C-A-down" = [
+"C-S-down" = [
   "extend_to_line_bounds",
   "delete_selection",
   "move_line_down",
