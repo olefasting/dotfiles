@@ -1,0 +1,13 @@
+{
+  "sync_dirs": [
+    {
+      "source_path": "/home/oasf/repos",
+      "remote_root": "/repos"
+    }
+  ],
+  "sync_concurrency": 4,
+  "remote_delete_behavior": "trash",
+  "dashboard_host": "0.0.0.0",
+  "dashboard_port": 4242,
+  "exclude_patterns": []
+}
