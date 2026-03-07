@@ -118,7 +118,7 @@ typeset -gx LESS_TERMCAP_md LESS_TERMCAP_me
 
 typeset -gx ENHANCD_FILTER="fzf --height 40%:fzy"
 
-#alias open="xdg-open"
+alias open="xdg-open"
 alias make="make -j$(nproc)"
 alias ninja="ninja -j$(nproc)"
 alias dir='dir --color=auto'
@@ -133,14 +133,23 @@ alias wget='wget -c '
 alias psmem='ps auxf | sort -nr -k 4'
 alias psmem10='ps auxf | sort -nr -k 4 | head -10'
 
+if (( $+commands[hx] )); then
+  alias helix=hx
+elif (( $+commands[helix] )); then
+  alias hx=helix
+fi
+
 (( $+commands[zoxide] )) && alias cd=z
 
-alias ls="eza --color=always --group-directories-first --icons=always "
-alias la="eza -a --color=always --group-directories-first --icons=always "
-alias ll="eza -la --color=always --group-directories-first --icons=always "
-alias lt="eza -aT --color=always --group-directories-first --icons=always "
-alias l.="eza -a --color=always --group-directories-first --icons=always | grep -e '^\.' "
-alias ll.="eza -la --color=always --group-directories-first --icons=always | grep -e '^\.' "
+typeset LS_CMD="ls"
+(( $+commands[eza] )) && typeset LS_CMD="eza"
+
+alias ls="$LS_CMD --color=always --group-directories-first --icons=always "
+alias la="$LS_CMD -a --color=always --group-directories-first --icons=always "
+alias ll="$LS_CMD -la --color=always --group-directories-first --icons=always "
+alias lt="$LS_CMD -aT --color=always --group-directories-first --icons=always "
+alias l.="$LS_CMD -a --color=always --group-directories-first --icons=always | grep -e '^\.' "
+alias ll.="$LS_CMD -la --color=always --group-directories-first --icons=always | grep -e '^\.' "
 
 alias jctl="journalctl -p 3 -xb"
 alias jctlb="journalctl -b -1"
